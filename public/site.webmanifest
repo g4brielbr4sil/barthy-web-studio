@@ -1,0 +1,18 @@
+{
+  "name": "Barthy Web Studio",
+  "short_name": "Barthy",
+  "description": "Páginas, sistemas, automações e operação digital para empresas e profissionais.",
+  "lang": "pt-BR",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0A1931",
+  "theme_color": "#0A1931",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

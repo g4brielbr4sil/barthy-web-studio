@@ -1,0 +1,320 @@
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  color-scheme: light;
+  --font-size: 16px;
+
+  /* Barthy palette (oficial — não criar novas cores) */
+  --deep-navy: #0A1931;
+  --midnight: #1B212C;
+  --royal: #1A3D63;
+  --ice-blue: #4A7FA7;
+  --soft-ice: #B3CFE5;
+  --ice-white: #F6FAFD;
+  --terra: #CD765D;
+  --terra-soft: #E29A85;
+
+  /* Light mode — editorial, premium, levemente azulado (derivado da paleta) */
+  --background: #EAF1F7;
+  --foreground: #0A1931;
+
+  --surface: #F6FAFD;
+  --surface-raised: #F1F6FA;
+  --surface-2: #DDE8F2;
+  --surface-3: #D2E0EC;
+
+  --card: rgba(246, 250, 253, 0.86);
+  --card-solid: #F6FAFD;
+  --card-foreground: #0A1931;
+
+  --popover: #F6FAFD;
+  --popover-foreground: #0A1931;
+
+  --primary: var(--terra);
+  --primary-foreground: #ffffff;
+  --secondary: var(--royal);
+  --secondary-foreground: var(--ice-white);
+
+  --muted: #D9E5EF;
+  --muted-foreground: #52657B;
+
+  --accent: var(--soft-ice);
+  --accent-foreground: #0A1931;
+
+  --destructive: #d4183d;
+  --destructive-foreground: #ffffff;
+
+  --border: rgba(26, 61, 99, 0.17);
+  --border-strong: rgba(26, 61, 99, 0.26);
+  --hairline: rgba(26, 61, 99, 0.10);
+
+  --input: rgba(26, 61, 99, 0.06);
+  --input-background: rgba(246, 250, 253, 0.92);
+
+  --switch-background: #CBD9E5;
+  --ring: var(--ice-blue);
+
+  /* Destaque tipográfico: no light usa Royal Blue para manter contraste */
+  --text-accent: #1A3D63;
+
+  --shadow-color: rgba(10, 25, 49, 0.16);
+  --shadow-soft: 0 18px 50px -32px rgba(10, 25, 49, 0.30);
+
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-bold: 700;
+  --radius: 0.875rem;
+}
+
+.dark {
+  color-scheme: dark;
+  /* Dark mode (default — premium noturno) */
+  --background: #0A1931;
+  --foreground: #F6FAFD;
+
+  --surface: #0D1F3D;
+  --surface-raised: #102543;
+  --surface-2: #122849;
+  --surface-3: #173153;
+
+  --card: rgba(255, 255, 255, 0.045);
+  --card-solid: #0F2240;
+  --card-foreground: #F6FAFD;
+
+  --popover: #0F2240;
+  --popover-foreground: #F6FAFD;
+
+  --primary: var(--terra);
+  --primary-foreground: #ffffff;
+  --secondary: var(--royal);
+  --secondary-foreground: var(--ice-white);
+
+  --muted: rgba(255, 255, 255, 0.065);
+  --muted-foreground: #9FB3CC;
+
+  --accent: var(--ice-blue);
+  --accent-foreground: var(--ice-white);
+
+  --destructive: oklch(0.65 0.2 25);
+  --destructive-foreground: #ffffff;
+
+  --border: rgba(179, 207, 229, 0.13);
+  --border-strong: rgba(179, 207, 229, 0.22);
+  --hairline: rgba(179, 207, 229, 0.08);
+
+  --input: rgba(255, 255, 255, 0.06);
+  --input-background: rgba(255, 255, 255, 0.045);
+
+  --switch-background: rgba(255, 255, 255, 0.16);
+  --ring: var(--ice-blue);
+
+  /* Destaque tipográfico: no dark usa Soft Ice */
+  --text-accent: #B3CFE5;
+
+  --shadow-color: rgba(0, 0, 0, 0.45);
+  --shadow-soft: 0 24px 70px -36px rgba(0, 0, 0, 0.70);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-surface: var(--surface);
+  --color-surface-raised: var(--surface-raised);
+  --color-surface-2: var(--surface-2);
+  --color-surface-3: var(--surface-3);
+  --color-card: var(--card);
+  --color-card-solid: var(--card-solid);
+  --color-border-strong: var(--border-strong);
+  --color-text-accent: var(--text-accent);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-hairline: var(--hairline);
+  --color-input: var(--input);
+  --color-input-background: var(--input-background);
+  --color-switch-background: var(--switch-background);
+  --color-ring: var(--ring);
+  --color-deep-navy: var(--deep-navy);
+  --color-midnight: var(--midnight);
+  --color-royal: var(--royal);
+  --color-ice-blue: var(--ice-blue);
+  --color-soft-ice: var(--soft-ice);
+  --color-ice-white: var(--ice-white);
+  --color-terra: var(--terra);
+  --color-terra-soft: var(--terra-soft);
+  --radius-sm: calc(var(--radius) - 6px);
+  --radius-md: calc(var(--radius) - 3px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 6px);
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  /* Inter é a única fonte oficial — display é alias do Inter. */
+  --font-display: "Inter", ui-sans-serif, system-ui, sans-serif;
+}
+
+@layer base {
+  * {
+    border-color: var(--border);
+    box-sizing: border-box;
+  }
+
+  html {
+    font-size: var(--font-size);
+    background-color: var(--background);
+    overflow-x: clip;
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans);
+    max-width: 100%;
+    overflow-x: clip;
+  }
+
+  /* Nada de mídia estourando a largura da tela em qualquer breakpoint */
+  img,
+  svg,
+  video,
+  canvas {
+    max-width: 100%;
+  }
+
+  h1 {
+    font-family: var(--font-display);
+    font-size: clamp(2.4rem, 5vw, 4.5rem);
+    font-weight: 500;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+  }
+
+  h2 {
+    font-family: var(--font-display);
+    font-size: clamp(1.9rem, 3.2vw, 2.8rem);
+    font-weight: 500;
+    line-height: 1.1;
+    letter-spacing: -0.015em;
+  }
+
+  h3 {
+    font-family: var(--font-sans);
+    font-size: 1.15rem;
+    font-weight: 600;
+    line-height: 1.35;
+    letter-spacing: -0.005em;
+  }
+
+  h4 {
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.4;
+  }
+
+  p {
+    line-height: 1.65;
+  }
+
+  label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    line-height: 1.4;
+  }
+
+  button {
+    font-family: var(--font-sans);
+    font-weight: 500;
+  }
+
+  input,
+  textarea,
+  select {
+    font-family: var(--font-sans);
+    line-height: 1.5;
+  }
+
+  ::selection {
+    background-color: var(--terra);
+    color: #ffffff;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  .text-pretty {
+    text-wrap: pretty;
+  }
+  .font-display {
+    font-family: var(--font-display);
+  }
+  .ring-soft {
+    box-shadow: 0 0 0 1px var(--hairline);
+  }
+  .glass {
+    background: var(--card);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-soft);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+  /* Superfície escura fixa nos dois temas (cards de experiência, blocos elevados) */
+  .surface-night {
+    background: linear-gradient(160deg, #102543, #0A1931);
+    color: var(--ice-white);
+    border: 1px solid var(--border-strong);
+    box-shadow: var(--shadow-soft);
+  }
+}
+
+@layer base {
+  /* Transição de tema suave — habilitada só após o primeiro frame (.theme-ready)
+     para não animar a carga inicial. Não usar transition: all. */
+  .theme-ready *,
+  .theme-ready *::before,
+  .theme-ready *::after {
+    transition:
+      background-color 200ms ease,
+      color 200ms ease,
+      border-color 200ms ease,
+      box-shadow 200ms ease,
+      fill 200ms ease,
+      stroke 200ms ease;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .theme-ready *,
+    .theme-ready *::before,
+    .theme-ready *::after {
+      transition: none !important;
+    }
+  }
+
+  /* Autofill adaptado ao tema — evita amarelo/branco incompatível */
+  input:-webkit-autofill,
+  textarea:-webkit-autofill,
+  select:-webkit-autofill {
+    -webkit-text-fill-color: var(--foreground);
+    caret-color: var(--foreground);
+    box-shadow: 0 0 0px 1000px var(--input-background) inset;
+    -webkit-box-shadow: 0 0 0px 1000px var(--input-background) inset;
+    transition: background-color 5000s ease-in-out 0s;
+  }
+
+  input,
+  textarea,
+  select {
+    accent-color: var(--terra);
+  }
+}
