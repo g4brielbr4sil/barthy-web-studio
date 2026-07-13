@@ -1,11 +1,26 @@
 
-  # Refine landing page design
+# Barthy Web Studio
 
-  This is a code bundle for Refine landing page design. The original project is available at https://www.figma.com/design/4wJm11ItZST0376zvdiibW/Refine-landing-page-design.
+Landing page oficial da Barthy Web Studio.
 
-  ## Running the code
+## Requisitos
 
-  Run `npm i` to install the dependencies.
+- Node conforme `.nvmrc`
+- pnpm conforme `packageManager` no `package.json`
 
-  Run `npm run dev` to start the development server.
-  
+## Desenvolvimento
+
+```bash
+pnpm install
+pnpm dev
+```
+
+## Verificações
+
+```bash
+pnpm typecheck
+pnpm build
+pnpm preview
+```
+
+O build de produção é gerado em `dist/`.

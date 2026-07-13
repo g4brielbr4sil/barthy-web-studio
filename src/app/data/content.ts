@@ -24,7 +24,7 @@ export const siteConfig = {
   baseCity: "Brasília/DF",
   // Preenchido apenas se você não usar VITE_BARTHY_WHATSAPP_URL.
   // Somente dígitos (DDI + DDD + número), ex.: "5561999999999".
-  whatsapp: "",
+  whatsapp: "" as string,
   instagram: "",
   linkedin: "",
 } as const;

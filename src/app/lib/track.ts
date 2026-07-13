@@ -12,6 +12,8 @@ export type TrackEvent =
   | "click_problem_cta"
   | "click_service_chip"
   | "click_crm_cta"
+  | "click_experience_link"
+  | "click_products_cta"
   | "submit_quote_form"
   | "submit_quote_success"
   | "submit_quote_error"
