@@ -27,18 +27,9 @@ export function applyTheme(theme: Theme): void {
   const root = document.documentElement;
   root.classList.toggle("dark", theme === "dark");
   root.style.colorScheme = theme;
+  root.style.backgroundColor = theme === "dark" ? "#0A1931" : "#EAF1F7";
   const meta = document.querySelector('meta[name="theme-color"]');
   if (meta) meta.setAttribute("content", theme === "dark" ? "#0A1931" : "#EAF1F7");
-}
-
-/**
- * Efeito de módulo: aplica o tema salvo assim que este arquivo é importado,
- * antes do React renderizar. Como o App importa este módulo no topo, a classe
- * .dark é definida antes do primeiro paint, evitando o clarão branco inicial.
- * (No Codex, um script curto no index.html pode adiantar ainda mais isso.)
- */
-if (typeof document !== "undefined") {
-  applyTheme(getInitialTheme());
 }
 
 interface ThemeContextValue {

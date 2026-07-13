@@ -1,27 +1,19 @@
 import { ArrowRight, Check } from "lucide-react";
-import { motion } from "motion/react";
+import { motion, useReducedMotion } from "motion/react";
 import { PlasmaBackground } from "./PlasmaBackground";
 import { LinkButton } from "./ui-primitives";
 import { useTheme } from "../lib/theme";
 import { trackEvent } from "../lib/track";
 
 const trust = [
-  "Escopo bem definido",
-  "Prazo combinado",
-  "Entrega objetiva",
-  "Atendimento organizado",
-];
-
-const flow = [
-  "Página ou formulário",
-  "Hermes",
-  "Diagnóstico",
-  "Proposta",
-  "Acompanhamento",
+  "Escopo e prazo definidos",
+  "Comunicação durante o projeto",
+  "Entrega pronta para uso",
 ];
 
 export function Hero() {
   const { isDark } = useTheme();
+  const reduceMotion = useReducedMotion();
 
   const isMobile =
     typeof window !== "undefined" && window.matchMedia("(max-width: 768px)").matches;
@@ -44,7 +36,7 @@ export function Hero() {
           speed={0.2}
           opacity={plasmaOpacity}
           scale={1.2}
-          mouseInteractive={!isMobile}
+          mouseInteractive
         />
       </div>
 
@@ -54,9 +46,9 @@ export function Hero() {
 
       <div className="mx-auto max-w-[1200px] px-4 sm:px-5 md:px-8 relative">
         <motion.div
-          initial={{ opacity: 0, y: 16 }}
+          initial={reduceMotion ? false : { opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: 0.38, ease: [0.22, 1, 0.36, 1] }}
           className="max-w-[760px]"
         >
           <p
@@ -112,25 +104,6 @@ export function Hero() {
             ))}
           </ul>
 
-          {/* Fluxo discreto da operação */}
-          <div className="mt-10 -mx-4 px-4 overflow-x-auto sm:overflow-visible sm:mx-0 sm:px-0">
-            <ol
-              className="flex items-center gap-2 sm:gap-3 whitespace-nowrap text-[var(--muted-foreground)]"
-              style={{ fontSize: "0.78rem" }}
-            >
-              {flow.map((step, i) => (
-                <li key={step} className="inline-flex items-center gap-2 sm:gap-3">
-                  <span className="inline-flex items-center gap-1.5">
-                    <span className="w-1 h-1 rounded-full bg-[var(--ice-blue)]" />
-                    {step}
-                  </span>
-                  {i < flow.length - 1 && (
-                    <ArrowRight className="w-3 h-3 text-[var(--border-strong)] shrink-0" />
-                  )}
-                </li>
-              ))}
-            </ol>
-          </div>
         </motion.div>
       </div>
     </section>

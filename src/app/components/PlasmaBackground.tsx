@@ -96,6 +96,28 @@ export function PlasmaBackground({
   className = "",
 }: PlasmaProps) {
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const programRef = useRef<Program | null>(null);
+  const propsRef = useRef({ color, speed, direction, scale, opacity, mouseInteractive });
+  propsRef.current = { color, speed, direction, scale, opacity, mouseInteractive };
+
+  useEffect(() => {
+    const program = programRef.current;
+    const node = containerRef.current;
+    if (!program) {
+      if (node && !node.querySelector("canvas")) {
+        node.style.background = `radial-gradient(60% 80% at 30% 20%, ${color}40, transparent 70%), radial-gradient(60% 80% at 80% 80%, ${color}25, transparent 70%)`;
+        node.style.opacity = String(opacity);
+      }
+      return;
+    }
+
+    (program.uniforms.uCustomColor.value as Float32Array).set(hexToRgb(color));
+    (program.uniforms.uUseCustomColor as { value: number }).value = color ? 1 : 0;
+    (program.uniforms.uSpeed as { value: number }).value = speed * 0.4;
+    (program.uniforms.uDirection as { value: number }).value = direction === "reverse" ? -1 : 1;
+    (program.uniforms.uScale as { value: number }).value = scale;
+    (program.uniforms.uOpacity as { value: number }).value = opacity;
+  }, [color, speed, direction, scale, opacity]);
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -107,18 +129,20 @@ export function PlasmaBackground({
     if (reduceMotion) {
       node.style.background = `radial-gradient(60% 80% at 30% 20%, ${color}40, transparent 70%), radial-gradient(60% 80% at 80% 80%, ${color}25, transparent 70%)`;
       node.style.opacity = String(opacity);
+      node.dataset.plasmaState = "reduced";
       return;
     }
 
-    const useCustomColor = color ? 1.0 : 0.0;
-    const customColorRgb = color ? hexToRgb(color) : [1, 1, 1];
-    const directionMultiplier = direction === "reverse" ? -1.0 : 1.0;
+    const initial = propsRef.current;
+    const useCustomColor = initial.color ? 1.0 : 0.0;
+    const customColorRgb = initial.color ? hexToRgb(initial.color) : [1, 1, 1];
+    const directionMultiplier = initial.direction === "reverse" ? -1.0 : 1.0;
 
     const renderer = new Renderer({
       webgl: 2,
       alpha: true,
       antialias: false,
-      dpr: Math.min(window.devicePixelRatio || 1, 1.5),
+      dpr: Math.min(window.devicePixelRatio || 1, 1.25),
     });
 
     const gl = renderer.gl;
@@ -137,25 +161,42 @@ export function PlasmaBackground({
         iResolution: { value: new Float32Array([1, 1]) },
         uCustomColor: { value: new Float32Array(customColorRgb) },
         uUseCustomColor: { value: useCustomColor },
-        uSpeed: { value: speed * 0.4 },
+        uSpeed: { value: initial.speed * 0.4 },
         uDirection: { value: directionMultiplier },
-        uScale: { value: scale },
-        uOpacity: { value: opacity },
+        uScale: { value: initial.scale },
+        uOpacity: { value: initial.opacity },
         uMouse: { value: new Float32Array([0, 0]) },
-        uMouseInteractive: { value: mouseInteractive ? 1.0 : 0.0 },
+        uMouseInteractive: { value: 0.0 },
       },
     });
+    programRef.current = program;
+    node.style.background = "none";
+    node.style.opacity = "1";
 
     const mesh = new Mesh(gl, { geometry, program });
+    const mobileQuery = window.matchMedia("(max-width: 768px)");
 
     const handleMouseMove = (e: MouseEvent) => {
-      if (!mouseInteractive) return;
+      if (!propsRef.current.mouseInteractive || mobileQuery.matches) return;
       const rect = node.getBoundingClientRect();
       const m = program.uniforms.uMouse.value as Float32Array;
       m[0] = e.clientX - rect.left;
       m[1] = e.clientY - rect.top;
     };
-    if (mouseInteractive) node.addEventListener("mousemove", handleMouseMove);
+    let mouseListening = false;
+    const syncMouseInteraction = () => {
+      const enabled = propsRef.current.mouseInteractive && !mobileQuery.matches;
+      (program.uniforms.uMouseInteractive as { value: number }).value = enabled ? 1 : 0;
+      if (enabled && !mouseListening) {
+        window.addEventListener("mousemove", handleMouseMove, { passive: true });
+        mouseListening = true;
+      } else if (!enabled && mouseListening) {
+        window.removeEventListener("mousemove", handleMouseMove);
+        mouseListening = false;
+      }
+    };
+    mobileQuery.addEventListener("change", syncMouseInteraction);
+    syncMouseInteraction();
 
     const setSize = () => {
       const rect = node.getBoundingClientRect();
@@ -172,10 +213,14 @@ export function PlasmaBackground({
     setSize();
 
     let raf = 0;
-    const t0 = performance.now();
+    let elapsed = 0;
+    let lastFrame = performance.now();
+    let inViewport = true;
     const loop = (t: number) => {
-      let timeValue = (t - t0) * 0.001;
-      if (direction === "pingpong") {
+      elapsed += Math.min(0.1, Math.max(0, (t - lastFrame) * 0.001));
+      lastFrame = t;
+      let timeValue = elapsed;
+      if (propsRef.current.direction === "pingpong") {
         const dur = 10;
         const seg = timeValue % (dur * 2);
         timeValue = seg > dur ? dur * 2 - seg : seg;
@@ -184,15 +229,46 @@ export function PlasmaBackground({
       renderer.render({ scene: mesh });
       raf = requestAnimationFrame(loop);
     };
-    raf = requestAnimationFrame(loop);
+
+    const stop = () => {
+      if (raf) cancelAnimationFrame(raf);
+      raf = 0;
+      node.dataset.plasmaState = "paused";
+    };
+    const start = () => {
+      if (raf || !inViewport || document.hidden) return;
+      lastFrame = performance.now();
+      node.dataset.plasmaState = "running";
+      raf = requestAnimationFrame(loop);
+    };
+    const syncPlayback = () => {
+      if (inViewport && !document.hidden) start();
+      else stop();
+    };
+
+    const viewportObserver = new IntersectionObserver(
+      ([entry]) => {
+        inViewport = entry.isIntersecting;
+        syncPlayback();
+      },
+      { rootMargin: "120px 0px" },
+    );
+    viewportObserver.observe(node);
+    document.addEventListener("visibilitychange", syncPlayback);
+    start();
 
     return () => {
-      cancelAnimationFrame(raf);
+      stop();
       ro.disconnect();
-      if (mouseInteractive) node.removeEventListener("mousemove", handleMouseMove);
+      viewportObserver.disconnect();
+      document.removeEventListener("visibilitychange", syncPlayback);
+      mobileQuery.removeEventListener("change", syncMouseInteraction);
+      if (mouseListening) window.removeEventListener("mousemove", handleMouseMove);
+      programRef.current = null;
       if (canvas.parentNode === node) node.removeChild(canvas);
+      delete node.dataset.plasmaState;
     };
-  }, [color, speed, direction, scale, opacity, mouseInteractive]);
+  }, []);
 
   return (
     <div

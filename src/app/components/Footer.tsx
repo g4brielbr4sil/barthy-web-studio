@@ -29,7 +29,7 @@ export function Footer() {
               Localização
             </div>
             <p className="text-[var(--muted-foreground)]" style={{ fontSize: "0.9rem" }}>
-              Base em Brasília. Atendimento digital em todo o Brasil.
+              Base em Brasília, com atendimento digital em todo o Brasil.
             </p>
           </div>
 
