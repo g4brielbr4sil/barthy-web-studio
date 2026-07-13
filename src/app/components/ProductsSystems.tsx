@@ -18,8 +18,8 @@ export function ProductsSystems() {
       <Container>
         <SectionHeading
           eyebrow="Produtos digitais"
-          title="Sistemas e automações construídos para a rotina da sua operação."
-          description="Além de páginas e portfólios, a Barthy desenvolve ferramentas digitais para organizar atendimento, vendas, tarefas, filas, cadastros e processos internos."
+          title="Produtos digitais para conectar canais e ampliar a operação."
+          description="Estruturas reutilizáveis, plataformas e conectores para apoiar atendimento, comunicação e novos serviços digitais."
         />
 
         <div

@@ -139,43 +139,16 @@ export const solutions: SolutionGroup[] = [
     ],
   },
   {
-    title: "CRM e organização comercial",
+    title: "Captação e organização comercial",
     description:
-      "Centralize contatos, origem, interesse, histórico, status e próximas ações para acompanhar melhor cada oportunidade.",
-    icon: Database,
-    items: [
-      "CRM simples",
-      "Pipeline comercial",
-      "Cadastro de clientes",
-      "Histórico de atendimento",
-      "Organização de follow-up",
-    ],
-  },
-  {
-    title: "Dashboards, portais e sistemas internos",
-    description:
-      "Acompanhe solicitações, tarefas, indicadores e processos em interfaces criadas para a rotina da operação.",
-    icon: LayoutDashboard,
-    items: [
-      "Dashboard comercial",
-      "Painel operacional",
-      "Área interna",
-      "Portal de atendimento",
-      "Sistema administrativo sob medida",
-    ],
-  },
-  {
-    title: "Automações e integrações",
-    description:
-      "Conecte formulários, e-mail, planilhas, alertas e sistemas para reduzir tarefas manuais e manter informações organizadas.",
+      "Facilite o primeiro contato e apresente sua oferta com materiais claros, prontos para apoiar conversas e pedidos de orçamento.",
     icon: Workflow,
     items: [
-      "Formulários conectados",
-      "Alertas automáticos",
-      "Integrações com n8n",
-      "Fluxos de e-mail",
-      "Registro automático de leads",
-      "Integrações com Hermes",
+      "Formulário de orçamento",
+      "Proposta comercial",
+      "Mensagens comerciais",
+      "Organização de WhatsApp",
+      "Link profissional",
     ],
   },
   {
@@ -218,23 +191,6 @@ export interface DigitalProduct {
 
 export const digitalProducts: DigitalProduct[] = [
   {
-    title: "CRM e gestão comercial",
-    icon: Database,
-    text: "Sistemas para organizar leads, clientes, origem do contato, serviço de interesse, histórico, status e próximas ações.",
-    items: [
-      "CRM simples",
-      "Pipeline comercial",
-      "Cadastro de clientes",
-      "Gestão de oportunidades",
-      "Follow-up",
-      "Histórico de atendimento",
-      "Distribuição de leads",
-      "Relatórios comerciais",
-      "Controle de propostas",
-      "Painel de conversão",
-    ],
-  },
-  {
     title: "SaaS e plataformas digitais",
     icon: Boxes,
     text: "Produtos digitais acessados pela internet, com login, perfis de usuário, dados organizados e funcionalidades específicas para cada operação.",
@@ -242,74 +198,29 @@ export const digitalProducts: DigitalProduct[] = [
     items: [
       "SaaS para empresas",
       "Plataformas de assinatura",
-      "Portais de clientes",
-      "Portais de equipes",
-      "Áreas administrativas",
-      "Painéis operacionais",
       "Sistemas multiusuário",
       "Gestão de planos",
       "Controle de acesso",
-      "Relatórios e indicadores",
     ],
   },
   {
-    title: "Sistemas para segmentos específicos",
-    icon: LayoutDashboard,
-    text: "Soluções adaptadas à rotina de diferentes tipos de empresa.",
-    note: "Soluções que podem ser desenvolvidas conforme a necessidade da operação.",
-    items: [
-      "Academias e estúdios",
-      "Bares e restaurantes",
-      "Empresas de eventos",
-      "Buffets",
-      "Clínicas",
-      "Prestadores de serviço",
-      "Escolas e cursos",
-      "Equipes comerciais",
-      "Empresas de cuidado",
-      "Operações com agendamento",
-      "Controle de pedidos",
-      "Gestão de recorrência",
-    ],
-  },
-  {
-    title: "Filas, atendimento e solicitações",
-    icon: Network,
-    text: "Organize entradas, prioridades, responsáveis, status e histórico de cada solicitação.",
-    items: [
-      "Fila de atendimento",
-      "Distribuição de solicitações",
-      "Controle de prioridade",
-      "Gestão de tickets",
-      "Histórico de contatos",
-      "Responsável por atendimento",
-      "Status de resolução",
-      "Alertas de atraso",
-      "Painel de pendências",
-      "Encaminhamento entre equipes",
-    ],
-  },
-  {
-    title: "Automação de canais de comunicação",
+    title: "Canais de comunicação conectados",
     icon: Workflow,
-    text: "Conecte canais de contato a fluxos de atendimento, registro de leads, alertas e respostas automáticas.",
+    text: "Conecte canais de contato a fluxos de triagem, registro e encaminhamento.",
     note: "Integrações conforme disponibilidade técnica, termos de uso e autorização do cliente.",
     items: [
       "WhatsApp",
       "E-mail",
       "Formulários",
       "Telegram",
-      "Mensagens automáticas",
       "Registro automático de contatos",
       "Alertas internos",
       "Respostas iniciais",
       "Distribuição para atendentes",
-      "Follow-up automático",
-      "Atendimento fora do horário comercial",
     ],
   },
   {
-    title: "Atendimento 24/7",
+    title: "Bots e triagem 24/7",
     icon: GaugeCircle,
     text: "Estruturas de atendimento automático podem responder perguntas iniciais, coletar informações e registrar solicitações a qualquer hora.",
     note: "O atendimento automático faz a triagem e o registro; a equipe assume quando necessário.",
@@ -321,7 +232,6 @@ export const digitalProducts: DigitalProduct[] = [
       "Direcionamento para atendente",
       "Informações de horário",
       "Solicitação de orçamento",
-      "Atualização de status",
       "Triagem inicial",
     ],
   },
@@ -339,8 +249,6 @@ export const digitalProducts: DigitalProduct[] = [
       "Mensagens de confirmação",
       "Lembretes",
       "Atualizações de status",
-      "Integração com CRM",
-      "Integração com Hermes",
       "Integração com n8n",
       "Integração com sistemas internos",
     ],
@@ -356,53 +264,15 @@ export const digitalProducts: DigitalProduct[] = [
       "Templates de follow-up",
       "Templates de mensagens",
       "Templates de e-mail",
-      "Templates de cadastro",
-      "Templates de relatórios",
-      "Templates de dashboards",
       "Templates de landing page",
       "Templates de formulários",
       "Templates de documentos internos",
     ],
   },
   {
-    title: "Dashboards e painéis",
-    icon: GaugeCircle,
-    text: "Visualize informações importantes em uma única tela.",
-    items: [
-      "Dashboard comercial",
-      "Dashboard financeiro",
-      "Dashboard operacional",
-      "Painel de leads",
-      "Painel de tarefas",
-      "Painel de solicitações",
-      "Painel de agendamentos",
-      "Painel de pedidos",
-      "Indicadores de atendimento",
-      "Relatórios de status",
-      "Visão por equipe ou responsável",
-    ],
-  },
-  {
-    title: "Portais e áreas internas",
-    icon: Boxes,
-    text: "Centralize informações, documentos, cadastros e atividades em ambientes próprios.",
-    items: [
-      "Portal do cliente",
-      "Portal do colaborador",
-      "Portal de prestadores",
-      "Área administrativa",
-      "Área de atendimento",
-      "Área de documentos",
-      "Área de treinamento",
-      "Área de acompanhamento",
-      "Painel de solicitações",
-      "Gestão de usuários e permissões",
-    ],
-  },
-  {
-    title: "Integrações",
+    title: "Integrações e conectores",
     icon: Network,
-    text: "Conecte ferramentas que hoje trabalham separadas.",
+    text: "Conecte ferramentas que hoje trabalham separadas com APIs oficiais e acessos autorizados.",
     items: [
       "Hermes",
       "n8n",
@@ -414,14 +284,12 @@ export const digitalProducts: DigitalProduct[] = [
       "Bancos de dados",
       "Supabase",
       "Sistemas de pagamento",
-      "Plataformas de assinatura",
-      "Canais de comunicação",
     ],
   },
 ];
 
 /* ------------------------------------------------------------------ */
-/*  Sistemas e operação (seção de maior valor — 4 frentes)            */
+/*  Sistemas e operação (seção de maior valor — 6 frentes)            */
 /* ------------------------------------------------------------------ */
 export interface SystemFront {
   title: string;
@@ -446,9 +314,19 @@ export const systemFronts: SystemFront[] = [
     icon: Boxes,
   },
   {
-    title: "Automações e integrações",
-    text: "Conecte formulários, e-mail, planilhas e sistemas para reduzir tarefas repetitivas.",
+    title: "Filas e solicitações",
+    text: "Distribua demandas por prioridade, responsável, prazo e status de resolução.",
     icon: Network,
+  },
+  {
+    title: "Cadastros e operação interna",
+    text: "Estruture dados, rotinas e permissões para manter a equipe trabalhando com clareza.",
+    icon: LayoutDashboard,
+  },
+  {
+    title: "Sistemas sob medida",
+    text: "Desenvolva uma solução alinhada às regras e necessidades específicas da operação.",
+    icon: Wrench,
   },
 ];
 
@@ -553,21 +431,33 @@ export const definedBeforeStart: string[] = [
 /* ------------------------------------------------------------------ */
 /*  Hermes — operação interna                                         */
 /* ------------------------------------------------------------------ */
-export const hermesFlow: string[] = [
-  "Solicitação recebida",
-  "Registro no Hermes",
-  "Análise",
-  "Próxima ação",
-  "Acompanhamento",
-];
+export interface HermesFunction {
+  title: string;
+  text: string;
+}
 
-export const hermesPoints: string[] = [
-  "Dados do contato",
-  "Origem do lead",
-  "Serviço de interesse",
-  "Histórico",
-  "Status comercial",
-  "Próxima ação",
+// A integração automática do formulário será ativada junto com a API pública de leads do Hermes.
+export const hermesFunctions: HermesFunction[] = [
+  {
+    title: "Centraliza",
+    text: "Reúne dados de contato, origem e solução de interesse.",
+  },
+  {
+    title: "Classifica",
+    text: "Organiza cada oportunidade por cidade, serviço, prioridade e estágio.",
+  },
+  {
+    title: "Notifica",
+    text: "Cria alertas e sinaliza quando existe uma nova solicitação ou ação pendente.",
+  },
+  {
+    title: "Direciona",
+    text: "Ajuda a definir a próxima ação, como diagnóstico, proposta ou follow-up.",
+  },
+  {
+    title: "Acompanha",
+    text: "Mantém status, histórico e andamento comercial registrados.",
+  },
 ];
 
 /* ------------------------------------------------------------------ */
@@ -651,7 +541,7 @@ export const faq: FaqItem[] = [
   },
   {
     q: "A Barthy atende fora de Brasília?",
-    a: "Sim. A base é em Brasília, mas os projetos digitais podem ser atendidos remotamente em todo o Brasil.",
+    a: "Sim. A Barthy tem base em Brasília, com atendimento digital em todo o Brasil.",
   },
   {
     q: "Como funciona o pagamento?",

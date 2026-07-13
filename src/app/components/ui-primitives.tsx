@@ -1,9 +1,10 @@
 import { ReactNode, ButtonHTMLAttributes, AnchorHTMLAttributes } from "react";
+import { motion, useReducedMotion } from "motion/react";
 
 type Variant = "primary" | "outline" | "ghost" | "soft";
 
 const base =
-  "inline-flex items-center justify-center gap-2 rounded-[14px] px-5 py-2.5 text-[0.95rem] transition-all duration-300 disabled:opacity-50 disabled:pointer-events-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)]/60 focus-visible:ring-offset-0";
+  "inline-flex min-h-11 items-center justify-center gap-2 rounded-[14px] px-5 py-2.5 text-[0.95rem] transition-[background-color,color,border-color,box-shadow,transform] duration-200 disabled:pointer-events-none disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)]/60 focus-visible:ring-offset-0";
 
 const variants: Record<Variant, string> = {
   primary:
@@ -83,7 +84,7 @@ export function Card({
 }) {
   return (
     <div
-      className={`relative rounded-2xl glass p-6 md:p-7 transition-all duration-300 hover:border-[var(--ice-blue)]/40 hover:-translate-y-[2px] ${className}`}
+      className={`relative rounded-2xl glass p-6 md:p-7 transition-[border-color,transform] duration-200 hover:border-[var(--ice-blue)]/40 hover:-translate-y-[2px] ${className}`}
     >
       {children}
     </div>
@@ -113,9 +114,18 @@ export function Section({
   children: ReactNode;
   className?: string;
 }) {
+  const reduceMotion = useReducedMotion();
+
   return (
-    <section id={id} className={`relative py-20 md:py-28 ${className}`}>
+    <motion.section
+      id={id}
+      initial={reduceMotion ? false : { opacity: 0, y: 18 }}
+      whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.12 }}
+      transition={{ duration: 0.42, ease: [0.22, 1, 0.36, 1] }}
+      className={`relative scroll-mt-[64px] py-20 md:scroll-mt-[72px] md:py-28 ${className}`}
+    >
       {children}
-    </section>
+    </motion.section>
   );
 }

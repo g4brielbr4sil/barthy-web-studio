@@ -54,7 +54,7 @@ export function SystemsCRM() {
             </div>
           </div>
 
-          {/* Quatro frentes estruturadas */}
+          {/* Seis frentes estruturadas */}
           <div className="grid gap-px overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--border)] sm:grid-cols-2">
             {systemFronts.map((c) => {
               const Icon = c.icon;

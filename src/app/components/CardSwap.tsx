@@ -83,12 +83,12 @@ export function CardSwap({
   const config =
     easing === "elastic"
       ? {
-          ease: "elastic.out(0.6,0.9)",
-          durDrop: 2,
-          durMove: 2,
-          durReturn: 2,
-          promoteOverlap: 0.9,
-          returnDelay: 0.05,
+          ease: "elastic.out(0.35,0.8)",
+          durDrop: 1.15,
+          durMove: 1.15,
+          durReturn: 1.15,
+          promoteOverlap: 0.7,
+          returnDelay: 0.1,
         }
       : {
           ease: "power1.inOut",
@@ -114,6 +114,7 @@ export function CardSwap({
 
   useEffect(() => {
     const total = refs.length;
+    const node = container.current;
     refs.forEach((r, i) => {
       if (r.current) placeNow(r.current, makeSlot(i, cardDistance, verticalDistance, total), skewAmount);
     });
@@ -122,7 +123,10 @@ export function CardSwap({
     const reduceMotion =
       typeof window !== "undefined" &&
       window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reduceMotion) return;
+    if (reduceMotion) {
+      if (node) node.dataset.cardSwapState = "reduced";
+      return;
+    }
 
     const swap = () => {
       if (order.current.length < 2) return;
@@ -130,6 +134,7 @@ export function CardSwap({
       const elFront = refs[front].current;
       if (!elFront) return;
 
+      tlRef.current?.kill();
       const tl = gsap.timeline();
       tlRef.current = tl;
 
@@ -160,36 +165,59 @@ export function CardSwap({
       });
     };
 
-    intervalRef.current = window.setInterval(swap, delay);
+    let inViewport = false;
+    let hovered = false;
 
     const pause = () => {
       tlRef.current?.pause();
       clearInterval(intervalRef.current);
+      intervalRef.current = 0;
+      if (node) node.dataset.cardSwapState = "paused";
     };
     const resume = () => {
       tlRef.current?.play();
-      clearInterval(intervalRef.current);
-      intervalRef.current = window.setInterval(swap, delay);
+      if (!intervalRef.current) intervalRef.current = window.setInterval(swap, delay);
+      if (node) node.dataset.cardSwapState = "running";
+    };
+    const syncPlayback = () => {
+      if (inViewport && !document.hidden && !hovered) resume();
+      else pause();
     };
 
-    // Pausa a animação quando a aba fica oculta (economia de CPU/bateria).
-    const onVisibility = () => (document.hidden ? pause() : resume());
-    document.addEventListener("visibilitychange", onVisibility);
+    const viewportObserver = new IntersectionObserver(
+      ([entry]) => {
+        inViewport = entry.isIntersecting;
+        syncPlayback();
+      },
+      { rootMargin: "100px 0px" },
+    );
+    if (node) viewportObserver.observe(node);
+    document.addEventListener("visibilitychange", syncPlayback);
 
-    const node = pauseOnHover ? container.current : null;
-    if (node) {
-      node.addEventListener("mouseenter", pause);
-      node.addEventListener("mouseleave", resume);
+    const onMouseEnter = () => {
+      hovered = true;
+      syncPlayback();
+    };
+    const onMouseLeave = () => {
+      hovered = false;
+      syncPlayback();
+    };
+    if (pauseOnHover && node) {
+      node.addEventListener("mouseenter", onMouseEnter);
+      node.addEventListener("mouseleave", onMouseLeave);
     }
 
     return () => {
-      document.removeEventListener("visibilitychange", onVisibility);
-      if (node) {
-        node.removeEventListener("mouseenter", pause);
-        node.removeEventListener("mouseleave", resume);
+      document.removeEventListener("visibilitychange", syncPlayback);
+      viewportObserver.disconnect();
+      if (pauseOnHover && node) {
+        node.removeEventListener("mouseenter", onMouseEnter);
+        node.removeEventListener("mouseleave", onMouseLeave);
       }
       clearInterval(intervalRef.current);
+      intervalRef.current = 0;
       tlRef.current?.kill();
+      if (node) delete node.dataset.cardSwapState;
     };
   }, [cardDistance, verticalDistance, delay, pauseOnHover, skewAmount, easing, refs]);
 

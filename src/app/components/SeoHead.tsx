@@ -3,7 +3,7 @@ import { siteConfig, faq, serviceTypes } from "../data/content";
 
 const TITLE = "Barthy Web Studio | Landing Pages, CRM, Dashboards e Automações";
 const DESCRIPTION =
-  "Landing pages, portfólios, CRMs, dashboards e automações que tornam sua apresentação mais clara, a captação mais simples e o atendimento mais organizado. Base em Brasília e atendimento digital em todo o Brasil.";
+  "Landing pages, portfólios, CRMs, dashboards e automações que tornam sua apresentação mais clara, a captação mais simples e o atendimento mais organizado. Base em Brasília, com atendimento digital em todo o Brasil.";
 const KEYWORDS =
   "landing page, portfólio online, CRM, pipeline comercial, dashboard, portal interno, automação, integração, suporte digital, presença digital, Barthy Web Studio, sites em Brasília, atendimento remoto Brasil";
 const OG_TITLE = "Barthy Web Studio | Páginas, sistemas e automações";
@@ -49,8 +49,6 @@ export function SeoHead() {
     upsertMeta("name", "keywords", KEYWORDS);
     upsertMeta("name", "author", siteConfig.name);
     upsertMeta("name", "robots", "index, follow");
-    upsertMeta("name", "theme-color", "#0A1931");
-
     // Open Graph (WhatsApp, LinkedIn, redes sociais)
     upsertMeta("property", "og:type", "website");
     upsertMeta("property", "og:site_name", siteConfig.name);

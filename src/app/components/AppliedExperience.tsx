@@ -6,7 +6,9 @@ import { Container, Section } from "./ui-primitives";
 import { trackEvent } from "../lib/track";
 
 function useMediaQuery(query: string) {
-  const [matches, setMatches] = useState(false);
+  const [matches, setMatches] = useState(() =>
+    typeof window !== "undefined" ? window.matchMedia(query).matches : false,
+  );
   useEffect(() => {
     const mq = window.matchMedia(query);
     const update = () => setMatches(mq.matches);

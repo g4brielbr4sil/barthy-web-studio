@@ -72,7 +72,7 @@ function PriceCard({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-60px" }}
       transition={{ duration: 0.55, delay: index * 0.08 + 0.2, ease: [0.22, 1, 0.36, 1] }}
-      className={`relative flex flex-col rounded-3xl p-8 backdrop-blur-xl transition-all duration-300 ${
+      className={`relative flex flex-col rounded-3xl p-8 backdrop-blur-xl transition-[background-color,border-color,box-shadow,transform] duration-200 ${
         highlight
           ? "bg-gradient-to-b from-[var(--surface)] to-[var(--background)] border border-[var(--terra)]/50 ring-1 ring-[var(--terra)]/25 shadow-[0_30px_80px_-30px_rgba(205,118,93,0.45)] lg:-mt-4 lg:mb-4 lg:z-10"
           : "glass hover:-translate-y-[2px] hover:border-[var(--ice-blue)]/40"

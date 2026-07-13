@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Menu, X } from "lucide-react";
 import { BarthyLogo } from "./BarthyLogo";
 import { ThemeToggle } from "./ThemeToggle";
@@ -19,6 +19,7 @@ const nav = [
 export function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const headerRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     const on = () => setScrolled(window.scrollY > 12);
@@ -27,36 +28,49 @@ export function Header() {
     return () => window.removeEventListener("scroll", on);
   }, []);
 
-  // Fecha o menu mobile com Escape.
+  // Fecha o menu mobile por teclado, clique externo ou mudança para desktop.
   useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") setOpen(false);
     };
+    const onPointerDown = (e: PointerEvent) => {
+      if (!headerRef.current?.contains(e.target as Node)) setOpen(false);
+    };
+    const onResize = () => {
+      if (window.innerWidth >= 1200) setOpen(false);
+    };
     window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
+    window.addEventListener("pointerdown", onPointerDown);
+    window.addEventListener("resize", onResize, { passive: true });
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      window.removeEventListener("pointerdown", onPointerDown);
+      window.removeEventListener("resize", onResize);
+    };
   }, [open]);
 
   return (
     <header
-      className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${
+      ref={headerRef}
+      className={`header-enter fixed inset-x-0 top-0 z-50 transition-[background-color,border-color,box-shadow,backdrop-filter] duration-300 ${
         scrolled
-          ? "backdrop-blur-xl bg-[var(--background)]/70 border-b border-[var(--border)]"
+          ? "border-b border-[var(--border)] bg-[var(--header-background)] shadow-[0_12px_36px_-28px_var(--shadow-color)] backdrop-blur-xl"
           : "bg-transparent border-b border-transparent"
       }`}
     >
-      <div className="mx-auto max-w-[1200px] px-4 sm:px-5 md:px-8 h-[64px] md:h-[72px] flex items-center justify-between gap-2 sm:gap-4 lg:gap-6">
-        <a href="#inicio" className="min-w-0 shrink truncate">
+      <div className="mx-auto flex h-[64px] max-w-[1400px] items-center justify-between gap-2 px-4 sm:gap-4 sm:px-5 md:h-[72px] md:px-8 min-[1200px]:gap-5">
+        <a href="#inicio" className="shrink-0 whitespace-nowrap" aria-label="Ir para o início">
           <BarthyLogo />
         </a>
 
-        <nav className="hidden lg:flex items-center gap-1">
+        <nav className="hidden min-w-0 flex-1 items-center justify-center gap-0.5 min-[1200px]:flex" aria-label="Navegação principal">
           {nav.map((item) => (
             <a
               key={item.href}
               href={item.href}
-              className="px-3 py-2 rounded-lg text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition-colors"
-              style={{ fontSize: "0.92rem" }}
+              className="whitespace-nowrap rounded-lg px-2.5 py-2 text-[var(--muted-foreground)] transition-colors hover:text-[var(--foreground)] min-[1360px]:px-3"
+              style={{ fontSize: "0.86rem" }}
             >
               {item.label}
             </a>
@@ -65,16 +79,18 @@ export function Header() {
 
         <div className="flex items-center gap-2 sm:gap-3 shrink-0">
           <ThemeToggle />
-          <LinkButton
-            href="#contato"
-            className="hidden md:inline-flex"
-            onClick={() => trackEvent("click_header_cta", { location: "desktop" })}
-          >
-            Falar sobre meu projeto
-          </LinkButton>
+          <div className="hidden min-[1200px]:block">
+            <LinkButton
+              href="#contato"
+              className="whitespace-nowrap"
+              onClick={() => trackEvent("click_header_cta", { location: "desktop" })}
+            >
+              Falar sobre meu projeto
+            </LinkButton>
+          </div>
           <button
             type="button"
-            className="lg:hidden shrink-0 inline-flex items-center justify-center w-9 h-9 rounded-full border border-[var(--border)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)]/60"
+            className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-[var(--border)] bg-[var(--card)] text-[var(--foreground)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)]/60 min-[1200px]:hidden"
             onClick={() => setOpen((v) => !v)}
             aria-label={open ? "Fechar menu" : "Abrir menu"}
             aria-expanded={open}
@@ -86,14 +102,14 @@ export function Header() {
       </div>
 
       {open && (
-        <div id="mobile-nav" className="lg:hidden border-t border-[var(--border)] bg-[var(--background)]/95 backdrop-blur-xl">
-          <div className="px-5 py-4 flex flex-col gap-1">
+        <div id="mobile-nav" className="max-h-[calc(100dvh-64px)] overflow-y-auto border-t border-[var(--border)] bg-[var(--header-menu-background)] shadow-xl backdrop-blur-xl min-[1200px]:hidden">
+          <nav className="flex flex-col gap-1 px-5 py-4" aria-label="Navegação mobile">
             {nav.map((item) => (
               <a
                 key={item.href}
                 href={item.href}
                 onClick={() => setOpen(false)}
-                className="px-3 py-2.5 rounded-lg text-[var(--foreground)] hover:bg-[var(--muted)]"
+                className="flex min-h-11 items-center rounded-lg px-3 py-2.5 text-[var(--foreground)] hover:bg-[var(--muted)]"
               >
                 {item.label}
               </a>
@@ -108,7 +124,7 @@ export function Header() {
             >
               Falar sobre meu projeto
             </LinkButton>
-          </div>
+          </nav>
         </div>
       )}
     </header>

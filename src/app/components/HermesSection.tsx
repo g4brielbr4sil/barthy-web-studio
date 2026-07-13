@@ -1,5 +1,5 @@
-import { Check, Workflow, ArrowRight } from "lucide-react";
-import { hermesPoints, hermesFlow } from "../data/content";
+import { Workflow } from "lucide-react";
+import { hermesFunctions } from "../data/content";
 import { Container, Section } from "./ui-primitives";
 
 export function HermesSection() {
@@ -25,51 +25,41 @@ export function HermesSection() {
                 Operação interna
               </div>
               <h2 className="text-balance text-[var(--foreground)]">
-                Leads organizados desde o primeiro contato.
+                O Hermes organiza cada oportunidade do primeiro contato ao acompanhamento.
               </h2>
               <p
                 className="mt-5 text-[var(--muted-foreground)] text-pretty"
                 style={{ fontSize: "clamp(0.98rem, 1.4vw, 1.05rem)" }}
               >
-                As solicitações do site entram no Hermes com origem, cidade, serviço de interesse e
-                próxima ação. Isso dá continuidade ao atendimento e reduz o risco de perder
-                oportunidades.
+                O Hermes é o sistema interno da Barthy para centralizar contatos, classificar
+                oportunidades, criar alertas e acompanhar as próximas ações comerciais em um só
+                lugar.
               </p>
-
-              {/* Fluxo interno */}
-              <ol className="mt-7 flex flex-col gap-2">
-                {hermesFlow.map((step, i) => (
-                  <li
-                    key={step}
-                    className="flex items-center gap-3 text-[var(--foreground)]"
-                    style={{ fontSize: "0.9rem" }}
-                  >
-                    <span className="inline-flex items-center justify-center w-6 h-6 rounded-full border border-[var(--border)] text-[var(--ice-blue)] shrink-0 tabular-nums" style={{ fontSize: "0.72rem" }}>
-                      {i + 1}
-                    </span>
-                    {step}
-                    {i < hermesFlow.length - 1 && (
-                      <ArrowRight className="w-3.5 h-3.5 text-[var(--border-strong)] ml-auto sm:ml-0" />
-                    )}
-                  </li>
-                ))}
-              </ol>
             </div>
 
-            <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {hermesPoints.map((p) => (
+            <ol className="grid grid-cols-1 gap-3">
+              {hermesFunctions.map((item, index) => (
                 <li
-                  key={p}
-                  className="flex items-center gap-2.5 rounded-xl border border-[var(--border)] bg-[var(--surface)] px-4 py-3 text-[var(--foreground)]"
-                  style={{ fontSize: "0.9rem" }}
+                  key={item.title}
+                  className="flex items-start gap-4 rounded-xl border border-[var(--border)] bg-[var(--surface)] px-4 py-3.5"
                 >
-                  <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-[var(--terra)]/15 text-[var(--terra)] shrink-0">
-                    <Check className="w-3 h-3" />
+                  <span
+                    className="mt-0.5 inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-[var(--border)] text-[var(--ice-blue)] tabular-nums"
+                    style={{ fontSize: "0.72rem" }}
+                  >
+                    {index + 1}
                   </span>
-                  {p}
+                  <span>
+                    <strong className="block text-[var(--foreground)]" style={{ fontSize: "0.92rem" }}>
+                      {item.title}
+                    </strong>
+                    <span className="mt-1 block text-[var(--muted-foreground)]" style={{ fontSize: "0.84rem", lineHeight: 1.55 }}>
+                      {item.text}
+                    </span>
+                  </span>
                 </li>
               ))}
-            </ul>
+            </ol>
           </div>
         </div>
       </Container>

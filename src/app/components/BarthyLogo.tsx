@@ -94,7 +94,7 @@ export function BarthyLogo({
     >
       <span style={{ fontWeight: 700 }}>Barthy</span>
       <span
-        className="ml-1.5 hidden min-[380px]:inline text-[var(--muted-foreground)]"
+        className="ml-1.5 inline text-[var(--muted-foreground)]"
         style={{ fontWeight: 400, letterSpacing: "-0.01em" }}
       >
         Web Studio
