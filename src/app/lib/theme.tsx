@@ -10,6 +10,10 @@ import {
 export type Theme = "light" | "dark";
 
 const STORAGE_KEY = "barthy-theme";
+const THEME_BACKGROUNDS: Record<Theme, string> = {
+  dark: "#0A1931",
+  light: "#EAF1F7",
+};
 
 /** Lê a preferência salva. Dark é o padrão quando não há nada salvo. */
 export function getInitialTheme(): Theme {
@@ -21,15 +25,34 @@ export function getInitialTheme(): Theme {
   }
 }
 
-/** Aplica o tema ao DOM: classe .dark, color-scheme e meta theme-color. */
-export function applyTheme(theme: Theme): void {
+/** Aplica todas as partes do tema em uma única execução síncrona. */
+export function applyTheme(theme: Theme, persist = false): void {
   if (typeof document === "undefined") return;
   const root = document.documentElement;
-  root.classList.toggle("dark", theme === "dark");
+  const isDark = theme === "dark";
+  const background = THEME_BACKGROUNDS[theme];
+
+  root.dataset.theme = theme;
+  root.classList.toggle("dark", isDark);
   root.style.colorScheme = theme;
-  root.style.backgroundColor = theme === "dark" ? "#0A1931" : "#EAF1F7";
-  const meta = document.querySelector('meta[name="theme-color"]');
-  if (meta) meta.setAttribute("content", theme === "dark" ? "#0A1931" : "#EAF1F7");
+  root.style.backgroundColor = background;
+  if (document.body) document.body.style.backgroundColor = background;
+
+  let meta = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]');
+  if (!meta) {
+    meta = document.createElement("meta");
+    meta.name = "theme-color";
+    document.head.appendChild(meta);
+  }
+  meta.content = background;
+
+  if (persist) {
+    try {
+      localStorage.setItem(STORAGE_KEY, theme);
+    } catch {
+      /* armazenamento indisponível; o tema visual continua aplicado */
+    }
+  }
 }
 
 interface ThemeContextValue {
@@ -45,25 +68,15 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     applyTheme(theme);
-    try {
-      localStorage.setItem(STORAGE_KEY, theme);
-    } catch {
-      /* ignore */
-    }
-  }, [theme]);
-
-  // Habilita as transições de tema só depois do primeiro frame.
-  useEffect(() => {
-    const id = requestAnimationFrame(() => {
-      document.documentElement.classList.add("theme-ready");
-    });
-    return () => cancelAnimationFrame(id);
+    document.documentElement.classList.add("theme-ready");
   }, []);
 
-  const toggleTheme = useCallback(
-    () => setTheme((t) => (t === "dark" ? "light" : "dark")),
-    [],
-  );
+  const toggleTheme = useCallback(() => {
+    const current = document.documentElement.dataset.theme === "light" ? "light" : "dark";
+    const next = current === "dark" ? "light" : "dark";
+    applyTheme(next, true);
+    setTheme(next);
+  }, []);
 
   return (
     <ThemeContext.Provider value={{ theme, isDark: theme === "dark", toggleTheme }}>

@@ -1,7 +1,8 @@
 @custom-variant dark (&:is(.dark *));
 
-:root {
-  color-scheme: light;
+:root,
+[data-theme="dark"] {
+  color-scheme: dark;
   --font-size: 16px;
 
   /* Barthy palette (oficial — não criar novas cores) */
@@ -14,63 +15,14 @@
   --terra: #CD765D;
   --terra-soft: #E29A85;
 
-  /* Light mode — editorial, premium, levemente azulado (derivado da paleta) */
-  --background: #EAF1F7;
-  --foreground: #0A1931;
+  /* Dark mode é o fallback inicial e a referência visual principal. */
+  --page-background: #0A1931;
+  --hero-background: #0A1931;
+  --hero-glow-primary: rgba(26, 61, 99, 0.52);
+  --hero-glow-secondary: rgba(74, 127, 167, 0.22);
+  --hero-tint-start: rgba(13, 31, 61, 0.34);
+  --hero-tint-end: rgba(10, 25, 49, 0.08);
 
-  --surface: #F6FAFD;
-  --surface-raised: #F1F6FA;
-  --surface-2: #DDE8F2;
-  --surface-3: #D2E0EC;
-
-  --card: rgba(246, 250, 253, 0.86);
-  --card-solid: #F6FAFD;
-  --card-foreground: #0A1931;
-
-  --popover: #F6FAFD;
-  --popover-foreground: #0A1931;
-
-  --primary: var(--terra);
-  --primary-foreground: #ffffff;
-  --secondary: var(--royal);
-  --secondary-foreground: var(--ice-white);
-
-  --muted: #D9E5EF;
-  --muted-foreground: #52657B;
-
-  --accent: var(--soft-ice);
-  --accent-foreground: #0A1931;
-
-  --destructive: #d4183d;
-  --destructive-foreground: #ffffff;
-
-  --border: rgba(26, 61, 99, 0.17);
-  --border-strong: rgba(26, 61, 99, 0.26);
-  --hairline: rgba(26, 61, 99, 0.10);
-
-  --input: rgba(26, 61, 99, 0.06);
-  --input-background: rgba(246, 250, 253, 0.92);
-
-  --switch-background: #CBD9E5;
-  --ring: var(--ice-blue);
-
-  /* Destaque tipográfico: no light usa Royal Blue para manter contraste */
-  --text-accent: #1A3D63;
-
-  --shadow-color: rgba(10, 25, 49, 0.16);
-  --shadow-soft: 0 18px 50px -32px rgba(10, 25, 49, 0.30);
-  --header-background: rgba(246, 250, 253, 0.88);
-  --header-menu-background: rgba(246, 250, 253, 0.97);
-
-  --font-weight-normal: 400;
-  --font-weight-medium: 500;
-  --font-weight-bold: 700;
-  --radius: 0.875rem;
-}
-
-.dark {
-  color-scheme: dark;
-  /* Dark mode (default — premium noturno) */
   --background: #0A1931;
   --foreground: #F6FAFD;
 
@@ -110,13 +62,73 @@
   --switch-background: rgba(255, 255, 255, 0.16);
   --ring: var(--ice-blue);
 
-  /* Destaque tipográfico: no dark usa Soft Ice */
   --text-accent: #B3CFE5;
 
   --shadow-color: rgba(0, 0, 0, 0.45);
   --shadow-soft: 0 24px 70px -36px rgba(0, 0, 0, 0.70);
   --header-background: rgba(10, 25, 49, 0.86);
   --header-menu-background: rgba(10, 25, 49, 0.97);
+
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-bold: 700;
+  --radius: 0.875rem;
+}
+
+[data-theme="light"] {
+  color-scheme: light;
+  --page-background: #EAF1F7;
+  --hero-background: #EAF1F7;
+  --hero-glow-primary: rgba(179, 207, 229, 0.58);
+  --hero-glow-secondary: rgba(26, 61, 99, 0.12);
+  --hero-tint-start: rgba(246, 250, 253, 0.22);
+  --hero-tint-end: rgba(221, 232, 242, 0.18);
+
+  --background: #EAF1F7;
+  --foreground: #0A1931;
+
+  --surface: #F6FAFD;
+  --surface-raised: #F1F6FA;
+  --surface-2: #DDE8F2;
+  --surface-3: #D2E0EC;
+
+  --card: rgba(246, 250, 253, 0.86);
+  --card-solid: #F6FAFD;
+  --card-foreground: #0A1931;
+
+  --popover: #F6FAFD;
+  --popover-foreground: #0A1931;
+
+  --primary: var(--terra);
+  --primary-foreground: #ffffff;
+  --secondary: var(--royal);
+  --secondary-foreground: var(--ice-white);
+
+  --muted: #D9E5EF;
+  --muted-foreground: #52657B;
+
+  --accent: var(--soft-ice);
+  --accent-foreground: #0A1931;
+
+  --destructive: #d4183d;
+  --destructive-foreground: #ffffff;
+
+  --border: rgba(26, 61, 99, 0.17);
+  --border-strong: rgba(26, 61, 99, 0.26);
+  --hairline: rgba(26, 61, 99, 0.10);
+
+  --input: rgba(26, 61, 99, 0.06);
+  --input-background: rgba(246, 250, 253, 0.92);
+
+  --switch-background: #CBD9E5;
+  --ring: var(--ice-blue);
+
+  --text-accent: #1A3D63;
+
+  --shadow-color: rgba(10, 25, 49, 0.16);
+  --shadow-soft: 0 18px 50px -32px rgba(10, 25, 49, 0.30);
+  --header-background: rgba(246, 250, 253, 0.88);
+  --header-menu-background: rgba(246, 250, 253, 0.97);
 }
 
 @theme inline {
@@ -172,19 +184,42 @@
     box-sizing: border-box;
   }
 
+  html,
+  body,
+  #root {
+    min-height: 100%;
+    background-color: var(--page-background);
+  }
+
   html {
     font-size: var(--font-size);
-    background-color: var(--background);
     overflow-x: clip;
     scroll-behavior: smooth;
   }
 
   body {
-    background-color: var(--background);
+    margin: 0;
     color: var(--foreground);
     font-family: var(--font-sans);
     max-width: 100%;
     overflow-x: clip;
+  }
+
+  main {
+    min-height: 100%;
+    background-color: var(--page-background);
+  }
+
+  .hero-section {
+    background-color: var(--hero-background);
+  }
+
+  .hero-background {
+    background:
+      radial-gradient(72% 82% at 14% 4%, var(--hero-glow-primary), transparent 72%),
+      radial-gradient(64% 76% at 96% 92%, var(--hero-glow-secondary), transparent 74%),
+      linear-gradient(135deg, var(--hero-tint-start), var(--hero-tint-end)),
+      var(--hero-background);
   }
 
   /* Nada de mídia estourando a largura da tela em qualquer breakpoint */
@@ -297,6 +332,14 @@
       fill 200ms ease,
       stroke 200ms ease,
       opacity 200ms ease;
+  }
+
+  .theme-ready body,
+  .theme-ready #root,
+  .theme-ready main,
+  .theme-ready .hero-section,
+  .theme-ready .hero-background {
+    transition: none;
   }
 
   .header-enter {

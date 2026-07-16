@@ -2,7 +2,6 @@ import { ArrowRight, Check } from "lucide-react";
 import { motion, useReducedMotion } from "motion/react";
 import { PlasmaBackground } from "./PlasmaBackground";
 import { LinkButton } from "./ui-primitives";
-import { useTheme } from "../lib/theme";
 import { trackEvent } from "../lib/track";
 
 const trust = [
@@ -12,36 +11,15 @@ const trust = [
 ];
 
 export function Hero() {
-  const { isDark } = useTheme();
   const reduceMotion = useReducedMotion();
-
-  const isMobile =
-    typeof window !== "undefined" && window.matchMedia("(max-width: 768px)").matches;
-
-  // Plasma muito sutil — mais discreto no light para não estourar.
-  const plasmaOpacity = isDark ? (isMobile ? 0.1 : 0.16) : isMobile ? 0.05 : 0.08;
-
-  const overlay = isDark
-    ? "radial-gradient(1100px 560px at 18% 8%, rgba(26,61,99,0.5), transparent 60%), radial-gradient(820px 460px at 96% 92%, rgba(74,127,167,0.22), transparent 60%)"
-    : "radial-gradient(1000px 520px at 16% 4%, rgba(74,127,167,0.16), transparent 62%), radial-gradient(760px 420px at 98% 96%, rgba(26,61,99,0.08), transparent 60%)";
 
   return (
     <section
       id="inicio"
-      className="relative isolate overflow-hidden pt-[112px] pb-20 md:pt-[160px] md:pb-28"
+      className="hero-section relative isolate overflow-hidden pt-[112px] pb-20 md:pt-[160px] md:pb-28"
     >
       <div className="absolute inset-0 -z-10">
-        <PlasmaBackground
-          color={isDark ? "#4A7FA7" : "#1A3D63"}
-          speed={0.2}
-          opacity={plasmaOpacity}
-          scale={1.2}
-          mouseInteractive
-        />
-      </div>
-
-      <div className="absolute inset-0 -z-10 pointer-events-none">
-        <div className="absolute inset-0" style={{ background: overlay }} />
+        <PlasmaBackground />
       </div>
 
       <div className="mx-auto max-w-[1200px] px-4 sm:px-5 md:px-8 relative">
