@@ -220,6 +220,51 @@
       radial-gradient(64% 76% at 96% 92%, var(--hero-glow-secondary), transparent 74%),
       linear-gradient(135deg, var(--hero-tint-start), var(--hero-tint-end)),
       var(--hero-background);
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .hero-background__svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+
+  .hero-wave {
+    transform-box: fill-box;
+    transform-origin: center;
+    will-change: transform, opacity;
+  }
+
+  .hero-wave--primary {
+    opacity: 0.48;
+    animation: hero-wave-primary 24s ease-in-out infinite alternate;
+  }
+
+  .hero-wave--secondary {
+    opacity: 0.25;
+    animation: hero-wave-secondary 28s ease-in-out infinite alternate;
+  }
+
+  .hero-wave--glow {
+    --hero-wave-glow-min: 0.14;
+    --hero-wave-glow-max: 0.22;
+    opacity: var(--hero-wave-glow-min);
+    animation: hero-wave-glow 18s ease-in-out infinite alternate;
+  }
+
+  [data-theme="light"] .hero-wave--primary {
+    opacity: 0.2;
+  }
+
+  [data-theme="light"] .hero-wave--secondary {
+    opacity: 0.11;
+  }
+
+  [data-theme="light"] .hero-wave--glow {
+    --hero-wave-glow-min: 0.05;
+    --hero-wave-glow-max: 0.09;
   }
 
   /* Nada de mídia estourando a largura da tela em qualquer breakpoint */
@@ -319,27 +364,33 @@
 }
 
 @layer base {
-  /* Transição de tema suave — habilitada só após o primeiro frame (.theme-ready)
-     para não animar a carga inicial. Não usar transition: all. */
-  .theme-ready *,
-  .theme-ready *::before,
-  .theme-ready *::after {
-    transition:
-      background-color 200ms ease,
-      color 200ms ease,
-      border-color 200ms ease,
-      box-shadow 200ms ease,
-      fill 200ms ease,
-      stroke 200ms ease,
-      opacity 200ms ease;
+  @keyframes hero-wave-primary {
+    from {
+      transform: translate3d(-2%, 1%, 0) scale(1.01);
+    }
+    to {
+      transform: translate3d(2%, -1%, 0) scale(1.03);
+    }
   }
 
-  .theme-ready body,
-  .theme-ready #root,
-  .theme-ready main,
-  .theme-ready .hero-section,
-  .theme-ready .hero-background {
-    transition: none;
+  @keyframes hero-wave-secondary {
+    from {
+      transform: translate3d(2%, -0.5%, 0) scale(1.02);
+    }
+    to {
+      transform: translate3d(-2%, 1%, 0) scale(1);
+    }
+  }
+
+  @keyframes hero-wave-glow {
+    from {
+      transform: translate3d(1%, 1%, 0) scale(0.98);
+      opacity: var(--hero-wave-glow-min);
+    }
+    to {
+      transform: translate3d(-1%, -1%, 0) scale(1.03);
+      opacity: var(--hero-wave-glow-max);
+    }
   }
 
   .header-enter {
@@ -366,10 +417,9 @@
       animation: none;
     }
 
-    .theme-ready *,
-    .theme-ready *::before,
-    .theme-ready *::after {
-      transition: none !important;
+    .hero-wave {
+      animation: none;
+      will-change: auto;
     }
   }
 

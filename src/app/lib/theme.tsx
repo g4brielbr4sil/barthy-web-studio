@@ -68,7 +68,6 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     applyTheme(theme);
-    document.documentElement.classList.add("theme-ready");
   }, []);
 
   const toggleTheme = useCallback(() => {
