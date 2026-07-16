@@ -24,7 +24,7 @@ export function HermesSection() {
                 <Workflow className="w-3.5 h-3.5 shrink-0" />
                 Operação interna
               </div>
-              <h2 className="text-balance text-[var(--foreground)]">
+              <h2 className="text-balance break-words text-[var(--foreground)]">
                 O Hermes organiza cada oportunidade do primeiro contato ao acompanhamento.
               </h2>
               <p

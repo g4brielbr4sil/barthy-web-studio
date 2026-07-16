@@ -26,14 +26,15 @@ export function SystemsCRM() {
               Sistemas e operação
             </p>
             <h2 className="text-balance text-[var(--foreground)]">
-              Quando a página não é suficiente, organizamos o processo.
+              Sistemas para centralizar informações e dar visibilidade à operação.
             </h2>
             <p
               className="mt-5 text-[var(--muted-foreground)] text-pretty"
               style={{ fontSize: "1.05rem" }}
             >
-              Criamos estruturas digitais para registrar informações, acompanhar oportunidades,
-              centralizar rotinas e dar mais visibilidade à operação.
+              Quando planilhas, mensagens e tarefas deixam de ser suficientes, a Barthy estrutura
+              sistemas que centralizam informações, organizam processos e dão mais visibilidade à
+              operação.
             </p>
 
             <div className="mt-8">

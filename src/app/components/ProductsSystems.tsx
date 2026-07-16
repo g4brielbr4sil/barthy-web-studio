@@ -17,9 +17,9 @@ export function ProductsSystems() {
       />
       <Container>
         <SectionHeading
-          eyebrow="Produtos digitais"
-          title="Produtos digitais para conectar canais e ampliar a operação."
-          description="Estruturas reutilizáveis, plataformas e conectores para apoiar atendimento, comunicação e novos serviços digitais."
+          eyebrow="Produtos e integrações"
+          title="Estruturas reutilizáveis para conectar canais e reduzir tarefas manuais."
+          description="Algumas necessidades podem ser resolvidas com produtos digitais, templates e integrações que melhoram a continuidade da operação."
         />
 
         <div

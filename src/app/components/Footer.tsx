@@ -16,8 +16,8 @@ export function Footer() {
           <div className="md:col-span-1">
             <BarthyLogo />
             <p className="mt-5 text-[var(--muted-foreground)] max-w-xs" style={{ fontSize: "0.9rem" }}>
-              Páginas, sistemas e operação digital para empresas e profissionais que querem vender e
-              trabalhar com mais clareza.
+              Soluções digitais organizadas para empresas, profissionais e operações que precisam
+              apresentar, conectar e evoluir com clareza.
             </p>
           </div>
 
@@ -70,7 +70,7 @@ export function Footer() {
         <div className="mt-12 pt-6 border-t border-[var(--border)] flex flex-col md:flex-row gap-3 items-start md:items-center justify-between text-[var(--muted-foreground)]" style={{ fontSize: "0.8rem" }}>
           <span>© {new Date().getFullYear()} Barthy Web Studio. Todos os direitos reservados.</span>
           <span style={{ letterSpacing: "0.18em", textTransform: "uppercase" }}>
-            Design, tecnologia e operação digital.
+            Tecnologia organizada para operações reais.
           </span>
         </div>
       </Container>

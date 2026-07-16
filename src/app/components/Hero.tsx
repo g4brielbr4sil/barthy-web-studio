@@ -5,8 +5,8 @@ import { LinkButton } from "./ui-primitives";
 import { trackEvent } from "../lib/track";
 
 const trust = [
+  "Diagnóstico antes da solução",
   "Escopo e prazo definidos",
-  "Comunicação durante o projeto",
   "Entrega pronta para uso",
 ];
 
@@ -33,22 +33,23 @@ export function Hero() {
             className="text-[var(--text-accent)] mb-4"
             style={{ fontSize: "0.85rem", letterSpacing: "0.14em", textTransform: "uppercase" }}
           >
-            Páginas, sistemas e automações
+            Tecnologia organizada para operações reais
           </p>
 
           <h1
             className="text-balance text-[var(--foreground)] max-w-[740px]"
             style={{ fontSize: "clamp(2rem, 5.4vw, 4rem)" }}
           >
-            Páginas, sistemas e atendimento organizados para sua empresa vender melhor.
+            Transformamos necessidades reais em páginas, sistemas e fluxos que fazem a operação
+            avançar.
           </h1>
 
           <p
             className="mt-6 max-w-[620px] text-[var(--muted-foreground)] text-pretty"
             style={{ fontSize: "clamp(0.98rem, 1.4vw, 1.1rem)" }}
           >
-            Criamos landing pages, portfólios, CRMs, dashboards e automações que tornam sua
-            apresentação mais clara, a captação mais simples e o atendimento mais organizado.
+            A Barthy organiza presença digital, captação, atendimento e processos internos em
+            soluções claras, funcionais e preparadas para evoluir.
           </p>
 
           <div className="mt-8 flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-3">

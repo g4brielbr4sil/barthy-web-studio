@@ -87,14 +87,14 @@ export function AppliedExperience() {
               Experiência aplicada
             </p>
             <h2 className="text-[var(--foreground)] text-balance">
-              Experiência que sustenta o que entregamos.
+              Experiência aplicada em operações que exigem continuidade.
             </h2>
             <p
               className="mt-5 text-[var(--muted-foreground)] text-pretty"
               style={{ fontSize: "clamp(0.98rem, 1.4vw, 1.05rem)", maxWidth: "60ch" }}
             >
-              A atuação em portais, plataformas educacionais, CRM, dashboards, automações e fluxos
-              internos orienta cada projeto desenvolvido pela Barthy.
+              A experiência da Barthy nasce da construção de soluções reais para operações que
+              exigem organização, controle e continuidade.
             </p>
             <ul
               className="mt-7 grid grid-cols-1 sm:grid-cols-2 gap-3 text-[var(--muted-foreground)]"
@@ -110,8 +110,8 @@ export function AppliedExperience() {
               ))}
             </ul>
             <p className="mt-6 text-[var(--muted-foreground)]" style={{ fontSize: "0.78rem" }}>
-              Experiências profissionais e projetos próprios que compõem a capacidade técnica da
-              Barthy Web Studio.
+              Projetos desenvolvidos e atuação profissional que demonstram conhecimento aplicado
+              em situações reais, sem representar necessariamente clientes da Barthy.
             </p>
           </div>
 
