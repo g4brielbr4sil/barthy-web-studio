@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type FormEvent } from "react";
-import { MessageCircle, Send, Loader2, Check, AlertTriangle, RotateCcw } from "lucide-react";
+import { MessageCircle, Send, Loader2, AlertTriangle, RotateCcw } from "lucide-react";
 import { motion } from "motion/react";
 import {
   Container,
@@ -17,6 +17,7 @@ import {
 import { submitLeadToHermes, NoContactChannelError } from "../lib/hermes";
 import { trackEvent } from "../lib/track";
 import { PREFILL_EVENT, type PrefillDetail } from "../lib/prefill";
+import { FormSuccessCelebration } from "./FormSuccessCelebration";
 
 const inputCls =
   "w-full px-4 py-3 rounded-xl bg-[var(--input-background)] border border-[var(--border)] text-[var(--foreground)] placeholder:text-[var(--muted-foreground)] focus:outline-none focus:border-[var(--ice-blue)]/70 focus:ring-2 focus:ring-[var(--ice-blue)]/20 transition min-w-0";
@@ -231,15 +232,21 @@ export function QuoteForm() {
 
           {/* Estado de sucesso */}
           {status === "success" ? (
-            <div className="rounded-2xl glass p-6 md:p-8 flex flex-col gap-4">
-              <motion.div
-                initial={{ scale: 0.6, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                transition={{ type: "spring", stiffness: 400, damping: 22 }}
-                className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-[var(--ice-blue)]/15 text-[var(--ice-blue)]"
-              >
-                <Check className="w-6 h-6" />
-              </motion.div>
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.36, ease: [0.22, 1, 0.36, 1] }}
+              className="relative flex flex-col gap-4 overflow-hidden rounded-2xl p-6 glass md:p-8"
+            >
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-0"
+                style={{
+                  background:
+                    "radial-gradient(420px 220px at 12% 8%, rgba(74,127,167,0.18), transparent 70%)",
+                }}
+              />
+              <FormSuccessCelebration />
               <div>
                 <h3 className="text-[var(--foreground)]">Solicitação recebida.</h3>
                 <p className="mt-2 text-[var(--muted-foreground)]" style={{ fontSize: "0.93rem" }}>
@@ -275,7 +282,7 @@ export function QuoteForm() {
                   <RotateCcw className="w-4 h-4" /> Enviar outra solicitação
                 </Button>
               </div>
-            </div>
+            </motion.div>
           ) : (
             <form
               ref={formRef}

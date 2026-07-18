@@ -362,6 +362,10 @@
     border: 1px solid var(--border-strong);
     box-shadow: var(--shadow-soft);
   }
+
+  .terminal-cursor {
+    animation: terminal-cursor-pulse 640ms steps(2, end) infinite;
+  }
 }
 
 @layer base {
@@ -420,6 +424,38 @@
     }
   }
 
+  @keyframes terminal-cursor-pulse {
+    50% {
+      opacity: 0.18;
+    }
+  }
+
+  .technical-flow__step {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  @supports (animation-timeline: view()) {
+    @media (min-width: 768px) and (prefers-reduced-motion: no-preference) {
+      .technical-flow__step {
+        animation: technical-flow-enter linear both;
+        animation-timeline: view();
+        animation-range: entry 10% cover 32%;
+      }
+    }
+  }
+
+  @keyframes technical-flow-enter {
+    from {
+      opacity: 0.45;
+      transform: translateY(12px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
   @media (prefers-reduced-motion: reduce) {
     html {
       scroll-behavior: auto;
@@ -435,6 +471,11 @@
     }
 
     .hero-background__svg {
+      animation: none;
+    }
+
+    .terminal-cursor,
+    .technical-flow__step {
       animation: none;
     }
   }

@@ -3,24 +3,11 @@ import { ArrowUpRight, ChevronRight } from "lucide-react";
 import { appliedExperience, type Experience } from "../data/content";
 import { Container, Section, SectionHeading } from "./ui-primitives";
 import { trackEvent } from "../lib/track";
+import { useMediaQuery } from "../lib/useMediaQuery";
+import { HermesTerminal } from "./HermesTerminal";
+import { TechnicalFlow } from "./TechnicalFlow";
 
 const LazyExperienceCardSwap = lazy(() => import("./ExperienceCardSwap"));
-
-function useMediaQuery(query: string) {
-  const [matches, setMatches] = useState(() =>
-    typeof window !== "undefined" ? window.matchMedia(query).matches : false,
-  );
-
-  useEffect(() => {
-    const mq = window.matchMedia(query);
-    const update = () => setMatches(mq.matches);
-    update();
-    mq.addEventListener("change", update);
-    return () => mq.removeEventListener("change", update);
-  }, [query]);
-
-  return matches;
-}
 
 function TechnologyBadges({ badges }: { badges: string[] }) {
   return (
@@ -200,6 +187,13 @@ function TechnicalDetails({ experience }: { experience: Experience }) {
           </p>
         </div>
       </div>
+
+      {experience.title === "PNQC" && <TechnicalFlow />}
+      {experience.title === "Hermes" && (
+        <div className="mt-8">
+          <HermesTerminal />
+        </div>
+      )}
 
       {experience.context && (
         <p
