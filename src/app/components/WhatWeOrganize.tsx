@@ -1,7 +1,5 @@
-import { ArrowRight } from "lucide-react";
-import { organizeOutcomes, organizePoints } from "../data/content";
-import { Container, LinkButton, Section, SectionHeading } from "./ui-primitives";
-import { trackEvent } from "../lib/track";
+import { serviceFronts } from "../data/content";
+import { Container, Section, SectionHeading } from "./ui-primitives";
 
 export function WhatWeOrganize() {
   return (
@@ -9,54 +7,41 @@ export function WhatWeOrganize() {
       <Container>
         <SectionHeading
           eyebrow="Onde ajudamos"
-          title="Quando informações, atendimento e ferramentas não trabalham juntos, a operação perde clareza."
-          description="Contatos ficam espalhados, tarefas dependem da memória, propostas não são acompanhadas e ferramentas acabam sendo usadas sem uma estrutura definida. A Barthy organiza essas partes em um fluxo mais claro, conectado e funcional."
+          title="Três frentes para apresentar, captar e operar melhor."
         />
 
-        {/* Lista editorial em duas colunas, numerada e com divisores */}
-        <ol className="grid gap-x-12 gap-y-0 sm:grid-cols-2">
-          {organizePoints.map((point, i) => (
-            <li
-              key={point}
-              className="flex items-baseline gap-4 border-b border-[var(--hairline)] py-4"
-            >
-              <span
-                className="text-[var(--text-accent)] tabular-nums shrink-0"
-                style={{ fontSize: "0.85rem", letterSpacing: "0.05em" }}
+        <div className="grid gap-5 md:grid-cols-3">
+          {serviceFronts.map((front) => {
+            const Icon = front.icon;
+            return (
+              <article
+                key={front.title}
+                className="rounded-2xl border border-[var(--border)] bg-[var(--card-solid)] p-6 transition-[border-color,transform] duration-200 hover:-translate-y-[2px] hover:border-[var(--ice-blue)]/40"
               >
-                {String(i + 1).padStart(2, "0")}
-              </span>
-              <span className="text-[var(--foreground)]" style={{ fontSize: "0.98rem" }}>
-                {point}
-              </span>
-            </li>
-          ))}
-        </ol>
-
-        <div className="mt-10 rounded-2xl border border-[var(--border)] bg-[var(--card)] p-6 md:p-7">
-          <h3 className="text-[var(--foreground)]">O que muda com uma estrutura conectada</h3>
-          <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-            {organizeOutcomes.map((outcome) => (
-              <div
-                key={outcome}
-                className="rounded-xl border border-[var(--hairline)] bg-[var(--surface)] px-4 py-3 text-[var(--foreground)]"
-                style={{ fontSize: "0.9rem" }}
-              >
-                {outcome}
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div className="mt-10">
-          <LinkButton
-            href="#contato"
-            variant="primary"
-            className="w-full sm:w-auto"
-            onClick={() => trackEvent("click_problem_cta")}
-          >
-            Quero organizar esses pontos <ArrowRight className="w-4 h-4" />
-          </LinkButton>
+                <span className="flex h-10 w-10 items-center justify-center rounded-xl border border-[var(--border)] bg-[var(--surface-2)] text-[var(--ice-blue)]">
+                  <Icon className="h-5 w-5" />
+                </span>
+                <h3 className="mt-5 text-[var(--foreground)]">{front.title}</h3>
+                <p
+                  className="mt-2 text-[var(--muted-foreground)]"
+                  style={{ fontSize: "0.92rem" }}
+                >
+                  {front.description}
+                </p>
+                <ul className="mt-5 flex flex-wrap gap-2">
+                  {front.examples.map((example) => (
+                    <li
+                      key={example}
+                      className="rounded-full border border-[var(--hairline)] bg-[var(--surface)] px-3 py-1 text-[var(--muted-foreground)]"
+                      style={{ fontSize: "0.78rem" }}
+                    >
+                      {example}
+                    </li>
+                  ))}
+                </ul>
+              </article>
+            );
+          })}
         </div>
       </Container>
     </Section>

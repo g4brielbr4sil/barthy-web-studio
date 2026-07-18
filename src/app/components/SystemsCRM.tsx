@@ -1,6 +1,6 @@
 import { ArrowRight } from "lucide-react";
-import { systemFronts } from "../data/content";
-import { Container, LinkButton, Section } from "./ui-primitives";
+import { systemDetails, systemFronts } from "../data/content";
+import { Container, Disclosure, LinkButton, Section } from "./ui-primitives";
 import { prefillQuote } from "../lib/prefill";
 import { trackEvent } from "../lib/track";
 
@@ -26,15 +26,13 @@ export function SystemsCRM() {
               Sistemas e operação
             </p>
             <h2 className="text-balance text-[var(--foreground)]">
-              Sistemas para centralizar informações e dar visibilidade à operação.
+              Sistemas para acompanhar a operação.
             </h2>
             <p
               className="mt-5 text-[var(--muted-foreground)] text-pretty"
               style={{ fontSize: "1.05rem" }}
             >
-              Quando planilhas, mensagens e tarefas deixam de ser suficientes, a Barthy estrutura
-              sistemas que centralizam informações, organizam processos e dão mais visibilidade à
-              operação.
+              Centralize dados, etapas e responsabilidades em um fluxo próprio.
             </p>
 
             <div className="mt-8">
@@ -50,7 +48,7 @@ export function SystemsCRM() {
                   trackEvent("click_crm_cta");
                 }}
               >
-                Conversar sobre uma solução <ArrowRight className="w-4 h-4" />
+                Conversar sobre um sistema <ArrowRight className="w-4 h-4" />
               </LinkButton>
             </div>
           </div>
@@ -74,6 +72,39 @@ export function SystemsCRM() {
             })}
           </div>
         </div>
+
+        <Disclosure label="Ver como os sistemas funcionam" className="mt-8">
+          <div className="grid gap-6 text-[var(--muted-foreground)] md:grid-cols-2">
+            <div>
+              <h3 className="text-[var(--foreground)]">Como funciona</h3>
+              <p className="mt-2" style={{ fontSize: "0.9rem" }}>
+                {systemDetails.howItWorks}
+              </p>
+            </div>
+            <div>
+              <h3 className="text-[var(--foreground)]">Exemplos de fluxo</h3>
+              <ul className="mt-2 space-y-1.5" style={{ fontSize: "0.88rem" }}>
+                {systemDetails.flows.map((flow) => (
+                  <li key={flow}>{flow}</li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <h3 className="text-[var(--foreground)]">Tecnologias possíveis</h3>
+              <ul className="mt-2 space-y-1.5" style={{ fontSize: "0.88rem" }}>
+                {systemDetails.technologies.map((technology) => (
+                  <li key={technology}>{technology}</li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <h3 className="text-[var(--foreground)]">Observação técnica</h3>
+              <p className="mt-2" style={{ fontSize: "0.9rem" }}>
+                {systemDetails.note}
+              </p>
+            </div>
+          </div>
+        </Disclosure>
       </Container>
     </Section>
   );

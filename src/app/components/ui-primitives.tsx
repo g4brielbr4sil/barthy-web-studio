@@ -1,4 +1,11 @@
-import { ReactNode, ButtonHTMLAttributes, AnchorHTMLAttributes } from "react";
+import {
+  ReactNode,
+  ButtonHTMLAttributes,
+  AnchorHTMLAttributes,
+  useId,
+  useState,
+} from "react";
+import { ChevronDown } from "lucide-react";
 import { motion, useReducedMotion } from "motion/react";
 
 type Variant = "primary" | "outline" | "ghost" | "soft";
@@ -87,6 +94,54 @@ export function Card({
       className={`relative rounded-2xl glass p-6 md:p-7 transition-[border-color,transform] duration-200 hover:border-[var(--ice-blue)]/40 hover:-translate-y-[2px] ${className}`}
     >
       {children}
+    </div>
+  );
+}
+
+export function Disclosure({
+  label,
+  children,
+  className = "",
+}: {
+  label: string;
+  children: ReactNode;
+  className?: string;
+}) {
+  const [open, setOpen] = useState(false);
+  const reduceMotion = useReducedMotion();
+  const panelId = useId();
+
+  return (
+    <div className={`rounded-xl border border-[var(--border)] bg-[var(--surface)] ${className}`}>
+      <button
+        type="button"
+        aria-expanded={open}
+        aria-controls={panelId}
+        onClick={() => setOpen((value) => !value)}
+        className="flex min-h-11 w-full items-center justify-between gap-3 px-4 py-3 text-left text-[var(--foreground)] transition-colors hover:bg-[var(--muted)]/45 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)]/60"
+        style={{ fontSize: "0.88rem" }}
+      >
+        <span>{label}</span>
+        <ChevronDown
+          aria-hidden="true"
+          className={`h-4 w-4 shrink-0 text-[var(--ice-blue)] transition-transform duration-300 ${
+            open ? "rotate-180" : ""
+          }`}
+        />
+      </button>
+      <div
+        id={panelId}
+        aria-hidden={!open}
+        className={`grid ${
+          reduceMotion
+            ? "transition-none"
+            : "transition-[grid-template-rows,opacity] duration-300"
+        } ${open ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"}`}
+      >
+        <div className="overflow-hidden">
+          <div className="border-t border-[var(--hairline)] px-4 py-4">{children}</div>
+        </div>
+      </div>
     </div>
   );
 }

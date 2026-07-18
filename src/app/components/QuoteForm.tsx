@@ -90,27 +90,12 @@ export function QuoteForm() {
   return (
     <Section id="contato">
       <Container>
-        <div className="mb-16 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6 md:p-8">
-          <p
-            className="text-[var(--text-accent)]"
-            style={{ fontSize: "0.72rem", letterSpacing: "0.22em", textTransform: "uppercase" }}
-          >
-            Tecnologia humana
-          </p>
-          <h2 className="mt-4 text-[var(--foreground)]">Tecnologia precisa organizar, não complicar.</h2>
-          <p className="mt-4 max-w-3xl text-[var(--muted-foreground)] text-pretty">
-            Cada projeto é pensado a partir da realidade da operação. A Barthy explica as decisões,
-            mantém o processo visível e constrói soluções que o cliente consegue compreender,
-            utilizar e evoluir.
-          </p>
-        </div>
-
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-start">
           <div className="min-w-0">
             <SectionHeading
               eyebrow="Contato"
               title="Vamos organizar o próximo passo do seu projeto?"
-              description="Conte o que sua empresa precisa apresentar, organizar ou conectar. A partir disso, avaliamos a solução mais adequada e estruturamos um caminho claro."
+              description="Conte o que precisa apresentar, captar ou estruturar. A partir disso, indicamos o próximo passo."
             />
             <p className="-mt-8 mb-8 text-[var(--muted-foreground)]" style={{ fontSize: "0.86rem" }}>
               Base em Brasília, com atendimento digital em todo o Brasil.

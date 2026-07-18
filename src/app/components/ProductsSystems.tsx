@@ -1,6 +1,12 @@
-import { ArrowRight, Info } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { digitalProducts } from "../data/content";
-import { Container, LinkButton, Section, SectionHeading } from "./ui-primitives";
+import {
+  Container,
+  Disclosure,
+  LinkButton,
+  Section,
+  SectionHeading,
+} from "./ui-primitives";
 import { prefillQuote } from "../lib/prefill";
 import { trackEvent } from "../lib/track";
 
@@ -17,9 +23,9 @@ export function ProductsSystems() {
       />
       <Container>
         <SectionHeading
-          eyebrow="Produtos e integrações"
-          title="Estruturas reutilizáveis para conectar canais e reduzir tarefas manuais."
-          description="Algumas necessidades podem ser resolvidas com produtos digitais, templates e integrações que melhoram a continuidade da operação."
+          eyebrow="Produtos e automações"
+          title="Bases reutilizáveis para acelerar rotinas digitais."
+          description="Produtos, templates e conexões adaptados ao contexto de uso."
         />
 
         <div
@@ -53,15 +59,24 @@ export function ProductsSystems() {
                     </span>
                   ))}
                 </div>
-                {p.note && (
-                  <p
-                    className="mt-4 flex items-start gap-1.5 text-[var(--muted-foreground)]"
-                    style={{ fontSize: "0.78rem" }}
+                <Disclosure label="Ver detalhes" className="mt-5">
+                  <ul
+                    className="space-y-2 text-[var(--muted-foreground)]"
+                    style={{ fontSize: "0.85rem" }}
                   >
-                    <Info className="mt-0.5 w-3.5 h-3.5 text-[var(--ice-blue)] shrink-0" />
-                    <span>{p.note}</span>
-                  </p>
-                )}
+                    {p.details.map((detail) => (
+                      <li key={detail}>{detail}</li>
+                    ))}
+                  </ul>
+                  {p.note && (
+                    <p
+                      className="mt-4 border-t border-[var(--hairline)] pt-4 text-[var(--muted-foreground)]"
+                      style={{ fontSize: "0.8rem" }}
+                    >
+                      {p.note}
+                    </p>
+                  )}
+                </Disclosure>
               </article>
             );
           })}
