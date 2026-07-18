@@ -8,8 +8,8 @@ export function Solutions() {
       <Container>
         <SectionHeading
           eyebrow="Soluções"
-          title="Soluções diretas para apresentar, captar e organizar."
-          description="Entregas contratáveis para resolver uma necessidade clara agora, com uma estrutura que pode evoluir conforme a operação."
+          title="Soluções prontas para contratar."
+          description="Quatro frentes para apresentar, captar e vender melhor."
         />
 
         <div
@@ -31,6 +31,12 @@ export function Solutions() {
                 </div>
                 <p className="text-[var(--muted-foreground)]" style={{ fontSize: "0.92rem" }}>
                   {g.description}
+                </p>
+                <p
+                  className="mt-3 text-[var(--foreground)]"
+                  style={{ fontSize: "0.9rem", lineHeight: 1.55 }}
+                >
+                  {g.benefit}
                 </p>
                 <ul className="mt-5 space-y-2.5">
                   {g.items.map((it) => (

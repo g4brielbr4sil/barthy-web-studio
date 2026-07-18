@@ -31,32 +31,26 @@ export function HermesSection() {
                 className="mt-5 text-[var(--muted-foreground)] text-pretty"
                 style={{ fontSize: "clamp(0.98rem, 1.4vw, 1.05rem)" }}
               >
-                O Hermes é o sistema interno da Barthy para centralizar contatos, classificar
-                oportunidades, criar alertas e acompanhar as próximas ações comerciais em um só
-                lugar.
+                Sistema interno da Barthy para centralizar contatos, prioridades e próximas ações
+                comerciais.
               </p>
             </div>
 
-            <ol className="grid grid-cols-1 gap-3">
+            <ol className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-2">
               {hermesFunctions.map((item, index) => (
                 <li
                   key={item.title}
-                  className="flex items-start gap-4 rounded-xl border border-[var(--border)] bg-[var(--surface)] px-4 py-3.5"
+                  className="flex min-h-14 items-center gap-3 rounded-xl border border-[var(--border)] bg-[var(--surface)] px-4 py-3"
                 >
                   <span
-                    className="mt-0.5 inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-[var(--border)] text-[var(--ice-blue)] tabular-nums"
+                    className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-[var(--border)] text-[var(--ice-blue)] tabular-nums"
                     style={{ fontSize: "0.72rem" }}
                   >
                     {index + 1}
                   </span>
-                  <span>
-                    <strong className="block text-[var(--foreground)]" style={{ fontSize: "0.92rem" }}>
-                      {item.title}
-                    </strong>
-                    <span className="mt-1 block text-[var(--muted-foreground)]" style={{ fontSize: "0.84rem", lineHeight: 1.55 }}>
-                      {item.text}
-                    </span>
-                  </span>
+                  <strong className="text-[var(--foreground)]" style={{ fontSize: "0.88rem" }}>
+                    {item.title}
+                  </strong>
                 </li>
               ))}
             </ol>

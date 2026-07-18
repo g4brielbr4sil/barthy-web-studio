@@ -5,7 +5,6 @@ import { SeoHead } from "./components/SeoHead";
 import { Header } from "./components/Header";
 import { Hero } from "./components/Hero";
 import { WhatWeOrganize } from "./components/WhatWeOrganize";
-import { ForWhom } from "./components/ForWhom";
 import { Solutions } from "./components/Solutions";
 import { SystemsCRM } from "./components/SystemsCRM";
 import { ProductsSystems } from "./components/ProductsSystems";
@@ -26,7 +25,6 @@ export default function App() {
         <main>
           <Hero />
           <WhatWeOrganize />
-          <ForWhom />
           <Solutions />
           <SystemsCRM />
           <ProductsSystems />

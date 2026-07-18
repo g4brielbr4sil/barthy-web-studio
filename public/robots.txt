@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://barthywebstudio.com.br/sitemap.xml
+Sitemap: https://barthy-web-studio.pages.dev/sitemap.xml

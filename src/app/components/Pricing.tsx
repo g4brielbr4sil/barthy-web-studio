@@ -7,9 +7,13 @@ import { trackEvent } from "../lib/track";
 
 const icons = [Rocket, Briefcase, Sparkles];
 
-export function Pricing() {
-  const reduceMotion = useReducedMotion();
+function pricingCtaSource(planName: string) {
+  if (planName === "Presença Básica") return "pricing-presenca-basica";
+  if (planName === "Portfólio Profissional") return "pricing-portfolio-profissional";
+  return "pricing-comercial-completo";
+}
 
+export function Pricing() {
   return (
     <Section id="pacotes" className="overflow-hidden">
       <div
@@ -26,7 +30,7 @@ export function Pricing() {
           align="center"
           eyebrow="Pacotes"
           title="Escolha a estrutura que faz sentido agora."
-          description="Os pacotes ajudam a começar com um escopo claro. Projetos de CRM, dashboards, portais, integrações e sistemas sob medida são avaliados após diagnóstico."
+          description="Escopo definido para começar com uma entrega objetiva."
         />
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8 items-stretch">
@@ -34,20 +38,6 @@ export function Pricing() {
             <PriceCard key={p.name} plan={p} index={i} Icon={icons[i] ?? Rocket} />
           ))}
         </div>
-
-        <motion.div
-          initial={reduceMotion ? false : { opacity: 0 }}
-          whileInView={reduceMotion ? undefined : { opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.45, delay: 0.1 }}
-          className="mt-10 mx-auto max-w-2xl text-center text-[var(--muted-foreground)] text-pretty flex flex-col gap-2"
-          style={{ fontSize: "0.9rem" }}
-        >
-          <p>
-            Ainda não sabe qual opção atende melhor? Conte o que precisa e indicamos o caminho mais
-            adequado.
-          </p>
-        </motion.div>
       </Container>
     </Section>
   );
@@ -64,6 +54,7 @@ function PriceCard({
 }) {
   const highlight = !!plan.highlight;
   const reduceMotion = useReducedMotion();
+  const ctaSource = pricingCtaSource(plan.name);
 
   return (
     <motion.article
@@ -147,8 +138,12 @@ function PriceCard({
           type="button"
           variant={highlight ? "primary" : "outline"}
           className="w-full group"
+          data-cta-source={ctaSource}
           onClick={() => {
-            trackEvent("click_package_cta", { pacote: plan.name });
+            trackEvent("cta_click", {
+              source: ctaSource,
+              destination: "contato",
+            });
             prefillQuote({
               service: `Pacote ${plan.name}`,
               note: `Tenho interesse no pacote ${plan.name}.`,
@@ -159,7 +154,18 @@ function PriceCard({
           {plan.cta}
           <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
         </Button>
-        <LinkButton href="#contato" variant="ghost" className="w-full">
+        <LinkButton
+          href="#contato"
+          variant="ghost"
+          className="w-full"
+          data-cta-source={ctaSource}
+          onClick={() =>
+            trackEvent("cta_click", {
+              source: ctaSource,
+              destination: "contato",
+            })
+          }
+        >
           Tirar uma dúvida
         </LinkButton>
       </div>

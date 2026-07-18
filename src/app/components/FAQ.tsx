@@ -5,7 +5,7 @@ import { faq } from "../data/content";
 import { Container, Section, SectionHeading } from "./ui-primitives";
 
 export function FAQ() {
-  const [open, setOpen] = useState<number | null>(0);
+  const [open, setOpen] = useState<number | null>(null);
   const reduceMotion = useReducedMotion();
 
   return (
@@ -13,8 +13,7 @@ export function FAQ() {
       <Container>
         <SectionHeading
           eyebrow="Perguntas frequentes"
-          title="O que você precisa saber antes de começar."
-          description="Informações sobre escopo, valores, prazos, atendimento e tipos de projeto."
+          title="Antes de começar."
         />
 
         <div className="mx-auto max-w-3xl divide-y divide-[var(--border)] rounded-2xl border border-[var(--border)] overflow-hidden">
