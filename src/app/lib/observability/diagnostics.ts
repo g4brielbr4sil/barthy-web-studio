@@ -22,8 +22,16 @@ function result(
 }
 
 function accessibleName(element: Element): string {
+  const labelledBy = element
+    .getAttribute("aria-labelledby")
+    ?.split(/\s+/)
+    .map((id) => document.getElementById(id)?.textContent?.trim() ?? "")
+    .filter(Boolean)
+    .join(" ");
+
   return (
     element.getAttribute("aria-label") ||
+    labelledBy ||
     element.getAttribute("title") ||
     element.textContent?.trim() ||
     ""
@@ -86,7 +94,10 @@ export function runRuntimeDiagnostics(): DiagnosticResult[] {
     "input:not([type='hidden']), select, textarea",
   )];
   const unlabeledFields = fields.filter(
-    (field) => field.labels?.length === 0 && !field.getAttribute("aria-label"),
+    (field) =>
+      field.labels?.length === 0 &&
+      !field.getAttribute("aria-label") &&
+      !field.getAttribute("aria-labelledby"),
   );
   results.push(
     result(
@@ -156,13 +167,18 @@ export function runRuntimeDiagnostics(): DiagnosticResult[] {
     ),
   );
 
-  const canonical = document.querySelector<HTMLLinkElement>('link[rel="canonical"]')?.href;
+  const canonicals = [
+    ...document.querySelectorAll<HTMLLinkElement>('link[rel="canonical"]'),
+  ];
+  const canonical = canonicals[0]?.href;
   results.push(
     result(
       "canonical",
       "Canonical",
-      canonical ? "good" : "critical",
-      canonical ? "Canonical presente." : "Canonical ausente.",
+      canonicals.length === 1 && canonical ? "good" : "critical",
+      canonicals.length === 1 && canonical
+        ? "Um canonical válido está presente."
+        : `${canonicals.length} canonical(is) encontrado(s); esperado: 1.`,
     ),
   );
 
@@ -208,13 +224,19 @@ export function runRuntimeDiagnostics(): DiagnosticResult[] {
     ),
   );
 
-  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const supportsMatchMedia = typeof window.matchMedia === "function";
+  const reducedMotion =
+    supportsMatchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   results.push(
     result(
       "reduced-motion",
       "Preferência de movimento",
-      "good",
-      reducedMotion ? "Movimento reduzido ativo nesta sessão." : "Movimento padrão ativo nesta sessão.",
+      supportsMatchMedia ? "good" : "unavailable",
+      supportsMatchMedia
+        ? reducedMotion
+          ? "Movimento reduzido ativo nesta sessão."
+          : "Movimento padrão ativo nesta sessão."
+        : "Não disponível neste navegador.",
     ),
   );
 

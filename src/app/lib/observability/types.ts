@@ -144,8 +144,12 @@ export interface SanitizedSessionReport {
   generatedAt: string;
   page: string;
   browser: string;
-  session: Omit<SessionSnapshot, "clickPoints"> & {
+  privacyNote: string;
+  limitations: string[];
+  session: Omit<SessionSnapshot, "clickPoints" | "events"> & {
     clickPointCount: number;
+    eventCount: number;
+    eventCounts: Partial<Record<SessionEventName, number>>;
   };
   heatmap: {
     columns: number;

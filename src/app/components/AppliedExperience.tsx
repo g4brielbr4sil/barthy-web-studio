@@ -248,14 +248,20 @@ export function AppliedExperience() {
       return;
     }
 
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (!entry.isIntersecting) return;
-        setShouldLoadCardSwap(true);
-        observer.disconnect();
-      },
-      { rootMargin: "500px 0px" },
-    );
+    let observer: IntersectionObserver;
+    try {
+      observer = new IntersectionObserver(
+        ([entry]) => {
+          if (!entry.isIntersecting) return;
+          setShouldLoadCardSwap(true);
+          observer.disconnect();
+        },
+        { rootMargin: "500px 0px" },
+      );
+    } catch {
+      setShouldLoadCardSwap(true);
+      return;
+    }
 
     observer.observe(node);
     return () => observer.disconnect();

@@ -371,6 +371,18 @@
     animation: terminal-cursor-pulse 640ms steps(2, end) infinite;
   }
 
+  [data-drag-enabled="true"] > * {
+    cursor: auto;
+  }
+
+  [data-drag-enabled="true"] :is(p, h3, li) {
+    cursor: text;
+  }
+
+  [data-drag-enabled="true"] :is(button, a, summary) {
+    cursor: pointer;
+  }
+
   .dev-mode-dialog {
     width: min(
       1180px,
@@ -386,6 +398,15 @@
           max(1rem, env(safe-area-inset-bottom))
       )
     );
+  }
+
+  .dev-mode-dialog[data-dialog-fallback="true"] {
+    position: fixed;
+    inset: 0;
+    z-index: 80;
+    box-shadow:
+      0 0 0 100vmax rgba(10, 25, 49, 0.7),
+      0 34px 100px -32px rgba(0, 0, 0, 0.65);
   }
 
   .dev-mode-dialog__shell {

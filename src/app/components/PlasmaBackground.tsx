@@ -17,10 +17,16 @@ export function PlasmaBackground({ className = "" }: PlasmaProps) {
     const node = backgroundRef.current;
     if (!node || !("IntersectionObserver" in window)) return;
 
-    const observer = new IntersectionObserver(
-      ([entry]) => setActive(entry.isIntersecting),
-      { rootMargin: "120px 0px" },
-    );
+    let observer: IntersectionObserver;
+    try {
+      observer = new IntersectionObserver(
+        ([entry]) => setActive(entry.isIntersecting),
+        { rootMargin: "120px 0px" },
+      );
+    } catch {
+      return;
+    }
+
     observer.observe(node);
     return () => observer.disconnect();
   }, []);

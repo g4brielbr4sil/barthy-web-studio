@@ -26,7 +26,12 @@ import {
   refreshObservabilitySnapshot,
   subscribeObservability,
 } from "../lib/observability/session";
-import { aggregateClickPoints, rankedSections } from "../lib/observability/heatmap";
+import {
+  aggregateClickPoints,
+  HEATMAP_COLUMNS,
+  HEATMAP_ROWS,
+  rankedSections,
+} from "../lib/observability/heatmap";
 import {
   identifyBottlenecks,
   runRuntimeDiagnostics,
@@ -54,6 +59,15 @@ const tabs: Array<{ id: TabId; label: string; Icon: typeof Activity }> = [
   { id: "bottlenecks", label: "Gargalos", Icon: AlertTriangle },
   { id: "diagnostics", label: "Diagnósticos", Icon: Bug },
 ];
+
+const FOCUSABLE_SELECTOR = [
+  "button:not([disabled])",
+  "a[href]",
+  "input:not([disabled])",
+  "select:not([disabled])",
+  "textarea:not([disabled])",
+  "[tabindex]:not([tabindex='-1'])",
+].join(",");
 
 const statusStyles: Record<DiagnosticStatus, string> = {
   good: "border-[#4A7FA7]/40 bg-[#4A7FA7]/10 text-[var(--foreground)]",
@@ -171,8 +185,8 @@ function HeatmapOverlay({
           key={`${cell.x}-${cell.y}`}
           className="absolute rounded-full bg-[var(--terra)] shadow-[0_0_18px_rgba(205,118,93,0.55)]"
           style={{
-            left: `${((cell.x + 0.5) / 28) * 100}%`,
-            top: `${((cell.y + 0.5) / 48) * 100}%`,
+            left: `${((cell.x + 0.5) / HEATMAP_COLUMNS) * 100}%`,
+            top: `${((cell.y + 0.5) / HEATMAP_ROWS) * 100}%`,
             width: `${12 + cell.intensity * 22}px`,
             height: `${12 + cell.intensity * 22}px`,
             opacity: 0.22 + cell.intensity * 0.48,
@@ -191,6 +205,7 @@ function SessionHeatmap({ snapshot }: { snapshot: SessionSnapshot }) {
     [snapshot.clickPoints],
   );
   const sections = rankedSections(snapshot.sections);
+  const maxSectionTime = Math.max(1, ...sections.map((section) => section.timeMs));
 
   return (
     <div className="grid gap-5 lg:grid-cols-[minmax(220px,0.7fr)_minmax(0,1.3fr)]">
@@ -206,8 +221,8 @@ function SessionHeatmap({ snapshot }: { snapshot: SessionSnapshot }) {
               key={`${cell.x}-${cell.y}`}
               className="absolute rounded-full bg-[var(--terra)]"
               style={{
-                left: `${((cell.x + 0.5) / 28) * 100}%`,
-                top: `${((cell.y + 0.5) / 48) * 100}%`,
+                left: `${((cell.x + 0.5) / HEATMAP_COLUMNS) * 100}%`,
+                top: `${((cell.y + 0.5) / HEATMAP_ROWS) * 100}%`,
                 width: `${8 + cell.intensity * 14}px`,
                 height: `${8 + cell.intensity * 14}px`,
                 opacity: 0.24 + cell.intensity * 0.55,
@@ -249,7 +264,6 @@ function SessionHeatmap({ snapshot }: { snapshot: SessionSnapshot }) {
           <h3 className="text-[var(--foreground)]">Intensidade por seção</h3>
           <ul className="mt-4 space-y-3">
             {sections.map((section) => {
-              const maxTime = Math.max(1, ...sections.map((item) => item.timeMs));
               return (
                 <li key={section.id}>
                   <div className="flex items-center justify-between gap-3 text-sm">
@@ -261,7 +275,9 @@ function SessionHeatmap({ snapshot }: { snapshot: SessionSnapshot }) {
                   <div className="mt-1.5 h-1.5 overflow-hidden rounded-full bg-[var(--muted)]">
                     <div
                       className="h-full rounded-full bg-[var(--ice-blue)]"
-                      style={{ width: `${Math.max(4, (section.timeMs / maxTime) * 100)}%` }}
+                      style={{
+                        width: `${Math.max(4, (section.timeMs / maxSectionTime) * 100)}%`,
+                      }}
                     />
                   </div>
                 </li>
@@ -285,6 +301,7 @@ export default function DevModePanel({
   onRequestClose: () => void;
 }) {
   const dialogRef = useRef<HTMLDialogElement>(null);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
   const tabsRef = useRef<Array<HTMLButtonElement | null>>([]);
   const titleId = useId();
   const [activeTab, setActiveTab] = useState<TabId>("overview");
@@ -303,9 +320,69 @@ export default function DevModePanel({
   useEffect(() => {
     const dialog = dialogRef.current;
     if (!dialog) return;
-    if (!dialog.open) dialog.showModal();
+
+    const root = document.documentElement;
+    const body = document.body;
+    const previousRootOverflow = root.style.overflow;
+    const previousBodyOverflow = body.style.overflow;
+    const previousBodyPaddingRight = body.style.paddingRight;
+    const scrollbarWidth = Math.max(0, window.innerWidth - root.clientWidth);
+
+    root.style.overflow = "hidden";
+    body.style.overflow = "hidden";
+    if (scrollbarWidth > 0) {
+      const currentPadding = Number.parseFloat(window.getComputedStyle(body).paddingRight) || 0;
+      body.style.paddingRight = `${currentPadding + scrollbarWidth}px`;
+    }
+
+    let usesFallback = false;
+    const inerted: Array<{ element: HTMLElement; previous: boolean }> = [];
+    const focusInsideFallback = (event: FocusEvent) => {
+      const target = event.target;
+      if (!usesFallback || (target instanceof Node && dialog.contains(target))) return;
+      closeButtonRef.current?.focus();
+    };
+
+    if (!dialog.open && typeof dialog.showModal === "function") {
+      try {
+        dialog.showModal();
+      } catch {
+        usesFallback = true;
+      }
+    } else if (!dialog.open) {
+      usesFallback = true;
+    }
+
+    if (usesFallback) {
+      dialog.setAttribute("open", "");
+      dialog.dataset.dialogFallback = "true";
+
+      let branch: HTMLElement = dialog;
+      while (branch.parentElement && branch.parentElement !== body) {
+        const parent = branch.parentElement;
+        for (const sibling of parent.children) {
+          if (!(sibling instanceof HTMLElement) || sibling === branch) continue;
+          inerted.push({ element: sibling, previous: sibling.inert });
+          sibling.inert = true;
+        }
+        branch = parent;
+      }
+      document.addEventListener("focusin", focusInsideFallback);
+    }
+
+    closeButtonRef.current?.focus();
+
     return () => {
-      if (dialog.open) dialog.close();
+      document.removeEventListener("focusin", focusInsideFallback);
+      inerted.forEach(({ element, previous }) => {
+        element.inert = previous;
+      });
+      delete dialog.dataset.dialogFallback;
+      if (dialog.open && typeof dialog.close === "function") dialog.close();
+      else dialog.removeAttribute("open");
+      root.style.overflow = previousRootOverflow;
+      body.style.overflow = previousBodyOverflow;
+      body.style.paddingRight = previousBodyPaddingRight;
     };
   }, []);
 
@@ -340,7 +417,39 @@ export default function DevModePanel({
     event.preventDefault();
     const next = tabs[nextIndex];
     setActiveTab(next.id);
-    tabsRef.current[nextIndex]?.focus();
+    const nextTab = tabsRef.current[nextIndex];
+    nextTab?.focus();
+    nextTab?.scrollIntoView({ block: "nearest", inline: "nearest" });
+  };
+
+  const keepFocusInsideDialog = (event: ReactKeyboardEvent<HTMLDialogElement>) => {
+    if (event.key !== "Tab") return;
+    const dialog = dialogRef.current;
+    if (!dialog) return;
+
+    const focusable = [...dialog.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR)].filter(
+      (element) =>
+        !element.inert &&
+        element.tabIndex >= 0 &&
+        element.getAttribute("aria-hidden") !== "true" &&
+        element.getClientRects().length > 0,
+    );
+    if (focusable.length === 0) {
+      event.preventDefault();
+      dialog.focus();
+      return;
+    }
+
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    const active = document.activeElement;
+    if (event.shiftKey && (active === first || !dialog.contains(active))) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && active === last) {
+      event.preventDefault();
+      first.focus();
+    }
   };
 
   const executeDiagnostics = () => {
@@ -393,6 +502,7 @@ export default function DevModePanel({
     <dialog
       ref={dialogRef}
       role="dialog"
+      tabIndex={-1}
       aria-modal="true"
       aria-labelledby={titleId}
       onCancel={(event) => {
@@ -400,10 +510,15 @@ export default function DevModePanel({
         onRequestClose();
       }}
       onKeyDown={(event) => {
-        if (event.key !== "Escape") return;
-        event.preventDefault();
-        event.stopPropagation();
-        onRequestClose();
+        if (event.key === "Tab") {
+          keepFocusInsideDialog(event);
+          return;
+        }
+        if (event.key === "Escape") {
+          event.preventDefault();
+          event.stopPropagation();
+          onRequestClose();
+        }
       }}
       className="dev-mode-dialog m-auto max-w-none overflow-hidden rounded-3xl border border-[var(--border-strong)] bg-[var(--background)] p-0 text-[var(--foreground)] shadow-[0_34px_100px_-32px_rgba(0,0,0,0.65)] backdrop:bg-[#0A1931]/70"
     >
@@ -427,8 +542,8 @@ export default function DevModePanel({
             </p>
           </div>
           <button
+            ref={closeButtonRef}
             type="button"
-            autoFocus
             aria-label="Fechar modo desenvolvedor"
             onClick={onRequestClose}
             className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-[var(--border)] bg-[var(--background)] text-[var(--muted-foreground)] transition-colors hover:text-[var(--foreground)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)]/60"
@@ -770,7 +885,9 @@ export default function DevModePanel({
         </div>
 
         <footer className="flex shrink-0 flex-col gap-1 border-t border-[var(--border)] bg-[var(--surface)] px-5 py-3 text-[var(--muted-foreground)] sm:flex-row sm:items-center sm:justify-between">
-          <span style={{ fontSize: "0.7rem" }}>Sessão local · sem cookies · sem request de analytics</span>
+          <span style={{ fontSize: "0.7rem" }}>
+            Os dados exibidos ficam nesta sessão e não são enviados para serviços externos.
+          </span>
           <span style={{ fontSize: "0.7rem" }}>
             Agregação entre visitantes depende de backend aprovado.
           </span>

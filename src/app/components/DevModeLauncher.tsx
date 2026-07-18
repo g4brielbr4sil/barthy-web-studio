@@ -35,6 +35,8 @@ function isTypingTarget(target: EventTarget | null): boolean {
 export function DevModeLauncher() {
   const [open, setOpen] = useState(false);
   const triggerRef = useRef<HTMLButtonElement>(null);
+  const openRef = useRef(false);
+  const focusTimerRef = useRef<number | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -66,6 +68,8 @@ export function DevModeLauncher() {
   }, []);
 
   const openPanel = useCallback(() => {
+    if (openRef.current) return;
+    openRef.current = true;
     setOpen(true);
     void import("../lib/observability/session").then((module) => {
       module.startObservability();
@@ -74,9 +78,21 @@ export function DevModeLauncher() {
   }, []);
 
   const closePanel = useCallback(() => {
+    openRef.current = false;
     setOpen(false);
-    window.setTimeout(() => triggerRef.current?.focus(), 0);
+    if (focusTimerRef.current !== null) window.clearTimeout(focusTimerRef.current);
+    focusTimerRef.current = window.setTimeout(() => {
+      focusTimerRef.current = null;
+      triggerRef.current?.focus();
+    }, 0);
   }, []);
+
+  useEffect(
+    () => () => {
+      if (focusTimerRef.current !== null) window.clearTimeout(focusTimerRef.current);
+    },
+    [],
+  );
 
   useEffect(() => {
     let sequenceIndex = 0;

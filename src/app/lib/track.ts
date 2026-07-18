@@ -5,20 +5,31 @@
  * Nenhum script externo (Google Analytics, Meta Pixel etc.) é carregado.
  * Quando quiser plugar um provedor, basta encaminhar `name`/`payload` aqui.
  */
-export type TrackEvent =
-  | "cta_click"
-  | "toggle_experience_details"
-  | "toggle_disclosure"
-  | "toggle_faq"
-  | "form_started"
-  | "form_error"
-  | "submit_quote_form"
-  | "submit_quote_success"
-  | "submit_quote_error"
-  | "theme_change"
-  | "dev_mode_open";
+export interface TrackEventPayloads {
+  cta_click: { source: string; destination: string };
+  toggle_experience_details: { title: string };
+  toggle_disclosure: { source: string };
+  toggle_faq: { index: number };
+  form_started: undefined;
+  form_error: { field: string };
+  submit_quote_form: undefined;
+  submit_quote_success: { via: "hermes" | "whatsapp" };
+  submit_quote_error: undefined;
+  theme_change: { theme: "light" | "dark" };
+  dev_mode_open: undefined;
+}
 
-export function trackEvent(name: TrackEvent, payload: Record<string, unknown> = {}): void {
+export type TrackEvent = keyof TrackEventPayloads;
+
+type TrackArguments<K extends TrackEvent> = TrackEventPayloads[K] extends undefined
+  ? [payload?: undefined]
+  : [payload: TrackEventPayloads[K]];
+
+export function trackEvent<K extends TrackEvent>(
+  name: K,
+  ...args: TrackArguments<K>
+): void {
+  const payload = args[0] ?? {};
   if (import.meta.env.DEV) {
     // eslint-disable-next-line no-console
     console.log(`[track] ${name}`, payload);

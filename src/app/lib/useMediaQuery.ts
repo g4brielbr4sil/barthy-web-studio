@@ -12,9 +12,13 @@ export function useMediaQuery(query: string, initialValue = false): boolean {
     const updateMatch = () => setMatches(mediaQuery.matches);
 
     updateMatch();
-    mediaQuery.addEventListener("change", updateMatch);
+    if (typeof mediaQuery.addEventListener === "function") {
+      mediaQuery.addEventListener("change", updateMatch);
+      return () => mediaQuery.removeEventListener("change", updateMatch);
+    }
 
-    return () => mediaQuery.removeEventListener("change", updateMatch);
+    mediaQuery.addListener(updateMatch);
+    return () => mediaQuery.removeListener(updateMatch);
   }, [query]);
 
   return matches;

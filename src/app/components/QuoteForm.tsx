@@ -14,7 +14,7 @@ import {
   contactHref,
   barthyWhatsappUrl,
 } from "../data/content";
-import { submitLeadToHermes, NoContactChannelError } from "../lib/hermes";
+import { submitLeadToHermes } from "../lib/hermes";
 import { trackEvent } from "../lib/track";
 import { PREFILL_EVENT, type PrefillDetail } from "../lib/prefill";
 import { FormSuccessCelebration } from "./FormSuccessCelebration";
@@ -25,10 +25,39 @@ const invalidInputCls =
   "border-[var(--destructive)] focus:border-[var(--destructive)] focus:ring-[var(--destructive)]/25";
 
 type Status = "idle" | "loading" | "success" | "error";
-type FieldName = "nome" | "whatsapp" | "email" | "cidadeUf" | "tipoServico";
+type FieldName =
+  | "nome"
+  | "whatsapp"
+  | "email"
+  | "cidadeUf"
+  | "tipoServico"
+  | "mensagem";
 type FieldErrors = Partial<Record<FieldName, string>>;
 
-const fieldOrder: FieldName[] = ["nome", "whatsapp", "email", "cidadeUf", "tipoServico"];
+const MESSAGE_LIMIT = 2_000;
+const fieldOrder: FieldName[] = [
+  "nome",
+  "whatsapp",
+  "email",
+  "cidadeUf",
+  "tipoServico",
+  "mensagem",
+];
+
+function formValue(data: FormData, field: string): string {
+  const value = data.get(field);
+  return typeof value === "string" ? value : "";
+}
+
+function isPrefillDetail(value: unknown): value is PrefillDetail {
+  if (typeof value !== "object" || value === null) return false;
+  const service = "service" in value ? value.service : undefined;
+  const note = "note" in value ? value.note : undefined;
+  return (
+    (service === undefined || typeof service === "string") &&
+    (note === undefined || typeof note === "string")
+  );
+}
 
 function validateWhatsapp(value: string): string | undefined {
   if (!value.trim()) return "Informe seu WhatsApp.";
@@ -56,14 +85,17 @@ function validateWhatsapp(value: string): string | undefined {
 function getFieldErrors(form: HTMLFormElement): FieldErrors {
   const data = new FormData(form);
   const errors: FieldErrors = {};
-  const nome = ((data.get("nome") as string) || "").trim();
-  const whatsapp = (data.get("whatsapp") as string) || "";
-  const email = ((data.get("email") as string) || "").trim();
-  const cidadeUf = ((data.get("cidadeUf") as string) || "").trim();
-  const tipoServico = (data.get("tipoServico") as string) || "";
-  const emailInput = form.elements.namedItem("email") as HTMLInputElement | null;
+  const nome = formValue(data, "nome").trim();
+  const whatsapp = formValue(data, "whatsapp");
+  const email = formValue(data, "email").trim();
+  const cidadeUf = formValue(data, "cidadeUf").trim();
+  const tipoServico = formValue(data, "tipoServico");
+  const mensagem = formValue(data, "mensagem");
+  const emailElement = form.elements.namedItem("email");
+  const emailInput = emailElement instanceof HTMLInputElement ? emailElement : null;
 
   if (!nome) errors.nome = "Informe seu nome.";
+  else if (nome.length < 2) errors.nome = "Digite pelo menos 2 caracteres.";
 
   const whatsappError = validateWhatsapp(whatsapp);
   if (whatsappError) errors.whatsapp = whatsappError;
@@ -74,6 +106,9 @@ function getFieldErrors(form: HTMLFormElement): FieldErrors {
 
   if (!cidadeUf) errors.cidadeUf = "Informe sua cidade e UF.";
   if (!tipoServico) errors.tipoServico = "Selecione um tipo de solução.";
+  if (mensagem.length > MESSAGE_LIMIT) {
+    errors.mensagem = `Limite a mensagem a ${MESSAGE_LIMIT} caracteres.`;
+  }
 
   return errors;
 }
@@ -103,6 +138,15 @@ export function QuoteForm() {
   const [message, setMessage] = useState("");
   const formRef = useRef<HTMLFormElement>(null);
   const formStartedRef = useRef(false);
+  const submittingRef = useRef(false);
+  const mountedRef = useRef(true);
+
+  useEffect(() => {
+    mountedRef.current = true;
+    return () => {
+      mountedRef.current = false;
+    };
+  }, []);
 
   const clearFieldError = (field: FieldName) => {
     setFieldErrors((current) => {
@@ -115,8 +159,9 @@ export function QuoteForm() {
 
   // Prefill vindo de CTAs (pacotes, chips de serviço, seção de CRM).
   useEffect(() => {
-    const handler = (e: Event) => {
-      const detail = (e as CustomEvent<PrefillDetail>).detail || {};
+    const handler: EventListener = (event) => {
+      if (!(event instanceof CustomEvent) || !isPrefillDetail(event.detail)) return;
+      const detail = event.detail;
       if (detail.service) {
         setService(resolveServiceOption(detail.service));
         setFieldErrors((current) => {
@@ -130,13 +175,13 @@ export function QuoteForm() {
         setMessage((prev) => (prev ? prev : detail.note ?? ""));
       }
     };
-    window.addEventListener(PREFILL_EVENT, handler as EventListener);
-    return () => window.removeEventListener(PREFILL_EVENT, handler as EventListener);
+    window.addEventListener(PREFILL_EVENT, handler);
+    return () => window.removeEventListener(PREFILL_EVENT, handler);
   }, []);
 
   const submit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (status === "loading") return;
+    if (status === "loading" || submittingRef.current) return;
     const form = e.currentTarget;
     const validationErrors = getFieldErrors(form);
 
@@ -158,33 +203,37 @@ export function QuoteForm() {
     setFieldErrors({});
     const data = new FormData(form);
     const payload = {
-      nome: (data.get("nome") as string) || "",
-      whatsapp: (data.get("whatsapp") as string) || "",
-      email: ((data.get("email") as string) || "").trim(),
-      empresa: ((data.get("empresa") as string) || "").trim(),
-      cidadeUf: ((data.get("cidadeUf") as string) || "").trim(),
-      tipoServico: (data.get("tipoServico") as string) || "",
-      mensagem: (data.get("mensagem") as string) || "",
+      nome: formValue(data, "nome"),
+      whatsapp: formValue(data, "whatsapp"),
+      email: formValue(data, "email").trim(),
+      empresa: formValue(data, "empresa").trim(),
+      cidadeUf: formValue(data, "cidadeUf").trim(),
+      tipoServico: formValue(data, "tipoServico"),
+      mensagem: formValue(data, "mensagem"),
     };
 
     trackEvent("cta_click", { source: "final-cta", destination: "contato" });
     trackEvent("submit_quote_form");
+    submittingRef.current = true;
     setStatus("loading");
     setErrorMsg("");
 
     try {
       const result = await submitLeadToHermes(payload);
+      if (!mountedRef.current) return;
       setVia(result.via);
       setStatus("success");
       trackEvent("submit_quote_success", { via: result.via });
-    } catch (err) {
+    } catch {
+      if (!mountedRef.current) return;
       // Mensagem única e neutra — sem expor detalhes técnicos na UI pública.
-      void (err instanceof NoContactChannelError);
       setStatus("error");
       setErrorMsg(
         "Não foi possível enviar agora. Tente novamente ou utilize um dos canais de contato disponíveis.",
       );
       trackEvent("submit_quote_error");
+    } finally {
+      submittingRef.current = false;
     }
   };
 
@@ -197,6 +246,7 @@ export function QuoteForm() {
     setErrorMsg("");
     setFieldErrors({});
     formStartedRef.current = false;
+    submittingRef.current = false;
   };
 
   const hasWhatsapp = !!barthyWhatsappUrl();
@@ -312,6 +362,8 @@ export function QuoteForm() {
                     name="nome"
                     type="text"
                     required
+                    minLength={2}
+                    maxLength={120}
                     className={`${inputCls} ${fieldErrors.nome ? invalidInputCls : ""}`}
                     placeholder="Seu nome"
                     aria-invalid={fieldErrors.nome ? "true" : undefined}
@@ -329,6 +381,7 @@ export function QuoteForm() {
                     inputMode="tel"
                     autoComplete="tel"
                     required
+                    maxLength={24}
                     className={`${inputCls} ${fieldErrors.whatsapp ? invalidInputCls : ""}`}
                     placeholder="(00) 00000-0000"
                     aria-invalid={fieldErrors.whatsapp ? "true" : undefined}
@@ -347,6 +400,7 @@ export function QuoteForm() {
                     name="email"
                     type="email"
                     autoComplete="email"
+                    maxLength={254}
                     className={`${inputCls} ${fieldErrors.email ? invalidInputCls : ""}`}
                     placeholder="seu@email.com"
                     aria-invalid={fieldErrors.email ? "true" : undefined}
@@ -361,6 +415,7 @@ export function QuoteForm() {
                     id="empresa"
                     name="empresa"
                     type="text"
+                    maxLength={160}
                     className={inputCls}
                     placeholder="Nome da empresa ou projeto"
                   />
@@ -375,6 +430,7 @@ export function QuoteForm() {
                     name="cidadeUf"
                     type="text"
                     required
+                    maxLength={120}
                     className={`${inputCls} ${fieldErrors.cidadeUf ? invalidInputCls : ""}`}
                     placeholder="Digite sua cidade e estado"
                     aria-invalid={fieldErrors.cidadeUf ? "true" : undefined}
@@ -421,11 +477,18 @@ export function QuoteForm() {
                   id="mensagem"
                   name="mensagem"
                   rows={4}
+                  maxLength={MESSAGE_LIMIT}
                   className={inputCls}
                   value={message}
-                  onChange={(e) => setMessage(e.target.value)}
+                  aria-invalid={fieldErrors.mensagem ? "true" : undefined}
+                  aria-describedby={fieldErrors.mensagem ? "mensagem-error" : undefined}
+                  onChange={(e) => {
+                    setMessage(e.target.value);
+                    clearFieldError("mensagem");
+                  }}
                   placeholder="Conte um pouco sobre o seu negócio e o que precisa."
                 />
+                <FieldError id="mensagem-error" message={fieldErrors.mensagem} />
               </div>
 
               {/* Microinteração de loading */}

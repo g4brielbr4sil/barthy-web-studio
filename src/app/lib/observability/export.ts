@@ -3,6 +3,7 @@ import type {
   Bottleneck,
   DiagnosticResult,
   SanitizedSessionReport,
+  SessionEventName,
   SessionSnapshot,
 } from "./types";
 
@@ -26,16 +27,32 @@ export function buildSanitizedReport(
   diagnostics: DiagnosticResult[],
   bottlenecks: Bottleneck[],
 ): SanitizedSessionReport {
-  const { clickPoints, ...sanitizedSession } = snapshot;
+  const { clickPoints, events, ...sanitizedSession } = snapshot;
+  const eventCounts = events.reduce<Partial<Record<SessionEventName, number>>>(
+    (counts, event) => {
+      counts[event.name] = (counts[event.name] ?? 0) + 1;
+      return counts;
+    },
+    {},
+  );
 
   return {
     schemaVersion: 1,
     generatedAt: new Date().toISOString(),
     page: window.location.pathname || "/",
     browser: browserFamily(),
+    privacyNote:
+      "Relatório local desta sessão. Os dados não são enviados para serviços externos.",
+    limitations: [
+      "As métricas refletem somente esta sessão e este navegador.",
+      "O heatmap é agregado por células e pode mudar após alterações grandes de layout.",
+      "Métricas não suportadas pelo navegador permanecem indisponíveis.",
+    ],
     session: {
       ...sanitizedSession,
       clickPointCount: clickPoints.length,
+      eventCount: events.length,
+      eventCounts,
     },
     heatmap: {
       columns: HEATMAP_COLUMNS,
@@ -51,7 +68,11 @@ export function buildSanitizedReport(
 
 export class LocalSessionTransport implements ObservabilityTransport {
   send(report: SanitizedSessionReport): void {
-    sessionStorage.setItem(REPORT_STORAGE_KEY, JSON.stringify(report));
+    try {
+      sessionStorage.setItem(REPORT_STORAGE_KEY, JSON.stringify(report));
+    } catch {
+      // O download continua disponível quando storage estiver bloqueado ou sem quota.
+    }
   }
 }
 
@@ -66,7 +87,10 @@ export class DownloadTransport implements ObservabilityTransport {
     const link = document.createElement("a");
     link.href = url;
     link.download = fileName;
+    link.hidden = true;
+    document.body.appendChild(link);
     link.click();
-    window.setTimeout(() => URL.revokeObjectURL(url), 0);
+    link.remove();
+    window.setTimeout(() => URL.revokeObjectURL(url), 1_000);
   }
 }
