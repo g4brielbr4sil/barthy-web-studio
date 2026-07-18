@@ -32,7 +32,7 @@ export function ProductsSystems() {
           className="grid gap-4"
           style={{ gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 340px), 1fr))" }}
         >
-          {digitalProducts.map((p) => {
+          {digitalProducts.map((p, index) => {
             const Icon = p.icon;
             return (
               <article
@@ -59,7 +59,11 @@ export function ProductsSystems() {
                     </span>
                   ))}
                 </div>
-                <Disclosure label="Ver detalhes" className="mt-5">
+                <Disclosure
+                  label="Ver detalhes"
+                  className="mt-5"
+                  trackingSource={`product-${index + 1}`}
+                >
                   <ul
                     className="space-y-2 text-[var(--muted-foreground)]"
                     style={{ fontSize: "0.85rem" }}

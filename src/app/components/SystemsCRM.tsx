@@ -113,7 +113,11 @@ export function SystemsCRM() {
           </div>
         </div>
 
-        <Disclosure label="Ver como os sistemas funcionam" className="mt-8">
+        <Disclosure
+          label="Ver como os sistemas funcionam"
+          className="mt-8"
+          trackingSource="systems-flow"
+        >
           <div className="grid gap-6 text-[var(--muted-foreground)] md:grid-cols-2">
             <div>
               <h3 className="text-[var(--foreground)]">Como funciona</h3>

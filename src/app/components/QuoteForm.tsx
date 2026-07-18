@@ -101,6 +101,7 @@ export function QuoteForm() {
   const [service, setService] = useState("");
   const [message, setMessage] = useState("");
   const formRef = useRef<HTMLFormElement>(null);
+  const formStartedRef = useRef(false);
 
   const clearFieldError = (field: FieldName) => {
     setFieldErrors((current) => {
@@ -147,6 +148,9 @@ export function QuoteForm() {
         const invalidElement = form.elements.namedItem(firstInvalidField);
         if (invalidElement instanceof HTMLElement) invalidElement.focus();
       }
+      Object.keys(validationErrors).forEach((field) => {
+        trackEvent("form_error", { field });
+      });
       return;
     }
 
@@ -163,7 +167,7 @@ export function QuoteForm() {
     };
 
     trackEvent("cta_click", { source: "final-cta", destination: "contato" });
-    trackEvent("submit_quote_form", { cidadeUf: payload.cidadeUf, tipoServico: payload.tipoServico });
+    trackEvent("submit_quote_form");
     setStatus("loading");
     setErrorMsg("");
 
@@ -191,6 +195,7 @@ export function QuoteForm() {
     setStatus("idle");
     setErrorMsg("");
     setFieldErrors({});
+    formStartedRef.current = false;
   };
 
   const hasWhatsapp = !!barthyWhatsappUrl();
@@ -236,6 +241,7 @@ export function QuoteForm() {
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.36, ease: [0.22, 1, 0.36, 1] }}
+              data-form-success="true"
               className="relative flex flex-col gap-4 overflow-hidden rounded-2xl p-6 glass md:p-8"
             >
               <div
@@ -287,6 +293,11 @@ export function QuoteForm() {
             <form
               ref={formRef}
               onSubmit={submit}
+              onInput={() => {
+                if (formStartedRef.current) return;
+                formStartedRef.current = true;
+                trackEvent("form_started");
+              }}
               noValidate
               className="rounded-2xl glass p-6 md:p-8 flex flex-col gap-4"
             >

@@ -3,6 +3,7 @@ import { BarthyLogo } from "./BarthyLogo";
 import { Container } from "./ui-primitives";
 import { siteConfig } from "../data/content";
 import { trackEvent } from "../lib/track";
+import { DevModeLauncher } from "./DevModeLauncher";
 
 export function Footer() {
   const socials = [
@@ -82,11 +83,14 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-12 pt-6 border-t border-[var(--border)] flex flex-col md:flex-row gap-3 items-start md:items-center justify-between text-[var(--muted-foreground)]" style={{ fontSize: "0.8rem" }}>
-          <span>© {new Date().getFullYear()} Barthy Web Studio. Todos os direitos reservados.</span>
-          <span style={{ letterSpacing: "0.18em", textTransform: "uppercase" }}>
-            Tecnologia organizada para operações reais.
-          </span>
+        <div className="mt-12 flex flex-col items-start justify-between gap-4 border-t border-[var(--border)] pt-6 text-[var(--muted-foreground)] md:flex-row md:items-center" style={{ fontSize: "0.8rem" }}>
+          <div className="flex min-w-0 flex-col gap-2">
+            <span>© {new Date().getFullYear()} Barthy Web Studio. Todos os direitos reservados.</span>
+            <span style={{ letterSpacing: "0.18em", textTransform: "uppercase" }}>
+              Tecnologia organizada para operações reais.
+            </span>
+          </div>
+          <DevModeLauncher />
         </div>
       </Container>
     </footer>
