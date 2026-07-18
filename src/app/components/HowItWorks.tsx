@@ -7,11 +7,11 @@ export function HowItWorks() {
       <Container>
         <SectionHeading
           eyebrow="Como trabalhamos"
-          title="Clareza do diagnóstico à entrega."
-          description="Cada projeto começa com entendimento da necessidade e avança com escopo, prazo e entregas definidos."
+          title="Direção clara do diagnóstico à continuidade."
+          description="A necessidade vem antes da ferramenta. O processo mantém escopo, prazo, responsabilidades e próximos passos visíveis."
         />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-5">
           {steps.map((s, i) => (
             <div
               key={s.n}
@@ -32,7 +32,7 @@ export function HowItWorks() {
                 {s.text}
               </p>
               {i < steps.length - 1 && (
-                <div className="hidden lg:block absolute top-1/2 -right-3 w-6 h-px bg-[var(--border-strong)]" />
+                <div className="hidden xl:block absolute top-1/2 -right-3 w-6 h-px bg-[var(--border-strong)]" />
               )}
             </div>
           ))}

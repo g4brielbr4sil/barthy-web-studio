@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { ChevronDown } from "lucide-react";
+import { useReducedMotion } from "motion/react";
 import { faq } from "../data/content";
 import { Container, Section, SectionHeading } from "./ui-primitives";
 
 export function FAQ() {
   const [open, setOpen] = useState<number | null>(0);
+  const reduceMotion = useReducedMotion();
 
   return (
     <Section id="faq">
@@ -44,11 +46,23 @@ export function FAQ() {
                   id={panelId}
                   role="region"
                   aria-labelledby={btnId}
-                  hidden={!isOpen}
-                  className="px-5 pb-5 -mt-1 text-[var(--muted-foreground)] text-pretty"
-                  style={{ fontSize: "0.93rem" }}
+                  aria-hidden={!isOpen}
+                  className={`grid ${
+                    reduceMotion
+                      ? "transition-none"
+                      : "transition-[grid-template-rows,opacity] duration-300"
+                  } ${
+                    isOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
+                  }`}
                 >
-                  {item.a}
+                  <div className="overflow-hidden">
+                    <div
+                      className="px-5 pb-5 -mt-1 text-[var(--muted-foreground)] text-pretty"
+                      style={{ fontSize: "0.93rem" }}
+                    >
+                      {item.a}
+                    </div>
+                  </div>
                 </div>
               </div>
             );

@@ -7,7 +7,7 @@ export function ForWhom() {
       <Container>
         <SectionHeading
           eyebrow="Para quem"
-          title="Para quem é a Barthy?"
+          title="Para empresas, profissionais e operações em crescimento."
           description={audiencesIntro}
         />
 

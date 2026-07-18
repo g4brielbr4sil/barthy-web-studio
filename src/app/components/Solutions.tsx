@@ -1,5 +1,5 @@
 import { Check } from "lucide-react";
-import { solutions, complements } from "../data/content";
+import { solutions } from "../data/content";
 import { Container, Section, SectionHeading } from "./ui-primitives";
 
 export function Solutions() {
@@ -8,8 +8,8 @@ export function Solutions() {
       <Container>
         <SectionHeading
           eyebrow="Soluções"
-          title="Comece pelo que sua empresa precisa agora."
-          description="Da presença digital aos processos internos, a Barthy estrutura soluções que podem começar simples e evoluir conforme a operação."
+          title="Soluções diretas para apresentar, captar e organizar."
+          description="Entregas contratáveis para resolver uma necessidade clara agora, com uma estrutura que pode evoluir conforme a operação."
         />
 
         <div
@@ -49,24 +49,6 @@ export function Solutions() {
           })}
         </div>
 
-        {/* Complementos comerciais — bloco menor, editorial (não card por item) */}
-        <div className="mt-10 rounded-2xl border border-[var(--border)] p-6 md:p-7">
-          <h3 className="text-[var(--foreground)]">Complementos comerciais</h3>
-          <p className="mt-2 text-[var(--muted-foreground)]" style={{ fontSize: "0.92rem" }}>
-            Materiais e ajustes que fortalecem a apresentação e completam a estrutura do projeto.
-          </p>
-          <div className="mt-5 flex flex-wrap gap-2.5">
-            {complements.map((c) => (
-              <span
-                key={c}
-                className="inline-flex items-center rounded-full border border-[var(--border)] px-3.5 py-1.5 text-[var(--muted-foreground)]"
-                style={{ fontSize: "0.85rem" }}
-              >
-                {c}
-              </span>
-            ))}
-          </div>
-        </div>
       </Container>
     </Section>
   );

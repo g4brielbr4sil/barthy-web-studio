@@ -18,18 +18,38 @@
             theme = "dark";
           }
           var root = document.documentElement;
-          root.classList.toggle("dark", theme === "dark");
+          var isDark = theme === "dark";
+          var background = isDark ? "#0A1931" : "#EAF1F7";
+          root.dataset.theme = theme;
+          root.classList.toggle("dark", isDark);
           root.style.colorScheme = theme;
-          root.style.backgroundColor = theme === "dark" ? "#0A1931" : "#EAF1F7";
-          document.querySelector('meta[name="theme-color"]').setAttribute(
-            "content",
-            theme === "dark" ? "#0A1931" : "#EAF1F7"
-          );
+          root.style.backgroundColor = background;
+          document.querySelector('meta[name="theme-color"]').setAttribute("content", background);
+
+          var applyBodyBackground = function () {
+            if (document.body) document.body.style.backgroundColor = background;
+          };
+          if (document.body) applyBodyBackground();
+          else document.addEventListener("DOMContentLoaded", applyBodyBackground, { once: true });
         })();
       </script>
       <style>
-        html, body { min-height: 100%; margin: 0; background-color: inherit; }
-        #root { min-height: 100%; }
+        :root,
+        [data-theme="dark"] {
+          --page-background: #0A1931;
+          --hero-background: #0A1931;
+          color-scheme: dark;
+        }
+        [data-theme="light"] {
+          --page-background: #EAF1F7;
+          --hero-background: #EAF1F7;
+          color-scheme: light;
+        }
+        html, body, #root, main {
+          min-height: 100%;
+          margin: 0;
+          background-color: var(--page-background, #0A1931);
+        }
       </style>
       
     </head>

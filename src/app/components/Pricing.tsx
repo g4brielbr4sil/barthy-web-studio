@@ -1,5 +1,5 @@
 import { Check, Sparkles, Rocket, Briefcase, Star, ArrowRight } from "lucide-react";
-import { motion } from "motion/react";
+import { motion, useReducedMotion } from "motion/react";
 import { packages, type Pkg } from "../data/content";
 import { Button, Container, LinkButton, Section, SectionHeading } from "./ui-primitives";
 import { prefillQuote } from "../lib/prefill";
@@ -8,6 +8,8 @@ import { trackEvent } from "../lib/track";
 const icons = [Rocket, Briefcase, Sparkles];
 
 export function Pricing() {
+  const reduceMotion = useReducedMotion();
+
   return (
     <Section id="pacotes" className="overflow-hidden">
       <div
@@ -24,7 +26,7 @@ export function Pricing() {
           align="center"
           eyebrow="Pacotes"
           title="Escolha a estrutura que faz sentido agora."
-          description="Os pacotes definem um ponto de partida. Escopo, prazo e entregas são confirmados antes do início do projeto."
+          description="Os pacotes ajudam a começar com um escopo claro. Projetos de CRM, dashboards, portais, integrações e sistemas sob medida são avaliados após diagnóstico."
         />
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8 items-stretch">
@@ -34,17 +36,13 @@ export function Pricing() {
         </div>
 
         <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
+          initial={reduceMotion ? false : { opacity: 0 }}
+          whileInView={reduceMotion ? undefined : { opacity: 1 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.4 }}
+          transition={{ duration: 0.45, delay: 0.1 }}
           className="mt-10 mx-auto max-w-2xl text-center text-[var(--muted-foreground)] text-pretty flex flex-col gap-2"
           style={{ fontSize: "0.9rem" }}
         >
-          <p>
-            Precisa de CRM, dashboard, portal ou automação? Projetos sob medida recebem orçamento
-            após um diagnóstico inicial.
-          </p>
           <p>
             Ainda não sabe qual opção atende melhor? Conte o que precisa e indicamos o caminho mais
             adequado.
@@ -65,13 +63,14 @@ function PriceCard({
   Icon: React.ElementType;
 }) {
   const highlight = !!plan.highlight;
+  const reduceMotion = useReducedMotion();
 
   return (
     <motion.article
-      initial={{ opacity: 0, y: 28 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      initial={reduceMotion ? false : { opacity: 0, y: 20 }}
+      whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-60px" }}
-      transition={{ duration: 0.55, delay: index * 0.08 + 0.2, ease: [0.22, 1, 0.36, 1] }}
+      transition={{ duration: 0.5, delay: index * 0.06 + 0.08, ease: [0.22, 1, 0.36, 1] }}
       className={`relative flex flex-col rounded-3xl p-8 backdrop-blur-xl transition-[background-color,border-color,box-shadow,transform] duration-200 ${
         highlight
           ? "bg-gradient-to-b from-[var(--surface)] to-[var(--background)] border border-[var(--terra)]/50 ring-1 ring-[var(--terra)]/25 shadow-[0_30px_80px_-30px_rgba(205,118,93,0.45)] lg:-mt-4 lg:mb-4 lg:z-10"

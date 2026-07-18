@@ -18,7 +18,7 @@ export function ThemeToggle() {
       <motion.span
         className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-[var(--border)] bg-[var(--surface)] shadow-sm"
         animate={{ x: isDark ? 0 : 14 }}
-        transition={reduceMotion ? { duration: 0 } : { type: "spring", stiffness: 500, damping: 34 }}
+        transition={reduceMotion ? { duration: 0 } : { duration: 0.16, ease: "easeOut" }}
       >
         {isDark ? (
           <Moon className="w-3.5 h-3.5 text-[var(--ice-blue)]" />

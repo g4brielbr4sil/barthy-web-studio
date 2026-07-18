@@ -1,5 +1,5 @@
 import { ArrowRight } from "lucide-react";
-import { organizePoints } from "../data/content";
+import { organizeOutcomes, organizePoints } from "../data/content";
 import { Container, LinkButton, Section, SectionHeading } from "./ui-primitives";
 import { trackEvent } from "../lib/track";
 
@@ -9,8 +9,8 @@ export function WhatWeOrganize() {
       <Container>
         <SectionHeading
           eyebrow="Onde ajudamos"
-          title="Menos ruído na apresentação. Mais clareza para vender e operar."
-          description="Quando apresentação, atendimento e processos não acompanham a qualidade do trabalho, a empresa perde clareza, tempo e oportunidades. A Barthy organiza esses pontos em uma estrutura digital coerente."
+          title="Quando informações, atendimento e ferramentas não trabalham juntos, a operação perde clareza."
+          description="Contatos ficam espalhados, tarefas dependem da memória, propostas não são acompanhadas e ferramentas acabam sendo usadas sem uma estrutura definida. A Barthy organiza essas partes em um fluxo mais claro, conectado e funcional."
         />
 
         {/* Lista editorial em duas colunas, numerada e com divisores */}
@@ -32,6 +32,21 @@ export function WhatWeOrganize() {
             </li>
           ))}
         </ol>
+
+        <div className="mt-10 rounded-2xl border border-[var(--border)] bg-[var(--card)] p-6 md:p-7">
+          <h3 className="text-[var(--foreground)]">O que muda com uma estrutura conectada</h3>
+          <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            {organizeOutcomes.map((outcome) => (
+              <div
+                key={outcome}
+                className="rounded-xl border border-[var(--hairline)] bg-[var(--surface)] px-4 py-3 text-[var(--foreground)]"
+                style={{ fontSize: "0.9rem" }}
+              >
+                {outcome}
+              </div>
+            ))}
+          </div>
+        </div>
 
         <div className="mt-10">
           <LinkButton

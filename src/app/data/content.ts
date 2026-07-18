@@ -4,7 +4,6 @@ import {
   Database,
   Workflow,
   Wrench,
-  PartyPopper,
   GaugeCircle,
   Boxes,
   Network,
@@ -57,7 +56,7 @@ export function barthyWhatsappUrl(message?: string): string {
  * Sempre retorna um link válido para os CTAs "falar com a Barthy".
  */
 export function contactHref(
-  message = "Olá, tenho interesse em organizar a presença digital do meu negócio com a Barthy Web Studio.",
+  message = "Olá, quero conversar sobre uma solução digital para organizar meu projeto ou operação com a Barthy Web Studio.",
 ): string {
   return barthyWhatsappUrl(message) || mailtoUrl("Contato — Barthy Web Studio", message);
 }
@@ -66,39 +65,40 @@ export function contactHref(
 /*  Onde ajudamos — "O que organizamos" (pontos neutros e profissionais) */
 /* ------------------------------------------------------------------ */
 export const organizePoints: string[] = [
-  "Informações espalhadas entre site, Instagram e WhatsApp",
-  "Orçamentos e propostas sem um padrão definido",
-  "Leads sem histórico ou próxima ação",
-  "Atendimento dependente de tarefas manuais",
-  "Falta de visibilidade sobre pedidos, tarefas e status",
-  "Ferramentas, arquivos e acessos sem uma organização central",
-  "Processos internos que dependem de planilhas e mensagens soltas",
-  "Falta de uma página clara para apresentar serviços e diferenciais",
+  "Informações espalhadas",
+  "Atendimento sem continuidade",
+  "Ferramentas desconectadas",
+  "Falta de visão sobre a próxima ação",
+];
+
+export const organizeOutcomes: string[] = [
+  "Presença mais clara",
+  "Captação organizada",
+  "Atendimento acompanhado",
+  "Operação estruturada",
 ];
 
 /* ------------------------------------------------------------------ */
 /*  Para quem é a Barthy?                                              */
 /* ------------------------------------------------------------------ */
 export const audiencesIntro =
-  "Para empresas, profissionais e operações que precisam apresentar melhor seus serviços, organizar o atendimento, captar oportunidades ou estruturar processos digitais.";
+  "Para quem precisa apresentar melhor seus serviços, organizar o atendimento, conectar informações ou estruturar processos digitais com mais clareza.";
 
 export const audiences: string[] = [
   "Empresas de eventos",
-  "Buffets e serviços para festas",
-  "Bares, restaurantes e experiências",
   "Prestadores de serviço",
   "Profissionais autônomos",
   "Empresas locais",
-  "Negócios que vendem pelo WhatsApp",
-  "Empresas que precisam organizar propostas e atendimento",
-  "Operações que precisam de CRM, dashboard ou painel interno",
+  "Operações em crescimento",
+  "Empresas que vendem pelo WhatsApp",
+  "Equipes comerciais",
   "Academias e estúdios",
   "Clínicas e serviços de cuidado",
   "Escolas, cursos e plataformas educacionais",
-  "Empresas com equipes comerciais",
-  "Empresas que precisam organizar filas, solicitações e tarefas",
-  "Operações que precisam de automações e integrações",
-  "Negócios que precisam de software sob medida",
+  "Operações que precisam organizar atendimento",
+  "Empresas que precisam de CRM, dashboards ou portais",
+  "Projetos que precisam de sistemas sob medida",
+  "Operações que precisam conectar ferramentas",
 ];
 
 /* ------------------------------------------------------------------ */
@@ -113,69 +113,57 @@ export interface SolutionGroup {
 
 export const solutions: SolutionGroup[] = [
   {
-    title: "Landing pages e portfólios",
+    title: "Presença digital",
     description:
-      "Apresente serviços, diferenciais e canais de contato em uma página clara, profissional e preparada para captar oportunidades.",
+      "Apresentação clara, profissional e preparada para transformar visitas em contatos.",
     icon: Globe,
     items: [
-      "Landing page",
-      "Portfólio profissional",
-      "Página institucional",
-      "Página para campanhas",
-      "Página para prestadores de serviço",
+      "Landing pages",
+      "Portfólios profissionais",
+      "Páginas institucionais",
+      "Páginas para eventos e serviços",
+      "Links profissionais",
     ],
   },
   {
-    title: "Páginas para eventos e experiências",
+    title: "Captação e atendimento",
     description:
-      "Organize fotos, formatos, serviços, cardápios, agenda, diferenciais e pedidos de orçamento em uma estrutura profissional.",
-    icon: PartyPopper,
-    items: [
-      "Empresas de eventos",
-      "Buffets",
-      "Bares e experiências",
-      "Produções",
-      "Serviços para festas",
-    ],
-  },
-  {
-    title: "Captação e organização comercial",
-    description:
-      "Facilite o primeiro contato e apresente sua oferta com materiais claros, prontos para apoiar conversas e pedidos de orçamento.",
+      "Canais mais organizados para receber, registrar e acompanhar solicitações.",
     icon: Workflow,
     items: [
-      "Formulário de orçamento",
-      "Proposta comercial",
-      "Mensagens comerciais",
-      "Organização de WhatsApp",
-      "Link profissional",
+      "Formulários",
+      "Páginas de orçamento",
+      "Organização de mensagens",
+      "Estrutura de contato",
+      "Encaminhamento de oportunidades",
     ],
   },
   {
-    title: "Suporte e operação digital",
+    title: "Organização comercial",
     description:
-      "Organize ferramentas, arquivos, acessos, backups e configurações técnicas para manter a rotina funcionando com mais segurança.",
-    icon: Wrench,
+      "Mais clareza sobre quem entrou, em que etapa está e o que precisa acontecer depois.",
+    icon: Database,
     items: [
-      "Gmail e Google Drive",
-      "Organização de arquivos",
-      "Backup",
-      "Configuração de ferramentas",
-      "Suporte remoto",
-      "Instalação e otimização",
-      "Impressoras e periféricos",
+      "Propostas",
+      "Pipeline",
+      "Acompanhamento",
+      "Organização de leads",
+      "Próximas ações",
     ],
   },
-];
-
-/** Complementos comerciais — apoio, não os serviços principais. */
-export const complements: string[] = [
-  "Proposta comercial",
-  "Formulário de orçamento",
-  "Organização de WhatsApp",
-  "Mensagens comerciais",
-  "Link profissional",
-  "Bio e apresentação",
+  {
+    title: "Suporte e estrutura digital",
+    description:
+      "Uma base mais segura e organizada para a operação funcionar.",
+    icon: Wrench,
+    items: [
+      "Organização de contas",
+      "Ferramentas e arquivos",
+      "Configurações",
+      "Suporte técnico",
+      "Orientação digital",
+    ],
+  },
 ];
 
 /* ------------------------------------------------------------------ */
@@ -193,97 +181,52 @@ export const digitalProducts: DigitalProduct[] = [
   {
     title: "SaaS e plataformas digitais",
     icon: Boxes,
-    text: "Produtos digitais acessados pela internet, com login, perfis de usuário, dados organizados e funcionalidades específicas para cada operação.",
-    note: "Projetos sob medida, com escopo definido após diagnóstico.",
+    text: "Produtos digitais reutilizáveis ou sob medida, com acesso organizado e funções alinhadas à operação.",
+    note: "Escopo e arquitetura definidos após diagnóstico.",
     items: [
-      "SaaS para empresas",
-      "Plataformas de assinatura",
-      "Sistemas multiusuário",
+      "SaaS",
+      "Plataformas com login",
+      "Perfis de usuário",
       "Gestão de planos",
-      "Controle de acesso",
+      "Produtos digitais",
     ],
   },
   {
-    title: "Canais de comunicação conectados",
+    title: "Templates operacionais",
+    icon: LayoutDashboard,
+    text: "Estruturas reutilizáveis para padronizar comunicação, registros e rotinas sem começar cada processo do zero.",
+    items: [
+      "Propostas e orçamentos",
+      "Follow-up",
+      "Mensagens e e-mails",
+      "Formulários",
+      "Documentos internos",
+    ],
+  },
+  {
+    title: "Bots e Powerbot",
     icon: Workflow,
-    text: "Conecte canais de contato a fluxos de triagem, registro e encaminhamento.",
-    note: "Integrações conforme disponibilidade técnica, termos de uso e autorização do cliente.",
+    text: "Fluxos de triagem e mensageria para coletar informações, registrar solicitações e direcionar contatos.",
+    note: "Implementação após avaliação técnica, conforme disponibilidade da plataforma e conectores autorizados.",
     items: [
-      "WhatsApp",
-      "E-mail",
-      "Formulários",
-      "Telegram",
-      "Registro automático de contatos",
-      "Alertas internos",
-      "Respostas iniciais",
-      "Distribuição para atendentes",
-    ],
-  },
-  {
-    title: "Bots e triagem 24/7",
-    icon: GaugeCircle,
-    text: "Estruturas de atendimento automático podem responder perguntas iniciais, coletar informações e registrar solicitações a qualquer hora.",
-    note: "O atendimento automático faz a triagem e o registro; a equipe assume quando necessário.",
-    items: [
-      "Perguntas frequentes",
-      "Coleta de nome e contato",
-      "Identificação do serviço de interesse",
-      "Registro no CRM",
-      "Direcionamento para atendente",
-      "Informações de horário",
-      "Solicitação de orçamento",
-      "Triagem inicial",
-    ],
-  },
-  {
-    title: "Powerbot e integrações de mensageria",
-    icon: Network,
-    text: "Powerbot e outras soluções de mensageria podem ser integradas a fluxos de atendimento, CRM, alertas e registro de solicitações.",
-    note: "Integrações realizadas com APIs oficiais e conectores autorizados para cada canal.",
-    items: [
-      "Atendimento automatizado",
       "Menus de opções",
-      "Triagem",
+      "Triagem inicial",
       "Registro de leads",
-      "Encaminhamento para equipe",
       "Mensagens de confirmação",
-      "Lembretes",
-      "Atualizações de status",
-      "Integração com n8n",
-      "Integração com sistemas internos",
+      "Encaminhamento para equipe",
     ],
   },
   {
-    title: "Templates e estruturas reutilizáveis",
-    icon: Boxes,
-    text: "Estruturas reutilizáveis para padronizar a comunicação e reduzir retrabalho.",
-    items: [
-      "Templates de proposta",
-      "Templates de orçamento",
-      "Templates de atendimento",
-      "Templates de follow-up",
-      "Templates de mensagens",
-      "Templates de e-mail",
-      "Templates de landing page",
-      "Templates de formulários",
-      "Templates de documentos internos",
-    ],
-  },
-  {
-    title: "Integrações e conectores",
+    title: "Formulários e integrações",
     icon: Network,
-    text: "Conecte ferramentas que hoje trabalham separadas com APIs oficiais e acessos autorizados.",
+    text: "Conexões entre canais e ferramentas para reduzir tarefas manuais e manter a continuidade das informações.",
+    note: "Integrações usam APIs oficiais e conectores compatíveis, conforme disponibilidade técnica.",
     items: [
-      "Hermes",
-      "n8n",
-      "Google Sheets",
+      "Formulários conectados",
+      "WhatsApp",
       "Gmail",
-      "Google Drive",
-      "Formulários",
-      "APIs externas",
-      "Bancos de dados",
-      "Supabase",
-      "Sistemas de pagamento",
+      "Telegram",
+      "Ferramentas compatíveis",
     ],
   },
 ];
@@ -299,12 +242,12 @@ export interface SystemFront {
 
 export const systemFronts: SystemFront[] = [
   {
-    title: "CRM e pipeline",
+    title: "CRM e pipeline comercial",
     text: "Organize leads, histórico, estágio, responsável e próxima ação.",
     icon: Database,
   },
   {
-    title: "Dashboards operacionais",
+    title: "Dashboards e indicadores",
     text: "Acompanhe pedidos, tarefas, indicadores e status em uma visão centralizada.",
     icon: GaugeCircle,
   },
@@ -314,14 +257,14 @@ export const systemFronts: SystemFront[] = [
     icon: Boxes,
   },
   {
-    title: "Filas e solicitações",
-    text: "Distribua demandas por prioridade, responsável, prazo e status de resolução.",
-    icon: Network,
+    title: "Cadastros e acompanhamento",
+    text: "Estruture dados, históricos, responsáveis e status para acompanhar a operação com clareza.",
+    icon: LayoutDashboard,
   },
   {
-    title: "Cadastros e operação interna",
-    text: "Estruture dados, rotinas e permissões para manter a equipe trabalhando com clareza.",
-    icon: LayoutDashboard,
+    title: "Filas, solicitações e tarefas",
+    text: "Distribua demandas por prioridade, responsável, prazo e status de resolução.",
+    icon: Network,
   },
   {
     title: "Sistemas sob medida",
@@ -399,22 +342,27 @@ export const steps = [
   {
     n: "01",
     title: "Diagnóstico",
-    text: "Entendemos o objetivo, a operação atual, o público e os pontos que precisam evoluir.",
+    text: "Entendemos o contexto, a necessidade e o que precisa ser organizado.",
   },
   {
     n: "02",
-    title: "Proposta",
-    text: "Definimos escopo, entregas, prazo, investimento e responsabilidades de cada parte.",
+    title: "Direção",
+    text: "Definimos a solução adequada, o escopo, o prazo e as responsabilidades.",
   },
   {
     n: "03",
-    title: "Produção",
-    text: "Desenvolvemos a solução, validamos o conteúdo e acompanhamos as decisões do projeto.",
+    title: "Construção",
+    text: "Desenvolvemos a solução com acompanhamento e validações.",
   },
   {
     n: "04",
-    title: "Entrega e evolução",
-    text: "Publicamos, documentamos e indicamos os próximos passos para manter ou evoluir a estrutura.",
+    title: "Entrega",
+    text: "Entregamos a estrutura pronta para uso, com as orientações e os materiais definidos.",
+  },
+  {
+    n: "05",
+    title: "Continuidade",
+    text: "Avaliamos próximos passos, ajustes e possibilidades de evolução.",
   },
 ];
 
@@ -474,9 +422,9 @@ export interface Experience {
 export const appliedExperience: Experience[] = [
   {
     title: "Grupo Levens",
-    category: "Portais e operação digital",
+    category: "Ecossistema digital",
     description:
-      "Atuação profissional em portais, fluxos internos, governança, testes e evolução de produtos digitais dentro do ecossistema Levens.",
+      "Experiência aplicada em portais, integrações, atendimento e processos operacionais voltados ao setor de cuidados.",
     accent: "from-[#4A7FA7] to-[#1A3D63]",
     link: {
       label: "Ver matéria na PEGN",
@@ -487,21 +435,21 @@ export const appliedExperience: Experience[] = [
     title: "PNQC",
     category: "Plataforma educacional",
     description:
-      "Estrutura de plataforma com módulos, aulas, autenticação, progresso, avaliações, certificados e diferentes perfis de acesso.",
+      "Plataforma educacional com autenticação, trilhas, progresso, avaliações e certificação.",
     accent: "from-[#CD765D] to-[#1A3D63]",
   },
   {
-    title: "Hermes Command Center",
+    title: "Hermes",
     category: "CRM e operação interna",
     description:
-      "Sistema próprio para organizar leads, pipeline comercial, financeiro, tarefas, rotina, relatórios e acompanhamento da operação.",
+      "Sistema interno de CRM, rotina, financeiro, acompanhamento e organização comercial.",
     accent: "from-[#B3CFE5] to-[#1A3D63]",
   },
   {
-    title: "Portais, CRM e automações",
-    category: "Sistemas sob medida",
+    title: "Portais e fluxos internos",
+    category: "Operações estruturadas",
     description:
-      "Experiência com dashboards, formulários, cadastros, fluxos operacionais, integrações, testes e organização de processos digitais.",
+      "Experiência com cadastros, dashboards, permissões, processos e acompanhamento de operações.",
     accent: "from-[#4A7FA7] to-[#0A1931]",
   },
 ];
@@ -516,48 +464,40 @@ export interface FaqItem {
 
 export const faq: FaqItem[] = [
   {
-    q: "Quanto custa uma landing page?",
-    a: "O investimento depende do conteúdo, quantidade de seções, integrações e prazo. Os pacotes da Barthy apresentam pontos de partida, e o valor final é confirmado após entender a necessidade.",
+    q: "A Barthy cria apenas sites?",
+    a: "Não. A Barthy também estrutura CRM, dashboards, portais, sistemas sob medida, produtos digitais, integrações e fluxos para organizar atendimento e operação.",
   },
   {
-    q: "A Barthy cria portfólios para empresas de eventos?",
-    a: "Sim. A página pode reunir serviços, fotos, formatos de atendimento, diferenciais, informações comerciais e formulário de orçamento.",
+    q: "É possível contratar um sistema sob medida?",
+    a: "Sim. O projeto começa com um diagnóstico para entender regras, usuários, informações e prioridades antes da definição do escopo.",
   },
   {
-    q: "A Barthy desenvolve CRM ou painel interno?",
-    a: "Sim. Podemos desenvolver CRMs, dashboards, portais e áreas internas para organizar leads, solicitações, tarefas, cadastros e processos.",
+    q: "Como funciona o diagnóstico?",
+    a: "A Barthy entende o contexto, o problema, a operação atual e a prioridade. A partir disso, indica uma solução adequada e apresenta escopo, prazo, investimento e responsabilidades.",
   },
   {
-    q: "Vocês fazem automações e integrações?",
-    a: "Sim. Desenvolvemos automações para registrar solicitações, enviar alertas, conectar formulários, e-mail, planilhas e sistemas.",
+    q: "Os pacotes incluem domínio e hospedagem?",
+    a: "Domínio, hospedagem e serviços de terceiros são definidos conforme o projeto e descritos na proposta. Quando houver custos externos, eles são apresentados antes do início.",
   },
   {
-    q: "Preciso ter logo, fotos e textos prontos?",
-    a: "Não. Avaliamos o que já existe, organizamos os materiais e indicamos o que precisa ser produzido antes do desenvolvimento.",
+    q: "A Barthy trabalha com automações e integrações?",
+    a: "Sim, após avaliação técnica. As integrações dependem da disponibilidade da plataforma, de APIs oficiais, de conectores compatíveis e das autorizações necessárias.",
   },
   {
-    q: "Vocês também oferecem suporte técnico?",
-    a: "Sim. Atendemos necessidades relacionadas a ferramentas, arquivos, contas, backup, instalação, otimização e suporte remoto.",
+    q: "É possível começar com uma solução menor?",
+    a: "Sim. Um pacote ou uma entrega pontual pode criar uma base inicial. Depois, os próximos passos são avaliados conforme a necessidade e o momento da operação.",
+  },
+  {
+    q: "Como funcionam pagamento e início do projeto?",
+    a: "O formato padrão é 50% no início e 50% na entrega. O projeto começa após a aprovação da proposta, a confirmação do pagamento inicial e o recebimento dos materiais combinados.",
   },
   {
     q: "A Barthy atende fora de Brasília?",
-    a: "Sim. A Barthy tem base em Brasília, com atendimento digital em todo o Brasil.",
+    a: "Sim. A Barthy tem base em Brasília e realiza atendimento digital em todo o Brasil.",
   },
   {
-    q: "Como funciona o pagamento?",
-    a: "O formato padrão é 50% no início e 50% na entrega. Condições específicas são apresentadas na proposta.",
-  },
-  {
-    q: "Qual é o prazo de entrega?",
-    a: "O prazo depende do escopo, das integrações e do envio dos materiais. A previsão é definida na proposta antes do início.",
-  },
-  {
-    q: "Qual pacote é mais adequado?",
-    a: "A escolha depende do objetivo atual. O formulário ajuda a entender a necessidade e indicar entre um pacote existente ou uma solução sob medida.",
-  },
-  {
-    q: "O que é o Hermes?",
-    a: "É o sistema interno usado pela Barthy para organizar contatos, serviços de interesse, histórico e próximas ações comerciais.",
+    q: "O que acontece depois da entrega?",
+    a: "A solução é entregue pronta para uso, acompanhada das orientações e dos materiais previstos no escopo. Ajustes, suporte adicional e novas evoluções podem ser avaliados em uma próxima etapa.",
   },
 ];
 
