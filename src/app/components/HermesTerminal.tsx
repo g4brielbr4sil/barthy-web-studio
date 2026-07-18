@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { motion, useReducedMotion, type Variants } from "motion/react";
 
 const terminalSequence = [
@@ -41,7 +41,8 @@ const lineVariants: Variants = {
 
 export function HermesTerminal() {
   const reduceMotion = useReducedMotion();
-  const [sequenceRunning, setSequenceRunning] = useState(!reduceMotion);
+  const [sequenceRunning, setSequenceRunning] = useState(false);
+  const sequenceStartedRef = useRef(false);
 
   return (
     <section
@@ -70,7 +71,15 @@ export function HermesTerminal() {
         initial={reduceMotion ? false : "hidden"}
         whileInView={reduceMotion ? undefined : "visible"}
         viewport={{ once: true, amount: 0.45 }}
-        onAnimationComplete={() => setSequenceRunning(false)}
+        onViewportEnter={() => {
+          if (reduceMotion || sequenceStartedRef.current) return;
+          sequenceStartedRef.current = true;
+          setSequenceRunning(true);
+        }}
+        onViewportLeave={() => setSequenceRunning(false)}
+        onAnimationComplete={() => {
+          if (sequenceStartedRef.current) setSequenceRunning(false);
+        }}
       >
         {terminalSequence.map((entry) => (
           <motion.div key={entry.command} variants={reduceMotion ? undefined : lineVariants}>

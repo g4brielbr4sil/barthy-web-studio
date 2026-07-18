@@ -120,15 +120,19 @@ export function TactileCard({
       dragConstraints={{ top: 0, right: 0, bottom: 0, left: 0 }}
       dragTransition={{ bounceStiffness: 350, bounceDamping: 22 }}
       whileDrag={dragEnabled ? { scale: 1.02, zIndex: 2 } : undefined}
-      onPointerDown={(event) => {
-        rest.onPointerDown?.(event);
-        if (!dragEnabled || event.defaultPrevented) return;
+      onPointerDown={
+        dragEnabled
+          ? (event) => {
+              rest.onPointerDown?.(event);
+              if (event.defaultPrevented) return;
 
-        const target = event.target;
-        if (target instanceof Element && target.closest(INTERACTIVE_SELECTOR)) return;
+              const target = event.target;
+              if (target instanceof Element && target.closest(INTERACTIVE_SELECTOR)) return;
 
-        dragControls.start(event);
-      }}
+              dragControls.start(event);
+            }
+          : undefined
+      }
     >
       {children}
     </motion.article>

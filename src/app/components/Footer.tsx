@@ -51,7 +51,7 @@ export function Footer() {
                   destination: "email",
                 })
               }
-              className="inline-flex items-center gap-2 text-[var(--foreground)] hover:text-[var(--terra)] transition-colors break-all"
+              className="inline-flex min-h-11 items-center gap-2 break-all text-[var(--foreground)] transition-colors hover:text-[var(--terra)]"
               style={{ fontSize: "0.92rem" }}
             >
               <Mail className="w-4 h-4 shrink-0" />
@@ -73,7 +73,7 @@ export function Footer() {
                         destination: label.toLowerCase(),
                       })
                     }
-                    className="inline-flex items-center justify-center w-9 h-9 rounded-full border border-[var(--border)] text-[var(--muted-foreground)] hover:text-[var(--foreground)] hover:border-[var(--ice-blue)]/60 transition-colors"
+                    className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-[var(--border)] text-[var(--muted-foreground)] transition-colors hover:border-[var(--ice-blue)]/60 hover:text-[var(--foreground)]"
                   >
                     <Icon className="w-4 h-4" />
                   </a>

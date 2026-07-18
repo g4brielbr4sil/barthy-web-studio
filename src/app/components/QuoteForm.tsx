@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { MessageCircle, Send, Loader2, AlertTriangle, RotateCcw } from "lucide-react";
-import { motion } from "motion/react";
+import { motion, useReducedMotion } from "motion/react";
 import {
   Container,
   LinkButton,
@@ -94,6 +94,7 @@ function FieldError({ id, message }: { id: string; message?: string }) {
 }
 
 export function QuoteForm() {
+  const reduceMotion = useReducedMotion();
   const [status, setStatus] = useState<Status>("idle");
   const [, setVia] = useState<"hermes" | "whatsapp" | null>(null);
   const [errorMsg, setErrorMsg] = useState("");
@@ -238,9 +239,11 @@ export function QuoteForm() {
           {/* Estado de sucesso */}
           {status === "success" ? (
             <motion.div
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.36, ease: [0.22, 1, 0.36, 1] }}
+              initial={reduceMotion ? false : { opacity: 0, y: 12 }}
+              animate={reduceMotion ? undefined : { opacity: 1, y: 0 }}
+              transition={
+                reduceMotion ? { duration: 0 } : { duration: 0.36, ease: [0.22, 1, 0.36, 1] }
+              }
               data-form-success="true"
               className="relative flex flex-col gap-4 overflow-hidden rounded-2xl p-6 glass md:p-8"
             >
@@ -430,10 +433,14 @@ export function QuoteForm() {
                 <div className="h-1 w-full overflow-hidden rounded-full bg-[var(--muted)]">
                   <motion.div
                     className="h-full bg-[var(--terra)]"
-                    initial={{ x: "-100%" }}
-                    animate={{ x: "100%" }}
-                    transition={{ repeat: Infinity, duration: 1.1, ease: "easeInOut" }}
-                    style={{ width: "50%" }}
+                    initial={reduceMotion ? false : { x: "-100%" }}
+                    animate={reduceMotion ? undefined : { x: "100%" }}
+                    transition={
+                      reduceMotion
+                        ? { duration: 0 }
+                        : { repeat: Infinity, duration: 1.1, ease: "easeInOut" }
+                    }
+                    style={{ width: reduceMotion ? "100%" : "50%" }}
                   />
                 </div>
               )}
@@ -459,7 +466,8 @@ export function QuoteForm() {
                 >
                   {status === "loading" ? (
                     <>
-                      <Loader2 className="w-4 h-4 animate-spin" /> Enviando...
+                      <Loader2 className={`h-4 w-4 ${reduceMotion ? "" : "animate-spin"}`} />{" "}
+                      Enviando...
                     </>
                   ) : (
                     <>

@@ -255,6 +255,10 @@
     animation: hero-wave-glow 18s ease-in-out infinite alternate;
   }
 
+  .hero-background[data-ambient-active="false"] .hero-wave {
+    animation-play-state: paused;
+  }
+
   [data-theme="light"] .hero-wave--primary {
     opacity: 0.2;
   }
@@ -365,6 +369,35 @@
 
   .terminal-cursor {
     animation: terminal-cursor-pulse 640ms steps(2, end) infinite;
+  }
+
+  .dev-mode-dialog {
+    width: min(
+      1180px,
+      calc(
+        100vw - max(1rem, env(safe-area-inset-left)) -
+          max(1rem, env(safe-area-inset-right))
+      )
+    );
+    max-height: min(
+      880px,
+      calc(
+        100dvh - max(1rem, env(safe-area-inset-top)) -
+          max(1rem, env(safe-area-inset-bottom))
+      )
+    );
+  }
+
+  .dev-mode-dialog__shell {
+    min-height: min(
+      560px,
+      calc(
+        100dvh - max(1rem, env(safe-area-inset-top)) -
+          max(1rem, env(safe-area-inset-bottom))
+      )
+    );
+    max-height: inherit;
+    padding-bottom: env(safe-area-inset-bottom);
   }
 }
 
@@ -477,6 +510,12 @@
     .terminal-cursor,
     .technical-flow__step {
       animation: none;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .dev-mode-dialog {
+      border-radius: 1.1rem;
     }
   }
 

@@ -18,6 +18,7 @@ export interface LongTaskMetric {
 export interface ResourceMetric {
   name: string;
   initiatorType: string;
+  startTime: number;
   duration: number;
   transferSize: number | null;
 }

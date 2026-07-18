@@ -326,6 +326,11 @@ export default function DevModePanel({
 
   const handleTabKeyDown = (event: ReactKeyboardEvent<HTMLButtonElement>, index: number) => {
     let nextIndex = index;
+    if (event.key === "Enter" || event.key === " " || event.key === "Space") {
+      event.preventDefault();
+      setActiveTab(tabs[index].id);
+      return;
+    }
     if (event.key === "ArrowRight") nextIndex = (index + 1) % tabs.length;
     else if (event.key === "ArrowLeft") nextIndex = (index - 1 + tabs.length) % tabs.length;
     else if (event.key === "Home") nextIndex = 0;
@@ -368,6 +373,21 @@ export default function DevModePanel({
   const sortedResources = [...snapshot.performance.resources].sort(
     (a, b) => b.duration - a.duration,
   );
+  const scriptCount = snapshot.performance.resources.filter(
+    (resource) => resource.initiatorType === "script" || resource.name.endsWith(".js"),
+  ).length;
+  const styleCount = snapshot.performance.resources.filter(
+    (resource) => resource.initiatorType === "link" || resource.name.endsWith(".css"),
+  ).length;
+  const imageCount = snapshot.performance.resources.filter(
+    (resource) => resource.initiatorType === "img",
+  ).length;
+  const fontCount = snapshot.performance.resources.filter((resource) =>
+    /\.(woff2?|ttf|otf)$/i.test(resource.name),
+  ).length;
+  const lateChunkCount = snapshot.performance.resources.filter((resource) =>
+    /(?:session|DevModePanel|ExperienceCardSwap).+\.js$/i.test(resource.name),
+  ).length;
 
   return (
     <dialog
@@ -379,9 +399,15 @@ export default function DevModePanel({
         event.preventDefault();
         onRequestClose();
       }}
-      className="dev-mode-dialog m-auto max-h-[min(880px,calc(100dvh-2rem))] w-[min(1180px,calc(100vw-2rem))] max-w-none overflow-hidden rounded-3xl border border-[var(--border-strong)] bg-[var(--background)] p-0 text-[var(--foreground)] shadow-[0_34px_100px_-32px_rgba(0,0,0,0.65)] backdrop:bg-[#0A1931]/70"
+      onKeyDown={(event) => {
+        if (event.key !== "Escape") return;
+        event.preventDefault();
+        event.stopPropagation();
+        onRequestClose();
+      }}
+      className="dev-mode-dialog m-auto max-w-none overflow-hidden rounded-3xl border border-[var(--border-strong)] bg-[var(--background)] p-0 text-[var(--foreground)] shadow-[0_34px_100px_-32px_rgba(0,0,0,0.65)] backdrop:bg-[#0A1931]/70"
     >
-      <div className="flex max-h-[min(880px,calc(100dvh-2rem))] min-h-[560px] flex-col">
+      <div className="dev-mode-dialog__shell flex flex-col">
         <header className="flex items-start justify-between gap-5 border-b border-[var(--border)] bg-[var(--surface)] px-5 py-4 md:px-6">
           <div>
             <div className="flex items-center gap-2 text-[var(--ice-blue)]">
@@ -454,7 +480,16 @@ export default function DevModePanel({
               <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
                 <MetricCard label="Duração da sessão" value={formatDuration(snapshot.durationMs)} />
                 <MetricCard label="Tempo visível" value={formatDuration(snapshot.visibleMs)} />
-                <MetricCard label="Scroll máximo" value={`${snapshot.maxScrollDepth.toFixed(1)}%`} />
+                <MetricCard label="Tempo oculto" value={formatDuration(snapshot.hiddenMs)} />
+                <MetricCard
+                  label="Scroll máximo"
+                  value={`${snapshot.maxScrollDepth.toFixed(1)}%`}
+                  detail={
+                    snapshot.deepestSection
+                      ? `Seção mais profunda: #${snapshot.deepestSection}`
+                      : "Nenhuma seção consolidada"
+                  }
+                />
                 <MetricCard label="Seções visitadas" value={String(visitedSections.length)} />
                 <MetricCard label="CTAs clicados" value={String(ctaCount)} />
                 <MetricCard label="Erros sanitizados" value={String(snapshot.errors.length)} />
@@ -466,6 +501,7 @@ export default function DevModePanel({
                       ? "Não disponível"
                       : snapshot.performance.cls.toFixed(3)
                   }
+                  detail={`${snapshot.performance.layoutShiftCount} shift(s) observado(s)`}
                 />
                 <MetricCard
                   label="TTFB"
@@ -546,6 +582,20 @@ export default function DevModePanel({
                   value={formatDuration(snapshot.performance.observedInp)}
                   detail="Observação da sessão, não CrUX oficial."
                 />
+                <MetricCard
+                  label="Recursos"
+                  value={String(snapshot.performance.resources.length)}
+                  detail="Entradas Resource Timing"
+                />
+                <MetricCard label="Scripts" value={String(scriptCount)} />
+                <MetricCard label="CSS" value={String(styleCount)} />
+                <MetricCard label="Imagens" value={String(imageCount)} />
+                <MetricCard label="Fontes" value={String(fontCount)} />
+                <MetricCard
+                  label="Chunks tardios"
+                  value={String(lateChunkCount)}
+                  detail="Session, painel e CardSwap observados"
+                />
               </div>
 
               <div className="grid gap-5 lg:grid-cols-2">
@@ -572,6 +622,16 @@ export default function DevModePanel({
                           ),
                         )}.`}
                   </p>
+                  {snapshot.performance.longTasks.length > 0 && (
+                    <ul className="mt-3 space-y-2 text-xs text-[var(--muted-foreground)]">
+                      {snapshot.performance.longTasks.slice(-6).map((task, index) => (
+                        <li key={`${task.startTime}-${index}`}>
+                          {formatDuration(task.duration)} por volta de{" "}
+                          {formatDuration(task.startTime)} após a navegação
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                 </section>
               </div>
 
@@ -610,6 +670,19 @@ export default function DevModePanel({
                   Não disponível neste navegador:{" "}
                   {snapshot.performance.unsupportedApis.join(", ")}.
                 </p>
+              )}
+
+              {snapshot.errors.length > 0 && (
+                <section className="rounded-2xl border border-[var(--destructive)]/35 bg-[var(--destructive)]/8 p-5">
+                  <h3 className="text-[var(--foreground)]">Erros sanitizados da sessão</h3>
+                  <ul className="mt-3 space-y-2 text-sm text-[var(--muted-foreground)]">
+                    {snapshot.errors.map((error, index) => (
+                      <li key={`${error.at}-${index}`}>
+                        {error.kind} · {formatDuration(error.at)} · {error.message}
+                      </li>
+                    ))}
+                  </ul>
+                </section>
               )}
             </div>
           )}

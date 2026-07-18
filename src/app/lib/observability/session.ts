@@ -103,6 +103,7 @@ let activeSection: string | null = null;
 let activeSectionStartedAt = 0;
 let sectionOrder = 0;
 let sectionRatios = new Map<string, number>();
+let sectionDepth = new Map<string, number>();
 let listeners = new Set<SnapshotListener>();
 let cleanupCallbacks: Array<() => void> = [];
 let persistTimer: number | null = null;
@@ -359,7 +360,8 @@ function selectActiveSection(): void {
 function initializeSections(): void {
   const current = ensureSnapshot();
   const nodes = [...document.querySelectorAll<HTMLElement>("main section[id]")];
-  for (const node of nodes) {
+  for (const [index, node] of nodes.entries()) {
+    sectionDepth.set(node.id, index);
     current.sections[node.id] = {
       id: node.id,
       viewed: false,
@@ -390,7 +392,13 @@ function initializeSections(): void {
         if (ratio >= SECTION_THRESHOLD && !metric.viewed) {
           metric.viewed = true;
           metric.firstSeenOrder = ++sectionOrder;
-          current.deepestSection = node.id;
+          const currentDeepest = currentSnapshot.deepestSection;
+          if (
+            !currentDeepest ||
+            (sectionDepth.get(node.id) ?? 0) > (sectionDepth.get(currentDeepest) ?? -1)
+          ) {
+            currentSnapshot.deepestSection = node.id;
+          }
           changed = true;
         }
       }
@@ -462,6 +470,7 @@ function resourceMetric(entry: PerformanceEntry): ResourceMetric {
   return {
     name: sanitizeResourceName(entry.name),
     initiatorType: resource.initiatorType || "other",
+    startTime: entry.startTime,
     duration: entry.duration,
     transferSize,
   };
@@ -560,7 +569,11 @@ function handleWindowError(event: ErrorEvent): void {
 function handleResourceError(event: Event): void {
   if (event instanceof ErrorEvent) return;
   const target = event.target;
-  if (target instanceof HTMLImageElement || target instanceof HTMLScriptElement) {
+  if (
+    target instanceof HTMLImageElement ||
+    target instanceof HTMLScriptElement ||
+    target instanceof HTMLLinkElement
+  ) {
     recordError("resource", `Falha ao carregar ${target.tagName.toLowerCase()}`);
   }
 }
@@ -583,6 +596,7 @@ export function startObservability(): () => void {
   activeSectionStartedAt = 0;
   sectionOrder = 0;
   sectionRatios = new Map<string, number>();
+  sectionDepth = new Map<string, number>();
   snapshot = createSnapshot();
   snapshot.startedAt = new Date(startEpoch).toISOString();
 

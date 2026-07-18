@@ -216,7 +216,7 @@ function TechnicalDetails({ experience }: { experience: Experience }) {
               destination: "experience",
             })
           }
-          className="mt-5 inline-flex items-center gap-1 text-[var(--foreground)] underline decoration-[var(--border-strong)] underline-offset-4 hover:decoration-[var(--ice-blue)]"
+          className="mt-5 inline-flex min-h-11 items-center gap-1 text-[var(--foreground)] underline decoration-[var(--border-strong)] underline-offset-4 hover:decoration-[var(--ice-blue)]"
           style={{ fontSize: "0.84rem" }}
         >
           {experience.link.label} <ArrowUpRight className="h-3.5 w-3.5" />
