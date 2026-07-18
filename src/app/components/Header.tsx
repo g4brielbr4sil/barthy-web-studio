@@ -83,7 +83,10 @@ export function Header() {
             <LinkButton
               href="#contato"
               className="whitespace-nowrap"
-              onClick={() => trackEvent("click_header_cta", { location: "desktop" })}
+              data-cta-source="header"
+              onClick={() =>
+                trackEvent("cta_click", { source: "header", destination: "contato" })
+              }
             >
               Falar sobre meu projeto
             </LinkButton>
@@ -116,9 +119,13 @@ export function Header() {
             ))}
             <LinkButton
               href="#contato"
+              data-cta-source="mobile-menu"
               onClick={() => {
                 setOpen(false);
-                trackEvent("click_header_cta", { location: "mobile" });
+                trackEvent("cta_click", {
+                  source: "mobile-menu",
+                  destination: "contato",
+                });
               }}
               className="mt-2 w-full"
             >

@@ -40,12 +40,16 @@ export function SystemsCRM() {
                 href="#contato"
                 variant="primary"
                 className="w-full sm:w-auto"
+                data-cta-source="systems"
                 onClick={() => {
                   prefillQuote({
                     service: "CRM e gestão comercial",
                     note: "Tenho interesse em sistemas, CRM ou automação para organizar a operação.",
                   });
-                  trackEvent("click_crm_cta");
+                  trackEvent("cta_click", {
+                    source: "systems",
+                    destination: "contato",
+                  });
                 }}
               >
                 Conversar sobre um sistema <ArrowRight className="w-4 h-4" />

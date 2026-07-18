@@ -7,6 +7,12 @@ import { trackEvent } from "../lib/track";
 
 const icons = [Rocket, Briefcase, Sparkles];
 
+function pricingCtaSource(planName: string) {
+  if (planName === "Presença Básica") return "pricing-presenca-basica";
+  if (planName === "Portfólio Profissional") return "pricing-portfolio-profissional";
+  return "pricing-comercial-completo";
+}
+
 export function Pricing() {
   return (
     <Section id="pacotes" className="overflow-hidden">
@@ -48,6 +54,7 @@ function PriceCard({
 }) {
   const highlight = !!plan.highlight;
   const reduceMotion = useReducedMotion();
+  const ctaSource = pricingCtaSource(plan.name);
 
   return (
     <motion.article
@@ -131,8 +138,12 @@ function PriceCard({
           type="button"
           variant={highlight ? "primary" : "outline"}
           className="w-full group"
+          data-cta-source={ctaSource}
           onClick={() => {
-            trackEvent("click_package_cta", { pacote: plan.name });
+            trackEvent("cta_click", {
+              source: ctaSource,
+              destination: "contato",
+            });
             prefillQuote({
               service: `Pacote ${plan.name}`,
               note: `Tenho interesse no pacote ${plan.name}.`,
@@ -143,7 +154,18 @@ function PriceCard({
           {plan.cta}
           <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
         </Button>
-        <LinkButton href="#contato" variant="ghost" className="w-full">
+        <LinkButton
+          href="#contato"
+          variant="ghost"
+          className="w-full"
+          data-cta-source={ctaSource}
+          onClick={() =>
+            trackEvent("cta_click", {
+              source: ctaSource,
+              destination: "contato",
+            })
+          }
+        >
           Tirar uma dúvida
         </LinkButton>
       </div>

@@ -95,7 +95,13 @@ export function Hero() {
               href="#contato"
               variant="primary"
               className="w-full sm:w-auto"
-              onClick={() => trackEvent("click_hero_cta", { target: "contato" })}
+              data-cta-source="hero-primary"
+              onClick={() =>
+                trackEvent("cta_click", {
+                  source: "hero-primary",
+                  destination: "contato",
+                })
+              }
             >
               Falar sobre meu projeto <ArrowRight className="w-4 h-4" />
             </LinkButton>
@@ -103,7 +109,13 @@ export function Hero() {
               href="#solucoes"
               variant="outline"
               className="w-full sm:w-auto"
-              onClick={() => trackEvent("click_hero_cta", { target: "solucoes" })}
+              data-cta-source="hero-secondary"
+              onClick={() =>
+                trackEvent("cta_click", {
+                  source: "hero-secondary",
+                  destination: "solucoes",
+                })
+              }
             >
               Conhecer soluções
             </LinkButton>

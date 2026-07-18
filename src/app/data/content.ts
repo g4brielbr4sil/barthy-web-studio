@@ -17,8 +17,8 @@ import {
 /* ------------------------------------------------------------------ */
 export const siteConfig = {
   name: "Barthy Web Studio",
-  url: "https://barthywebstudio.com.br",
-  domain: "barthywebstudio.com.br",
+  url: "https://barthy-web-studio.pages.dev/",
+  domain: "barthy-web-studio.pages.dev",
   email: "contato.barthywebstudio@gmail.com",
   baseCity: "Brasília/DF",
   // Preenchido apenas se você não usar VITE_BARTHY_WHATSAPP_URL.
@@ -595,28 +595,64 @@ export const faq: FaqItem[] = [
 /* ------------------------------------------------------------------ */
 /*  Formulário — tipos de solução                                     */
 /* ------------------------------------------------------------------ */
-export const serviceOptions: string[] = [
-  "Landing page ou portfólio",
-  "Página para eventos ou serviços",
-  "CRM e gestão comercial",
-  "Dashboard ou painel interno",
-  "Sistema sob medida",
-  "SaaS ou plataforma digital",
-  "Portal ou área interna",
-  "Automação de atendimento",
-  "Integração com WhatsApp ou canais",
-  "Fila e gestão de solicitações",
-  "Template ou estrutura reutilizável",
-  "Sistema para academia",
-  "Sistema para bar ou restaurante",
-  "Sistema para eventos",
-  "Suporte e organização digital",
-  "Pacote Presença Básica",
-  "Pacote Portfólio Profissional",
-  "Pacote Comercial Completo",
-  "Outra solução digital",
-  "Ainda não sei qual solução",
+export interface ServiceOptionGroup {
+  label: string;
+  options: string[];
+}
+
+export const serviceOptionGroups: ServiceOptionGroup[] = [
+  {
+    label: "Presença digital",
+    options: ["Landing page", "Portfólio profissional", "Página institucional"],
+  },
+  {
+    label: "Comercial e atendimento",
+    options: ["Formulário ou orçamento", "CRM e pipeline", "Organização do atendimento"],
+  },
+  {
+    label: "Sistemas",
+    options: ["Dashboard", "Portal ou área interna", "Sistema sob medida"],
+  },
+  {
+    label: "Integrações",
+    options: ["Automação", "Bot", "Integração entre ferramentas"],
+  },
+  {
+    label: "Outros",
+    options: ["Suporte e organização digital", "Ainda não sei qual solução preciso"],
+  },
 ];
+
+export const serviceOptions = serviceOptionGroups.flatMap((group) => group.options);
+
+/**
+ * Mantém CTAs e integrações internas compatíveis com os valores usados antes
+ * do agrupamento do select. O payload continua enviando uma string legível.
+ */
+const legacyServiceOptionMap: Record<string, string> = {
+  "Landing page ou portfólio": "Landing page",
+  "Página para eventos ou serviços": "Página institucional",
+  "CRM e gestão comercial": "CRM e pipeline",
+  "Dashboard ou painel interno": "Dashboard",
+  "SaaS ou plataforma digital": "Sistema sob medida",
+  "Automação de atendimento": "Automação",
+  "Integração com WhatsApp ou canais": "Integração entre ferramentas",
+  "Fila e gestão de solicitações": "Organização do atendimento",
+  "Template ou estrutura reutilizável": "Sistema sob medida",
+  "Sistema para academia": "Sistema sob medida",
+  "Sistema para bar ou restaurante": "Sistema sob medida",
+  "Sistema para eventos": "Sistema sob medida",
+  "Pacote Presença Básica": "Landing page",
+  "Pacote Portfólio Profissional": "Portfólio profissional",
+  "Pacote Comercial Completo": "Formulário ou orçamento",
+  "Outra solução digital": "Ainda não sei qual solução preciso",
+  "Ainda não sei qual solução": "Ainda não sei qual solução preciso",
+};
+
+export function resolveServiceOption(value: string): string {
+  if (serviceOptions.includes(value)) return value;
+  return legacyServiceOptionMap[value] ?? "Ainda não sei qual solução preciso";
+}
 
 /* Tipos de serviço para o structured data (serviceType). */
 export const serviceTypes: string[] = [

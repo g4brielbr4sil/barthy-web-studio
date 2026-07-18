@@ -87,12 +87,16 @@ export function ProductsSystems() {
             href="#contato"
             variant="primary"
             className="w-full sm:w-auto"
+            data-cta-source="products"
             onClick={() => {
               prefillQuote({
                 service: "Sistema sob medida",
                 note: "Sistema, CRM, automação ou integração — quero organizar minha operação.",
               });
-              trackEvent("click_products_cta");
+              trackEvent("cta_click", {
+                source: "products",
+                destination: "contato",
+              });
             }}
           >
             Quero organizar minha operação <ArrowRight className="w-4 h-4" />

@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
+import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import { ArrowUpRight, ChevronRight } from "lucide-react";
-import { CardSwap, Card } from "./CardSwap";
 import { appliedExperience, type Experience } from "../data/content";
 import { Container, Section, SectionHeading } from "./ui-primitives";
 import { trackEvent } from "../lib/track";
+
+const LazyExperienceCardSwap = lazy(() => import("./ExperienceCardSwap"));
 
 function useMediaQuery(query: string) {
   const [matches, setMatches] = useState(() =>
@@ -79,6 +80,15 @@ function ExperienceFace({ experience }: { experience: Experience }) {
         </div>
       </div>
     </div>
+  );
+}
+
+function CardSwapFallback() {
+  return (
+    <div
+      aria-hidden="true"
+      className="h-[320px] w-full max-w-[410px] rounded-2xl border border-[var(--border)] bg-[var(--card-solid)]"
+    />
   );
 }
 
@@ -205,9 +215,11 @@ function TechnicalDetails({ experience }: { experience: Experience }) {
           href={experience.link.url}
           target="_blank"
           rel="noopener noreferrer"
+          data-cta-source="experience"
           onClick={() =>
-            trackEvent("click_experience_link", {
-              title: experience.title,
+            trackEvent("cta_click", {
+              source: "experience",
+              destination: "experience",
             })
           }
           className="mt-5 inline-flex items-center gap-1 text-[var(--foreground)] underline decoration-[var(--border-strong)] underline-offset-4 hover:decoration-[var(--ice-blue)]"
@@ -222,9 +234,38 @@ function TechnicalDetails({ experience }: { experience: Experience }) {
 
 export function AppliedExperience() {
   const isDesktop = useMediaQuery("(min-width: 1280px)");
+  const reduceMotion = useMediaQuery("(prefers-reduced-motion: reduce)");
+  const canUseCardSwap = isDesktop && !reduceMotion;
+  const experienceDisplayRef = useRef<HTMLDivElement>(null);
+  const [shouldLoadCardSwap, setShouldLoadCardSwap] = useState(false);
   const [selectedTitle, setSelectedTitle] = useState<string | null>(null);
   const selectedExperience =
     appliedExperience.find((experience) => experience.title === selectedTitle) ?? null;
+
+  useEffect(() => {
+    if (!canUseCardSwap) {
+      setShouldLoadCardSwap(false);
+      return;
+    }
+
+    const node = experienceDisplayRef.current;
+    if (!node || !("IntersectionObserver" in window)) {
+      setShouldLoadCardSwap(true);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+        setShouldLoadCardSwap(true);
+        observer.disconnect();
+      },
+      { rootMargin: "500px 0px" },
+    );
+
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, [canUseCardSwap]);
 
   const toggleDetails = (experience: Experience) => {
     setSelectedTitle((current) => (current === experience.title ? null : experience.title));
@@ -242,8 +283,11 @@ export function AppliedExperience() {
           description="Abra cada case para ver arquitetura, responsabilidades e regras."
         />
 
-        {isDesktop ? (
-          <div className="grid items-center gap-14 xl:grid-cols-[minmax(0,0.78fr)_minmax(0,1.22fr)]">
+        {canUseCardSwap ? (
+          <div
+            ref={experienceDisplayRef}
+            className="grid items-center gap-14 xl:grid-cols-[minmax(0,0.78fr)_minmax(0,1.22fr)]"
+          >
             <div className="space-y-3">
               {appliedExperience.map((experience) => (
                 <DetailButton
@@ -257,26 +301,23 @@ export function AppliedExperience() {
             </div>
 
             <div className="relative flex h-[470px] w-full items-center justify-end overflow-visible">
-              <CardSwap
-                width={410}
-                height={320}
-                cardDistance={36}
-                verticalDistance={32}
-                delay={4800}
-                pauseOnHover
-                skewAmount={2}
-                easing="linear"
-              >
-                {appliedExperience.map((experience) => (
-                  <Card key={experience.title}>
-                    <ExperienceFace experience={experience} />
-                  </Card>
-                ))}
-              </CardSwap>
+              {shouldLoadCardSwap ? (
+                <Suspense fallback={<CardSwapFallback />}>
+                  <LazyExperienceCardSwap
+                    experiences={appliedExperience}
+                    renderFace={(experience) => <ExperienceFace experience={experience} />}
+                  />
+                </Suspense>
+              ) : (
+                <CardSwapFallback />
+              )}
             </div>
           </div>
         ) : (
-          <div className="grid gap-5 md:grid-cols-2">
+          <div
+            ref={experienceDisplayRef}
+            className="grid gap-5 md:grid-cols-2 xl:grid-cols-3"
+          >
             {appliedExperience.map((experience) => (
               <article
                 key={experience.title}

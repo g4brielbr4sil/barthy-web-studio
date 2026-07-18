@@ -2,6 +2,7 @@ import { Instagram, Linkedin, Mail } from "lucide-react";
 import { BarthyLogo } from "./BarthyLogo";
 import { Container } from "./ui-primitives";
 import { siteConfig } from "../data/content";
+import { trackEvent } from "../lib/track";
 
 export function Footer() {
   const socials = [
@@ -42,6 +43,13 @@ export function Footer() {
             </div>
             <a
               href={`mailto:${siteConfig.email}`}
+              data-cta-source="footer"
+              onClick={() =>
+                trackEvent("cta_click", {
+                  source: "footer",
+                  destination: "email",
+                })
+              }
               className="inline-flex items-center gap-2 text-[var(--foreground)] hover:text-[var(--terra)] transition-colors break-all"
               style={{ fontSize: "0.92rem" }}
             >
@@ -57,6 +65,13 @@ export function Footer() {
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={label}
+                    data-cta-source="footer"
+                    onClick={() =>
+                      trackEvent("cta_click", {
+                        source: "footer",
+                        destination: label.toLowerCase(),
+                      })
+                    }
                     className="inline-flex items-center justify-center w-9 h-9 rounded-full border border-[var(--border)] text-[var(--muted-foreground)] hover:text-[var(--foreground)] hover:border-[var(--ice-blue)]/60 transition-colors"
                   >
                     <Icon className="w-4 h-4" />
