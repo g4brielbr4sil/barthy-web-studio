@@ -3,6 +3,7 @@ import { ChevronDown } from "lucide-react";
 import { useReducedMotion } from "motion/react";
 import { faq } from "../data/content";
 import { Container, Section, SectionHeading } from "./ui-primitives";
+import { trackEvent } from "../lib/track";
 
 export function FAQ() {
   const [open, setOpen] = useState<number | null>(null);
@@ -29,7 +30,10 @@ export function FAQ() {
                     id={btnId}
                     aria-expanded={isOpen}
                     aria-controls={panelId}
-                    onClick={() => setOpen(isOpen ? null : i)}
+                    onClick={() => {
+                      setOpen(isOpen ? null : i);
+                      if (!isOpen) trackEvent("toggle_faq", { index: i });
+                    }}
                     className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left text-[var(--foreground)] transition-colors hover:bg-[var(--muted)]/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)]/60"
                     style={{ fontSize: "1rem", fontWeight: 500 }}
                   >

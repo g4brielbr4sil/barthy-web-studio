@@ -6,6 +6,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
+import { trackEvent } from "./track";
 
 export type Theme = "light" | "dark";
 
@@ -75,6 +76,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     const next = current === "dark" ? "light" : "dark";
     applyTheme(next, true);
     setTheme(next);
+    trackEvent("theme_change", { theme: next });
   }, []);
 
   return (

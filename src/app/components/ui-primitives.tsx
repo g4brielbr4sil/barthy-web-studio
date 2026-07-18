@@ -7,6 +7,7 @@ import {
 } from "react";
 import { ChevronDown } from "lucide-react";
 import { motion, useReducedMotion } from "motion/react";
+import { trackEvent } from "../lib/track";
 
 type Variant = "primary" | "outline" | "ghost" | "soft";
 
@@ -102,10 +103,12 @@ export function Disclosure({
   label,
   children,
   className = "",
+  trackingSource,
 }: {
   label: string;
   children: ReactNode;
   className?: string;
+  trackingSource?: string;
 }) {
   const [open, setOpen] = useState(false);
   const reduceMotion = useReducedMotion();
@@ -117,7 +120,17 @@ export function Disclosure({
         type="button"
         aria-expanded={open}
         aria-controls={panelId}
-        onClick={() => setOpen((value) => !value)}
+        onClick={() =>
+          setOpen((value) => {
+            const next = !value;
+            if (next) {
+              trackEvent("toggle_disclosure", {
+                source: trackingSource ?? "disclosure",
+              });
+            }
+            return next;
+          })
+        }
         className="flex min-h-11 w-full items-center justify-between gap-3 px-4 py-3 text-left text-[var(--foreground)] transition-colors hover:bg-[var(--muted)]/45 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)]/60"
         style={{ fontSize: "0.88rem" }}
       >

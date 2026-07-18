@@ -3,6 +3,7 @@ import { BarthyLogo } from "./BarthyLogo";
 import { Container } from "./ui-primitives";
 import { siteConfig } from "../data/content";
 import { trackEvent } from "../lib/track";
+import { DevModeLauncher } from "./DevModeLauncher";
 
 export function Footer() {
   const socials = [
@@ -50,7 +51,7 @@ export function Footer() {
                   destination: "email",
                 })
               }
-              className="inline-flex items-center gap-2 text-[var(--foreground)] hover:text-[var(--terra)] transition-colors break-all"
+              className="inline-flex min-h-11 items-center gap-2 break-all text-[var(--foreground)] transition-colors hover:text-[var(--terra)]"
               style={{ fontSize: "0.92rem" }}
             >
               <Mail className="w-4 h-4 shrink-0" />
@@ -72,7 +73,7 @@ export function Footer() {
                         destination: label.toLowerCase(),
                       })
                     }
-                    className="inline-flex items-center justify-center w-9 h-9 rounded-full border border-[var(--border)] text-[var(--muted-foreground)] hover:text-[var(--foreground)] hover:border-[var(--ice-blue)]/60 transition-colors"
+                    className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-[var(--border)] text-[var(--muted-foreground)] transition-colors hover:border-[var(--ice-blue)]/60 hover:text-[var(--foreground)]"
                   >
                     <Icon className="w-4 h-4" />
                   </a>
@@ -82,11 +83,14 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-12 pt-6 border-t border-[var(--border)] flex flex-col md:flex-row gap-3 items-start md:items-center justify-between text-[var(--muted-foreground)]" style={{ fontSize: "0.8rem" }}>
-          <span>© {new Date().getFullYear()} Barthy Web Studio. Todos os direitos reservados.</span>
-          <span style={{ letterSpacing: "0.18em", textTransform: "uppercase" }}>
-            Tecnologia organizada para operações reais.
-          </span>
+        <div className="mt-12 flex flex-col items-start justify-between gap-4 border-t border-[var(--border)] pt-6 text-[var(--muted-foreground)] md:flex-row md:items-center" style={{ fontSize: "0.8rem" }}>
+          <div className="flex min-w-0 flex-col gap-2">
+            <span>© {new Date().getFullYear()} Barthy Web Studio. Todos os direitos reservados.</span>
+            <span style={{ letterSpacing: "0.18em", textTransform: "uppercase" }}>
+              Tecnologia organizada para operações reais.
+            </span>
+          </div>
+          <DevModeLauncher />
         </div>
       </Container>
     </footer>

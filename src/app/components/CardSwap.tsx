@@ -122,6 +122,7 @@ export function CardSwap({
     // Respeita redução de movimento: mantém os cards estáticos, sem animação.
     const reduceMotion =
       typeof window !== "undefined" &&
+      typeof window.matchMedia === "function" &&
       window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (reduceMotion) {
       if (node) node.dataset.cardSwapState = "reduced";
@@ -184,14 +185,26 @@ export function CardSwap({
       else pause();
     };
 
-    const viewportObserver = new IntersectionObserver(
-      ([entry]) => {
-        inViewport = entry.isIntersecting;
+    let viewportObserver: IntersectionObserver | null = null;
+    if (node && "IntersectionObserver" in window) {
+      try {
+        viewportObserver = new IntersectionObserver(
+          ([entry]) => {
+            inViewport = entry.isIntersecting;
+            syncPlayback();
+          },
+          { rootMargin: "100px 0px" },
+        );
+        viewportObserver.observe(node);
+      } catch {
+        viewportObserver = null;
+        inViewport = true;
         syncPlayback();
-      },
-      { rootMargin: "100px 0px" },
-    );
-    if (node) viewportObserver.observe(node);
+      }
+    } else if (node) {
+      inViewport = true;
+      syncPlayback();
+    }
     document.addEventListener("visibilitychange", syncPlayback);
 
     const onMouseEnter = () => {
@@ -209,7 +222,7 @@ export function CardSwap({
 
     return () => {
       document.removeEventListener("visibilitychange", syncPlayback);
-      viewportObserver.disconnect();
+      viewportObserver?.disconnect();
       if (pauseOnHover && node) {
         node.removeEventListener("mouseenter", onMouseEnter);
         node.removeEventListener("mouseleave", onMouseLeave);

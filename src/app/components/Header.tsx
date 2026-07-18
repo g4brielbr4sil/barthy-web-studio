@@ -60,7 +60,11 @@ export function Header() {
       }`}
     >
       <div className="mx-auto flex h-[64px] max-w-[1400px] items-center justify-between gap-2 px-4 sm:gap-4 sm:px-5 md:h-[72px] md:px-8 min-[1200px]:gap-5">
-        <a href="#inicio" className="shrink-0 whitespace-nowrap" aria-label="Ir para o início">
+        <a
+          href="#inicio"
+          className="inline-flex min-h-11 shrink-0 items-center whitespace-nowrap"
+          aria-label="Ir para o início"
+        >
           <BarthyLogo />
         </a>
 
@@ -69,7 +73,7 @@ export function Header() {
             <a
               key={item.href}
               href={item.href}
-              className="whitespace-nowrap rounded-lg px-2.5 py-2 text-[var(--muted-foreground)] transition-colors hover:text-[var(--foreground)] min-[1360px]:px-3"
+              className="inline-flex min-h-11 items-center whitespace-nowrap rounded-lg px-2.5 py-2 text-[var(--muted-foreground)] transition-colors hover:text-[var(--foreground)] min-[1360px]:px-3"
               style={{ fontSize: "0.86rem" }}
             >
               {item.label}

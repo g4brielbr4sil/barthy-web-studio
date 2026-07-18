@@ -1,15 +1,41 @@
+import { useEffect, useRef, useState } from "react";
+
 export interface PlasmaProps {
   className?: string;
 }
 
 /**
  * Fundo ambiente da Hero com três camadas SVG animadas apenas por CSS.
- * Não usa canvas, WebGL, listeners, timers ou atualização de frames via JavaScript.
+ * Não usa canvas, WebGL, timers ou atualização de frames via JavaScript.
+ * Um único observer pausa o CSS quando a Hero sai da viewport.
  */
 export function PlasmaBackground({ className = "" }: PlasmaProps) {
+  const backgroundRef = useRef<HTMLDivElement>(null);
+  const [active, setActive] = useState(true);
+
+  useEffect(() => {
+    const node = backgroundRef.current;
+    if (!node || !("IntersectionObserver" in window)) return;
+
+    let observer: IntersectionObserver;
+    try {
+      observer = new IntersectionObserver(
+        ([entry]) => setActive(entry.isIntersecting),
+        { rootMargin: "120px 0px" },
+      );
+    } catch {
+      return;
+    }
+
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <div
+      ref={backgroundRef}
       aria-hidden="true"
+      data-ambient-active={active ? "true" : "false"}
       className={`hero-background pointer-events-none absolute inset-0 ${className}`}
     >
       <svg

@@ -3,24 +3,11 @@ import { ArrowUpRight, ChevronRight } from "lucide-react";
 import { appliedExperience, type Experience } from "../data/content";
 import { Container, Section, SectionHeading } from "./ui-primitives";
 import { trackEvent } from "../lib/track";
+import { useMediaQuery } from "../lib/useMediaQuery";
+import { HermesTerminal } from "./HermesTerminal";
+import { TechnicalFlow } from "./TechnicalFlow";
 
 const LazyExperienceCardSwap = lazy(() => import("./ExperienceCardSwap"));
-
-function useMediaQuery(query: string) {
-  const [matches, setMatches] = useState(() =>
-    typeof window !== "undefined" ? window.matchMedia(query).matches : false,
-  );
-
-  useEffect(() => {
-    const mq = window.matchMedia(query);
-    const update = () => setMatches(mq.matches);
-    update();
-    mq.addEventListener("change", update);
-    return () => mq.removeEventListener("change", update);
-  }, [query]);
-
-  return matches;
-}
 
 function TechnologyBadges({ badges }: { badges: string[] }) {
   return (
@@ -201,6 +188,13 @@ function TechnicalDetails({ experience }: { experience: Experience }) {
         </div>
       </div>
 
+      {experience.title === "PNQC" && <TechnicalFlow />}
+      {experience.title === "Hermes" && (
+        <div className="mt-8">
+          <HermesTerminal />
+        </div>
+      )}
+
       {experience.context && (
         <p
           className="mt-6 border-t border-[var(--hairline)] pt-5 text-[var(--muted-foreground)]"
@@ -222,7 +216,7 @@ function TechnicalDetails({ experience }: { experience: Experience }) {
               destination: "experience",
             })
           }
-          className="mt-5 inline-flex items-center gap-1 text-[var(--foreground)] underline decoration-[var(--border-strong)] underline-offset-4 hover:decoration-[var(--ice-blue)]"
+          className="mt-5 inline-flex min-h-11 items-center gap-1 text-[var(--foreground)] underline decoration-[var(--border-strong)] underline-offset-4 hover:decoration-[var(--ice-blue)]"
           style={{ fontSize: "0.84rem" }}
         >
           {experience.link.label} <ArrowUpRight className="h-3.5 w-3.5" />
@@ -254,14 +248,20 @@ export function AppliedExperience() {
       return;
     }
 
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (!entry.isIntersecting) return;
-        setShouldLoadCardSwap(true);
-        observer.disconnect();
-      },
-      { rootMargin: "500px 0px" },
-    );
+    let observer: IntersectionObserver;
+    try {
+      observer = new IntersectionObserver(
+        ([entry]) => {
+          if (!entry.isIntersecting) return;
+          setShouldLoadCardSwap(true);
+          observer.disconnect();
+        },
+        { rootMargin: "500px 0px" },
+      );
+    } catch {
+      setShouldLoadCardSwap(true);
+      return;
+    }
 
     observer.observe(node);
     return () => observer.disconnect();

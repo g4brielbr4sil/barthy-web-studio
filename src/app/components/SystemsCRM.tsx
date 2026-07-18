@@ -3,6 +3,16 @@ import { systemDetails, systemFronts } from "../data/content";
 import { Container, Disclosure, LinkButton, Section } from "./ui-primitives";
 import { prefillQuote } from "../lib/prefill";
 import { trackEvent } from "../lib/track";
+import { MotionGroup, TactileCard } from "./motion-primitives";
+
+const operationalStates = [
+  "Novo contato",
+  "Em análise",
+  "Próxima ação",
+  "Atualização",
+  "Concluído",
+  "Fluxo próprio",
+] as const;
 
 export function SystemsCRM() {
   return (
@@ -58,26 +68,56 @@ export function SystemsCRM() {
           </div>
 
           {/* Seis frentes estruturadas */}
-          <div className="grid gap-px overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--border)] sm:grid-cols-2">
-            {systemFronts.map((c) => {
-              const Icon = c.icon;
-              return (
-                <div key={c.title} className="bg-[var(--card-solid)] p-6">
-                  <Icon className="w-5 h-5 text-[var(--ice-blue)]" />
-                  <h3 className="mt-4 text-[var(--foreground)]">{c.title}</h3>
-                  <p
-                    className="mt-2 text-[var(--muted-foreground)]"
-                    style={{ fontSize: "0.92rem" }}
+          <div>
+            <div className="mb-3 flex items-center justify-between gap-4">
+              <span
+                className="text-[var(--text-accent)]"
+                style={{ fontSize: "0.68rem", letterSpacing: "0.16em", textTransform: "uppercase" }}
+              >
+                Representação visual
+              </span>
+              <span className="h-px flex-1 bg-[var(--hairline)]" aria-hidden="true" />
+            </div>
+            <MotionGroup className="grid gap-3 sm:grid-cols-2">
+              {systemFronts.map((c, index) => {
+                const Icon = c.icon;
+                return (
+                  <TactileCard
+                    key={c.title}
+                    className="group rounded-2xl border border-[var(--border)] bg-[var(--card-solid)] p-5 shadow-[0_20px_54px_-42px_var(--shadow-color)] transition-[background-color,border-color,box-shadow] duration-200 hover:border-[var(--ice-blue)]/45 sm:p-6"
                   >
-                    {c.text}
-                  </p>
-                </div>
-              );
-            })}
+                    <div className="flex items-center justify-between gap-3">
+                      <Icon className="h-5 w-5 text-[var(--ice-blue)]" />
+                      <span
+                        className="rounded-full border border-[var(--border)] bg-[var(--surface)] px-2.5 py-1 text-[var(--muted-foreground)]"
+                        style={{ fontSize: "0.64rem" }}
+                      >
+                        {operationalStates[index]}
+                      </span>
+                    </div>
+                    <h3 className="mt-4 text-[var(--foreground)]">{c.title}</h3>
+                    <p
+                      className="mt-2 text-[var(--muted-foreground)]"
+                      style={{ fontSize: "0.92rem" }}
+                    >
+                      {c.text}
+                    </p>
+                    <span
+                      className="mt-5 block h-px w-10 bg-[var(--ice-blue)]/55 transition-transform duration-200 group-hover:translate-x-1"
+                      aria-hidden="true"
+                    />
+                  </TactileCard>
+                );
+              })}
+            </MotionGroup>
           </div>
         </div>
 
-        <Disclosure label="Ver como os sistemas funcionam" className="mt-8">
+        <Disclosure
+          label="Ver como os sistemas funcionam"
+          className="mt-8"
+          trackingSource="systems-flow"
+        >
           <div className="grid gap-6 text-[var(--muted-foreground)] md:grid-cols-2">
             <div>
               <h3 className="text-[var(--foreground)]">Como funciona</h3>
