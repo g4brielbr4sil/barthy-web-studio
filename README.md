@@ -1,28 +1,25 @@
 # Barthy Web Studio V1
 
-Primeira versão do site institucional da Barthy Web Studio, operação autoral de soluções digitais para pequenos negócios.
+Esta foi a primeira versão do site institucional da Barthy Web Studio, projeto que criei para apresentar soluções digitais para pequenos negócios.
 
-Este repositório não representa toda a operação da Barthy. Ele registra a primeira experiência web criada para apresentar serviços, sistemas, projetos, processo comercial e canais de captação.
+A V1 reúne serviços, sistemas, projetos, processo comercial e canais de contato em uma experiência mais extensa e técnica. Ela continua publicada como registro da evolução da marca enquanto a V2 passa pelos últimos ajustes.
 
-## Visão geral
+## Visão rápida
 
-| Item | Situação |
+| Item | Descrição |
 | --- | --- |
 | Tipo | Site institucional e comercial |
 | Versão | V1 |
-| Papel atual | Versão anterior mantida como histórico técnico |
-| Direção seguinte | [`barthy-web-studio-v2`](https://github.com/g4brielbr4sil/barthy-web-studio-v2) |
-| URL configurada | [barthy-web-studio.pages.dev](https://barthy-web-studio.pages.dev/) |
-| Repositório | Público |
+| Status | Publicada |
+| Aplicação | [barthy-web-studio.pages.dev](https://barthy-web-studio.pages.dev/) |
+| Próxima versão | [`barthy-web-studio-v2`](https://github.com/g4brielbr4sil/barthy-web-studio-v2) |
 | Licença | Proprietária |
 
-A V1 não deve ser apagada, arquivada ou retirada da vitrine antes da publicação e validação da V2. Ela documenta decisões de produto, design, captação e integração que continuam relevantes para o portfólio.
+## O que a V1 apresenta
 
-## Objetivo do projeto
+A página organiza a proposta da Barthy em diferentes frentes:
 
-A V1 foi criada para mostrar que a Barthy pode atuar em mais de uma camada da presença digital de um negócio:
-
-- apresentação institucional
+- presença digital
 - landing pages e portfólios
 - formulários e captação de leads
 - estrutura comercial digital
@@ -32,11 +29,9 @@ A V1 foi criada para mostrar que a Barthy pode atuar em mais de uma camada da pr
 - automações e integrações
 - sistemas e plataformas sob medida
 
-O site também apresenta experiências aplicadas, pacotes, processo de trabalho, perguntas frequentes e um formulário de orçamento conectado ao Hermes ou ao WhatsApp.
+Esses itens representam soluções que podem ser desenvolvidas conforme diagnóstico e escopo. O site não trata todo o catálogo como produto pronto.
 
 ## Estrutura da página
-
-A aplicação é composta pelas seguintes seções:
 
 ```text
 Header
@@ -54,16 +49,16 @@ Formulário de orçamento
 Footer
 ```
 
-Essa composição faz da V1 uma apresentação comercial mais extensa e técnica do que a V2.
+A V1 foi pensada como uma apresentação comercial completa, com mais conteúdo e mais detalhes sobre as possibilidades da operação.
 
-## Soluções apresentadas no código
+## Funcionalidades
 
 ### Presença digital
 
 - landing pages
 - portfólios profissionais
 - páginas institucionais
-- páginas de eventos
+- páginas para eventos
 - conteúdo organizado
 - CTAs e formulários
 
@@ -84,10 +79,8 @@ Essa composição faz da V1 uma apresentação comercial mais extensa e técnica
 - SaaS e plataformas com login
 - perfis de usuário
 - autenticação e permissões
-- APIs e conectores compatíveis
+- APIs e conectores
 - bots e automações após avaliação técnica
-
-As soluções são apresentadas como possibilidades sujeitas a diagnóstico e escopo. O site não afirma que todo item do catálogo já existe como produto pronto.
 
 ## Captação de leads
 
@@ -101,51 +94,39 @@ O formulário de orçamento coleta:
 - tipo de serviço
 - mensagem
 
-Validações implementadas:
-
-- campos obrigatórios
-- nome com tamanho mínimo
-- validação de telefone com DDD
-- verificação de e-mail
-- limite de tamanho da mensagem
-- foco no primeiro campo inválido
-- mensagens de erro associadas
-- prevenção de envio duplicado
-- estados de carregamento, sucesso e erro
-
-### Fluxo de envio
+O fluxo possui validação dos campos, prevenção de envio duplicado, foco no primeiro erro e estados de carregamento, sucesso e falha.
 
 ```mermaid
 flowchart TD
     FORM[Formulário de orçamento] --> VALIDATE{Dados válidos?}
-    VALIDATE -->|Não| ERRORS[Erros por campo e foco no primeiro]
+    VALIDATE -->|Não| ERRORS[Mostra os erros]
     VALIDATE -->|Sim| HERMES{Endpoint do Hermes configurado?}
-    HERMES -->|Sim| POST[Envia lead por POST]
+    HERMES -->|Sim| POST[Envia o lead por POST]
     HERMES -->|Não| WA{WhatsApp configurado?}
-    WA -->|Sim| OPEN[Abre mensagem preenchida]
-    WA -->|Não| FAILURE[Exibe erro sem fingir sucesso]
+    WA -->|Sim| OPEN[Abre a mensagem preenchida]
+    WA -->|Não| FAILURE[Informa que o envio não foi concluído]
 ```
 
-O código só informa envio pelo Hermes quando o endpoint responde com sucesso. Quando o endpoint não está configurado, o sistema tenta abrir o WhatsApp com os dados preenchidos. Se nenhum canal existir, apresenta erro claro.
+Quando o endpoint do Hermes responde com sucesso, o lead é registrado pela integração. Sem endpoint, o site tenta abrir o WhatsApp com os dados preenchidos. Caso nenhum canal esteja disponível, o formulário informa o erro sem exibir um sucesso falso.
 
-## Arquitetura da aplicação
+## Arquitetura
 
 ```mermaid
 flowchart LR
     APP[React App] --> THEME[Theme Provider]
-    APP --> SEO[SEO Head]
+    APP --> SEO[SEO]
     APP --> CONTENT[Seções comerciais]
     APP --> FORM[Formulário]
 
     CONTENT --> DATA[Conteúdo centralizado]
-    FORM --> HERMES[Endpoint público do Hermes]
-    FORM --> WHATSAPP[Fallback WhatsApp]
+    FORM --> HERMES[Endpoint do Hermes]
+    FORM --> WHATSAPP[Fallback para WhatsApp]
 
     APP --> BUILD[Vite Build]
     BUILD --> CF[Cloudflare Pages]
 ```
 
-## Stack técnica
+## Stack
 
 ### Interface
 
@@ -178,49 +159,49 @@ flowchart LR
 - auditoria de dependências
 - Cloudflare Pages
 
-A branch de revisão atualiza o React Router da versão 7.13.0 para 7.18.1 e regenera o lockfile para aplicar correções disponíveis na mesma versão principal.
+O React Router foi atualizado da versão 7.13.0 para 7.18.1 e o lockfile foi regenerado para aplicar as correções disponíveis na mesma versão principal.
 
-## Tema, movimento e acessibilidade
+## Tema e acessibilidade
 
-O código inclui:
+A interface inclui:
 
 - temas claro e escuro
-- aplicação do tema antes do primeiro paint para reduzir flash visual
+- aplicação do tema antes do primeiro paint
 - componentes reutilizáveis
 - animações progressivas
-- respeito a movimento reduzido
+- suporte a movimento reduzido
 - navegação por teclado
 - estados de foco
 - validação acessível no formulário
-- carregamento sob demanda de recursos técnicos
-- tratamento de falhas sem mensagens enganosas
+- carregamento sob demanda de recursos
+- tratamento claro de falhas
 
-## Estrutura do repositório
+## Estrutura do projeto
 
 ```text
 src/
   app/
-    components/       seções, formulários e componentes visuais
-    data/             conteúdo, catálogo e configuração do site
-    lib/              tema, integração com Hermes e rastreamento
+    components/       seções e componentes visuais
+    data/             conteúdo e configuração do site
+    lib/              tema, Hermes e rastreamento
     types/            contratos TypeScript
   styles/             estilos globais
-  main.tsx             inicialização da aplicação
+  main.tsx            inicialização da aplicação
 public/                arquivos públicos
 ```
 
 ## Configuração
 
-Os canais reais são fornecidos por variáveis de ambiente.
+Os canais de contato são definidos por variáveis de ambiente:
 
 ```env
 VITE_HERMES_LEAD_ENDPOINT=
 VITE_BARTHY_WHATSAPP_URL=
 ```
 
-O endpoint do Hermes precisa aceitar requisições públicas apenas das origens autorizadas. Variáveis `VITE_` são públicas no navegador e nunca devem armazenar tokens ou segredos.
+Variáveis `VITE_` ficam disponíveis no navegador e não devem armazenar senhas, tokens privados ou outras credenciais.
 
-## Desenvolvimento local
+## Rodando localmente
 
 ### Requisitos
 
@@ -241,51 +222,38 @@ pnpm preview
 pnpm audit --prod
 ```
 
-Checklist funcional:
+Checklist principal:
 
 1. temas claro e escuro
 2. navegação e CTAs
 3. conteúdo em desktop e celular
-4. formulário com dados inválidos
+4. validação do formulário
 5. envio para endpoint de teste
 6. fallback para WhatsApp
-7. ausência de falso sucesso
+7. ausência de sucesso falso
 8. movimento reduzido
 9. foco e navegação por teclado
 
-## Diferenças entre V1 e V2
+## V1 e V2
 
 | V1 | V2 |
 | --- | --- |
 | dark-first | light-first |
 | apresentação comercial extensa | narrativa editorial mais direta |
 | catálogo amplo de soluções | foco em projetos, processo e posicionamento |
-| Material UI, Radix, GSAP e Motion | stack visual reduzida com Anime.js e shader |
-| integração direta com Hermes ou WhatsApp | endpoint genérico e fallback por e-mail |
-| maior quantidade de componentes | experiência mais enxuta |
+| Material UI, Radix, GSAP e Motion | Anime.js, CSS e shader |
+| integração com Hermes ou WhatsApp | endpoint genérico e fallback por e-mail |
+| mais blocos e componentes | experiência mais enxuta |
 
-A V1 permanece relevante como prova de evolução de produto e de decisões técnicas. A V2 deve assumir a posição principal somente após estabilização e publicação.
+A V1 continua relevante como parte da evolução da Barthy. A V2 assume o protagonismo depois da validação visual e da publicação definitiva.
 
-## Limitações e próximos passos
+## Próximos passos
 
-- confirmar a disponibilidade da URL configurada
 - produzir screenshots desktop e mobile
-- revisar contatos e variáveis de produção
-- manter a atualização de dependências validada pelo CI
-- documentar a V1 como versão anterior depois da publicação da V2
-- não arquivar o repositório antes da decisão final
+- revisar os contatos de produção
+- manter as dependências atualizadas
+- preservar a V1 como histórico técnico após a publicação da V2
 
-## Segurança e privacidade
+Desenvolvido por **Gabriel Brasil** para a **Barthy Web Studio**.
 
-- nenhum segredo deve usar prefixo `VITE_`
-- dados reais de leads não devem aparecer no repositório
-- screenshots devem utilizar informações fictícias
-- endpoint público precisa limitar origens e validar os dados recebidos
-- relatórios e eventos de diagnóstico não devem conter informações pessoais
-- nenhuma integração externa deve ser ativada sem configuração e validação
-
-## Autoria e licença
-
-Projeto desenvolvido por Gabriel Brasil para a Barthy Web Studio.
-
-Código, marca, identidade, conteúdo e documentação são proprietários. Consulte [`LICENSE`](LICENSE).
+Código, marca, identidade e conteúdo protegidos pela licença disponível em [`LICENSE`](LICENSE).
