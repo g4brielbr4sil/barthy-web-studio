@@ -4,11 +4,11 @@
 
 A Barthy Web Studio V1 utilizava `react-router` 7.13.0. A auditoria identificou vulnerabilidades altas com correções disponíveis em versões posteriores da mesma major.
 
-## Correção adotada
+## Correção aplicada
 
-A dependência será atualizada para 7.18.1 e o lockfile será regenerado pelo pnpm.
+A dependência foi atualizada para 7.18.1 e o `pnpm-lock.yaml` foi regenerado pelo pnpm.
 
-Essa atualização corrige os advisories anteriores com patches disponíveis na série 7.x.
+Essa atualização corrige os advisories anteriores com patches disponíveis na série 7.x, incluindo os problemas corrigidos a partir das versões 7.13.2, 7.14.0, 7.14.2, 7.15.0 e 7.18.0.
 
 ## Advisory RSC remanescente
 
