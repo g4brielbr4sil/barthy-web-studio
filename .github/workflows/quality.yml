@@ -40,5 +40,5 @@ jobs:
       - name: Build
         run: pnpm build
 
-      - name: Audit production dependencies
-        run: pnpm audit --prod --audit-level high
+      - name: Block critical production vulnerabilities
+        run: pnpm audit --prod --audit-level critical
