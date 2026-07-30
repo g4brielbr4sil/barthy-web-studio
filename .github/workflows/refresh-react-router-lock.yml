@@ -1,0 +1,43 @@
+name: Refresh React Router lockfile
+
+on:
+  push:
+    branches:
+      - docs/v1-portfolio-archive
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v4
+        with:
+          ref: docs/v1-portfolio-archive
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 11.7.0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - name: Update React Router and regenerate lockfile
+        run: pnpm add react-router@7.18.1 --save-exact --lockfile-only
+
+      - name: Remove temporary workflow and commit
+        run: |
+          rm .github/workflows/refresh-react-router-lock.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add package.json pnpm-lock.yaml .github/workflows/refresh-react-router-lock.yml
+          git commit -m "fix: update React Router security patches"
+          git push origin HEAD:docs/v1-portfolio-archive
