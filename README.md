@@ -1,6 +1,6 @@
 # Barthy Web Studio V1
 
-Primeira versão do site institucional e comercial da **Barthy Web Studio**, criada para apresentar soluções digitais voltadas a pequenos negócios.
+A primeira versão do site institucional e comercial da **Barthy Web Studio** foi criada para apresentar soluções digitais voltadas a pequenos negócios.
 
 A V1 reúne serviços, sistemas, projetos, processo comercial e canais de contato em uma experiência mais extensa e detalhada. O repositório permanece disponível como registro da evolução técnica e visual da marca.
 
@@ -161,7 +161,7 @@ flowchart LR
 A interface inclui:
 
 - temas claro e escuro
-- aplicação antecipada do tema para reduzir troca visual no carregamento
+- aplicação antecipada do tema para reduzir a troca visual no carregamento
 - componentes reutilizáveis
 - animações progressivas
 - suporte a movimento reduzido
