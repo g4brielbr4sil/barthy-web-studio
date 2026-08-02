@@ -1,8 +1,8 @@
 # Barthy Web Studio V1
 
-Esta foi a primeira versão do site institucional da Barthy Web Studio, projeto que criei para apresentar soluções digitais para pequenos negócios.
+Primeira versão do site institucional e comercial da **Barthy Web Studio**, criada para apresentar soluções digitais voltadas a pequenos negócios.
 
-A V1 reúne serviços, sistemas, projetos, processo comercial e canais de contato em uma experiência mais extensa e técnica. Ela continua publicada como registro da evolução da marca enquanto a V2 passa pelos últimos ajustes.
+A V1 reúne serviços, sistemas, projetos, processo comercial e canais de contato em uma experiência mais extensa e detalhada. O repositório permanece disponível como registro da evolução técnica e visual da marca.
 
 ## Visão rápida
 
@@ -10,17 +10,19 @@ A V1 reúne serviços, sistemas, projetos, processo comercial e canais de contat
 | --- | --- |
 | Tipo | Site institucional e comercial |
 | Versão | V1 |
-| Status | Publicada |
 | Aplicação | [barthy-web-studio.pages.dev](https://barthy-web-studio.pages.dev/) |
-| Próxima versão | [`barthy-web-studio-v2`](https://github.com/g4brielbr4sil/barthy-web-studio-v2) |
+| Versão atual | [`barthy-web-studio-v2`](https://github.com/g4brielbr4sil/barthy-web-studio-v2) |
 | Licença | Proprietária |
 
-## O que a V1 apresenta
+## Sobre a Barthy Web Studio
 
-A página organiza a proposta da Barthy em diferentes frentes:
+A Barthy Web Studio organiza presença digital, comunicação comercial e soluções técnicas para pequenos negócios. O projeto apresenta possibilidades que podem ser desenvolvidas conforme diagnóstico, necessidade e escopo de cada operação.
 
-- presença digital
-- landing pages e portfólios
+Entre as frentes apresentadas estão:
+
+- landing pages e sites institucionais
+- portfólios profissionais
+- páginas para eventos e campanhas
 - formulários e captação de leads
 - estrutura comercial digital
 - CRM e pipeline
@@ -29,9 +31,7 @@ A página organiza a proposta da Barthy em diferentes frentes:
 - automações e integrações
 - sistemas e plataformas sob medida
 
-Esses itens representam soluções que podem ser desenvolvidas conforme diagnóstico e escopo. O site não trata todo o catálogo como produto pronto.
-
-## Estrutura da página
+## Estrutura da experiência
 
 ```text
 Header
@@ -49,9 +49,7 @@ Formulário de orçamento
 Footer
 ```
 
-A V1 foi pensada como uma apresentação comercial completa, com mais conteúdo e mais detalhes sobre as possibilidades da operação.
-
-## Funcionalidades
+## Principais funcionalidades
 
 ### Presença digital
 
@@ -76,15 +74,14 @@ A V1 foi pensada como uma apresentação comercial completa, com mais conteúdo 
 - CRM e pipeline
 - dashboards
 - portais e áreas internas
-- SaaS e plataformas com login
-- perfis de usuário
-- autenticação e permissões
+- plataformas com autenticação
+- perfis de usuário e permissões
 - APIs e conectores
-- bots e automações após avaliação técnica
+- bots e automações avaliados conforme o contexto
 
 ## Captação de leads
 
-O formulário de orçamento coleta:
+O formulário de orçamento coleta informações essenciais para o primeiro diagnóstico:
 
 - nome
 - WhatsApp
@@ -107,7 +104,7 @@ flowchart TD
     WA -->|Não| FAILURE[Informa que o envio não foi concluído]
 ```
 
-Quando o endpoint do Hermes responde com sucesso, o lead é registrado pela integração. Sem endpoint, o site tenta abrir o WhatsApp com os dados preenchidos. Caso nenhum canal esteja disponível, o formulário informa o erro sem exibir um sucesso falso.
+Quando o endpoint do Hermes responde com sucesso, o lead é registrado pela integração. Sem endpoint, o site utiliza o contato via WhatsApp quando disponível. Falhas são informadas sem exibir uma confirmação de envio incorreta.
 
 ## Arquitetura
 
@@ -120,13 +117,13 @@ flowchart LR
 
     CONTENT --> DATA[Conteúdo centralizado]
     FORM --> HERMES[Endpoint do Hermes]
-    FORM --> WHATSAPP[Fallback para WhatsApp]
+    FORM --> WHATSAPP[Contato via WhatsApp]
 
     APP --> BUILD[Vite Build]
     BUILD --> CF[Cloudflare Pages]
 ```
 
-## Stack
+## Tecnologias
 
 ### Interface
 
@@ -159,14 +156,12 @@ flowchart LR
 - auditoria de dependências
 - Cloudflare Pages
 
-O React Router foi atualizado da versão 7.13.0 para 7.18.1 e o lockfile foi regenerado para aplicar as correções disponíveis na mesma versão principal.
-
 ## Tema e acessibilidade
 
 A interface inclui:
 
 - temas claro e escuro
-- aplicação do tema antes do primeiro paint
+- aplicação antecipada do tema para reduzir troca visual no carregamento
 - componentes reutilizáveis
 - animações progressivas
 - suporte a movimento reduzido
@@ -174,7 +169,7 @@ A interface inclui:
 - estados de foco
 - validação acessível no formulário
 - carregamento sob demanda de recursos
-- tratamento claro de falhas
+- tratamento de falhas
 
 ## Estrutura do projeto
 
@@ -192,16 +187,18 @@ public/                arquivos públicos
 
 ## Configuração
 
-Os canais de contato são definidos por variáveis de ambiente:
-
 ```env
 VITE_HERMES_LEAD_ENDPOINT=
 VITE_BARTHY_WHATSAPP_URL=
 ```
 
-Variáveis `VITE_` ficam disponíveis no navegador e não devem armazenar senhas, tokens privados ou outras credenciais.
+`VITE_HERMES_LEAD_ENDPOINT` define o endpoint de recebimento dos leads.
 
-## Rodando localmente
+`VITE_BARTHY_WHATSAPP_URL` define o canal de contato via WhatsApp.
+
+Variáveis com prefixo `VITE_` são públicas no navegador e não devem armazenar credenciais privadas.
+
+## Execução local
 
 ### Requisitos
 
@@ -222,38 +219,24 @@ pnpm preview
 pnpm audit --prod
 ```
 
-Checklist principal:
-
-1. temas claro e escuro
-2. navegação e CTAs
-3. conteúdo em desktop e celular
-4. validação do formulário
-5. envio para endpoint de teste
-6. fallback para WhatsApp
-7. ausência de sucesso falso
-8. movimento reduzido
-9. foco e navegação por teclado
-
 ## V1 e V2
 
 | V1 | V2 |
 | --- | --- |
-| dark-first | light-first |
 | apresentação comercial extensa | narrativa editorial mais direta |
 | catálogo amplo de soluções | foco em projetos, processo e posicionamento |
-| Material UI, Radix, GSAP e Motion | Anime.js, CSS e shader |
-| integração com Hermes ou WhatsApp | endpoint genérico e fallback por e-mail |
+| Material UI, Radix, GSAP e Motion | Anime.js, CSS e recurso visual com shader |
+| integração com Hermes ou WhatsApp | endpoint de contato e fallback por e-mail |
 | mais blocos e componentes | experiência mais enxuta |
 
-A V1 continua relevante como parte da evolução da Barthy. A V2 assume o protagonismo depois da validação visual e da publicação definitiva.
+A V1 representa a primeira estrutura comercial da Barthy. A V2 aprofunda o posicionamento de portfólio e a apresentação dos projetos desenvolvidos.
 
-## Próximos passos
+## Autor e contato
 
-- produzir screenshots desktop e mobile
-- revisar os contatos de produção
-- manter as dependências atualizadas
-- preservar a V1 como histórico técnico após a publicação da V2
+**Gabriel Brasil Barthy Elias**  
+**Barthy Web Studio**
 
-Desenvolvido por **Gabriel Brasil** para a **Barthy Web Studio**.
+- GitHub: [@g4brielbr4sil](https://github.com/g4brielbr4sil)
+- E-mail: [contato.barthywebstudio@gmail.com](mailto:contato.barthywebstudio@gmail.com)
 
 Código, marca, identidade e conteúdo protegidos pela licença disponível em [`LICENSE`](LICENSE).
