@@ -1,8 +1,8 @@
 # Barthy Web Studio V1
 
-A primeira versão do site institucional e comercial da **Barthy Web Studio** foi criada para apresentar soluções digitais voltadas a pequenos negócios.
+Esta é a primeira versão do site institucional e comercial da **Barthy Web Studio**.
 
-A V1 reúne serviços, sistemas, projetos, processo comercial e canais de contato em uma experiência mais extensa e detalhada. O repositório permanece disponível como registro da evolução técnica e visual da marca.
+Criei a V1 para apresentar os serviços da marca, explicar como os projetos são conduzidos e receber pedidos de orçamento. O repositório continua público como parte da evolução técnica e visual da Barthy.
 
 ## Visão rápida
 
@@ -14,24 +14,23 @@ A V1 reúne serviços, sistemas, projetos, processo comercial e canais de contat
 | Versão atual | [`barthy-web-studio-v2`](https://github.com/g4brielbr4sil/barthy-web-studio-v2) |
 | Licença | Proprietária |
 
-## Sobre a Barthy Web Studio
+## O que tem nesta versão
 
-A Barthy Web Studio organiza presença digital, comunicação comercial e soluções técnicas para pequenos negócios. O projeto apresenta possibilidades que podem ser desenvolvidas conforme diagnóstico, necessidade e escopo de cada operação.
-
-Entre as frentes apresentadas estão:
+A V1 apresenta soluções para pequenos negócios, como:
 
 - landing pages e sites institucionais
 - portfólios profissionais
 - páginas para eventos e campanhas
 - formulários e captação de leads
-- estrutura comercial digital
 - CRM e pipeline
 - dashboards e indicadores
 - portais e áreas internas
 - automações e integrações
-- sistemas e plataformas sob medida
+- sistemas sob medida
 
-## Estrutura da experiência
+A página também mostra projetos, processo de trabalho, pacotes, perguntas frequentes e canais de contato.
+
+## Estrutura da página
 
 ```text
 Header
@@ -49,39 +48,9 @@ Formulário de orçamento
 Footer
 ```
 
-## Principais funcionalidades
+## Formulário de orçamento
 
-### Presença digital
-
-- landing pages
-- portfólios profissionais
-- páginas institucionais
-- páginas para eventos
-- conteúdo organizado
-- CTAs e formulários
-
-### Operação comercial
-
-- captação de contatos
-- propostas
-- mensagens comerciais
-- follow-up
-- formulários conectados
-- encaminhamento de solicitações
-
-### Sistemas e integrações
-
-- CRM e pipeline
-- dashboards
-- portais e áreas internas
-- plataformas com autenticação
-- perfis de usuário e permissões
-- APIs e conectores
-- bots e automações avaliados conforme o contexto
-
-## Captação de leads
-
-O formulário de orçamento coleta informações essenciais para o primeiro diagnóstico:
+O formulário coleta os dados necessários para o primeiro contato:
 
 - nome
 - WhatsApp
@@ -91,7 +60,7 @@ O formulário de orçamento coleta informações essenciais para o primeiro diag
 - tipo de serviço
 - mensagem
 
-O fluxo possui validação dos campos, prevenção de envio duplicado, foco no primeiro erro e estados de carregamento, sucesso e falha.
+O fluxo valida os campos, evita envio duplicado, leva o foco até o primeiro erro e mostra os estados de carregamento, sucesso ou falha.
 
 ```mermaid
 flowchart TD
@@ -104,7 +73,7 @@ flowchart TD
     WA -->|Não| FAILURE[Informa que o envio não foi concluído]
 ```
 
-Quando o endpoint do Hermes responde com sucesso, o lead é registrado pela integração. Sem endpoint, o site utiliza o contato via WhatsApp quando disponível. Falhas são informadas sem exibir uma confirmação de envio incorreta.
+Quando o endpoint do Hermes está configurado e responde corretamente, o lead é registrado pela integração. Sem esse endpoint, o site tenta abrir o contato pelo WhatsApp. Se nenhum canal estiver disponível, o formulário informa a falha em vez de mostrar um sucesso falso.
 
 ## Arquitetura
 
@@ -146,10 +115,9 @@ flowchart LR
 - Embla Carousel
 - Sonner
 
-### Entrega e qualidade
+### Qualidade e entrega
 
 - pnpm
-- Git e GitHub
 - GitHub Actions
 - TypeScript typecheck
 - build automatizado
@@ -166,9 +134,9 @@ A interface inclui:
 - animações progressivas
 - suporte a movimento reduzido
 - navegação por teclado
-- estados de foco
+- foco visível
 - validação acessível no formulário
-- carregamento sob demanda de recursos
+- carregamento sob demanda
 - tratamento de falhas
 
 ## Estrutura do projeto
@@ -192,11 +160,11 @@ VITE_HERMES_LEAD_ENDPOINT=
 VITE_BARTHY_WHATSAPP_URL=
 ```
 
-`VITE_HERMES_LEAD_ENDPOINT` define o endpoint de recebimento dos leads.
+`VITE_HERMES_LEAD_ENDPOINT` aponta para o endpoint que recebe os leads.
 
-`VITE_BARTHY_WHATSAPP_URL` define o canal de contato via WhatsApp.
+`VITE_BARTHY_WHATSAPP_URL` define o contato usado como alternativa ao endpoint.
 
-Variáveis com prefixo `VITE_` são públicas no navegador e não devem armazenar credenciais privadas.
+No Vite, tudo que começa com `VITE_` fica disponível no navegador. Não coloque senha, token ou outra informação privada nessas variáveis.
 
 ## Execução local
 
@@ -223,19 +191,13 @@ pnpm audit --prod
 
 | V1 | V2 |
 | --- | --- |
-| apresentação comercial extensa | narrativa editorial mais direta |
+| apresentação comercial mais extensa | narrativa editorial mais direta |
 | catálogo amplo de soluções | foco em projetos, processo e posicionamento |
 | Material UI, Radix, GSAP e Motion | Anime.js, CSS e recurso visual com shader |
-| integração com Hermes ou WhatsApp | endpoint de contato e fallback por e-mail |
+| integração com Hermes ou WhatsApp | endpoint de contato e alternativa por e-mail |
 | mais blocos e componentes | experiência mais enxuta |
 
-A V1 representa a primeira estrutura comercial da Barthy. A V2 aprofunda o posicionamento de portfólio e a apresentação dos projetos desenvolvidos.
-
-## Padrão de contribuição
-
-A documentação, os commits e as Pull Requests deste repositório usam português do Brasil, com linguagem técnica, clara e direta. Os commits seguem Conventional Commits com o prefixo técnico em inglês e a descrição em português, como `fix: corrigir validação do formulário`.
-
-O padrão completo está disponível em [`CONTRIBUTING.md`](CONTRIBUTING.md).
+A V1 foi a primeira estrutura comercial da Barthy. A V2 mantém a mesma base de trabalho, mas apresenta os projetos e o posicionamento de forma mais direta.
 
 ## Autor e contato
 
