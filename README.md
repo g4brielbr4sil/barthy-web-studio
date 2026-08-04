@@ -231,6 +231,12 @@ pnpm audit --prod
 
 A V1 representa a primeira estrutura comercial da Barthy. A V2 aprofunda o posicionamento de portfólio e a apresentação dos projetos desenvolvidos.
 
+## Padrão de contribuição
+
+A documentação, os commits e as Pull Requests deste repositório usam português do Brasil, com linguagem técnica, clara e direta. Os commits seguem Conventional Commits com o prefixo técnico em inglês e a descrição em português, como `fix: corrigir validação do formulário`.
+
+O padrão completo está disponível em [`CONTRIBUTING.md`](CONTRIBUTING.md).
+
 ## Autor e contato
 
 **Gabriel Brasil Barthy Elias**  
